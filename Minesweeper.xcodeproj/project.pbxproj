@@ -15,6 +15,8 @@
 		2BE47CB52223FF2C00D3952A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2BE47CB32223FF2C00D3952A /* LaunchScreen.storyboard */; };
 		2BE47CC02223FF2C00D3952A /* MinesweeperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE47CBF2223FF2C00D3952A /* MinesweeperTests.swift */; };
 		2BE47CCB2223FF2C00D3952A /* MinesweeperUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE47CCA2223FF2C00D3952A /* MinesweeperUITests.swift */; };
+		2BE47CD9222422D300D3952A /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE47CD8222422D300D3952A /* HeaderView.swift */; };
+		2BE47CDB222425A400D3952A /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE47CDA222425A400D3952A /* CollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		2BE47CC62223FF2C00D3952A /* MinesweeperUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MinesweeperUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BE47CCA2223FF2C00D3952A /* MinesweeperUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinesweeperUITests.swift; sourceTree = "<group>"; };
 		2BE47CCC2223FF2C00D3952A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2BE47CD8222422D300D3952A /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		2BE47CDA222425A400D3952A /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +110,8 @@
 				2BE47CB32223FF2C00D3952A /* LaunchScreen.storyboard */,
 				2BE47CB62223FF2C00D3952A /* Info.plist */,
 				2BE47CAE2223FF2A00D3952A /* Minesweeper.xcdatamodeld */,
+				2BE47CD8222422D300D3952A /* HeaderView.swift */,
+				2BE47CDA222425A400D3952A /* CollectionViewCell.swift */,
 			);
 			path = Minesweeper;
 			sourceTree = "<group>";
@@ -259,9 +265,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2BE47CDB222425A400D3952A /* CollectionViewCell.swift in Sources */,
 				2BE47CB02223FF2A00D3952A /* Minesweeper.xcdatamodeld in Sources */,
 				2BE47CAA2223FF2A00D3952A /* ViewController.swift in Sources */,
 				2BE47CA82223FF2A00D3952A /* AppDelegate.swift in Sources */,
+				2BE47CD9222422D300D3952A /* HeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
