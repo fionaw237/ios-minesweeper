@@ -18,6 +18,8 @@ class CollectionViewCell: UICollectionViewCell {
         self.hasMine = false
         self.numberOfMinesLabel.text = ""
         self.mineImageView.image = nil
+        self.backgroundColor = UIColor.lightGray
+        self.isUserInteractionEnabled = true
     }
     
     func configureNumberOfMinesLabel(numberOfMines: Int) {
@@ -56,5 +58,9 @@ class CollectionViewCell: UICollectionViewCell {
     
     func configureMineContainingCell() {
         self.mineImageView.image = UIImage(named: "mine-icon-black-50")
+    }
+    
+    func configureForGameOver() {
+        self.backgroundColor = UIColor.red
     }
 }

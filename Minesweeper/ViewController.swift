@@ -18,6 +18,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     let numberOfItemsInSection = 8
     let numberOfSections = 8
     let numberOfMines = 10
+    var remainingFlags = 10
+    
+    var timerStarted = false
     
     @IBAction func resetButtonPressed(_ sender: Any) {
         self.resetGame()
@@ -25,13 +28,18 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
+        self.remainingFlags = self.numberOfMines
         self.indexPathsOfMines = self.getIndexPathsOfMines()
     }
     
     func resetGame() {
         self.indexPathsOfMines = self.getIndexPathsOfMines()
         self.collectionView.reloadData()
+    }
+    
+    func updateTimer() {
+        print("update")
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -58,11 +66,16 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if (!timerStarted) {
+            timerStarted = true
+//            Timer.scheduledTimer(timeInterval: (1.0/30.0), target: self, selector: Selector(), userInfo: nil, repeats: true)
+        }
+        
         let cell: CollectionViewCell = self.collectionView.cellForItem(at: indexPath) as! CollectionViewCell
         
         if cell.hasMine {
-            self.showAllMines()
-            self.headerView.configureResetButtonForGameOver()
+            self.gameOver(clickedCell: cell)
             return
         }
         
@@ -112,6 +125,19 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 cell.configureMineContainingCell()
             }
         }
+    }
+    
+    func disableUserInteractionOnAllCells() {
+        for cell: CollectionViewCell in self.collectionView!.visibleCells as! Array<CollectionViewCell> {
+            cell.isUserInteractionEnabled = false
+        }
+    }
+    
+    func gameOver(clickedCell: CollectionViewCell) {
+        self.showAllMines()
+        self.headerView.configureResetButtonForGameOver()
+        clickedCell.configureForGameOver()
+        self.disableUserInteractionOnAllCells()
     }
 }
 
