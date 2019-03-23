@@ -13,20 +13,25 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @IBOutlet weak var headerView: HeaderView!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var minesArray: [IndexPath]!
+    var indexPathsOfMines = Set<IndexPath>()
     
     let numberOfItemsInSection = 8
     let numberOfSections = 8
+    let numberOfMines = 10
     
     @IBAction func resetButtonPressed(_ sender: Any) {
-        self.collectionView.reloadData()
+        self.resetGame()
     }
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.minesArray = self.getIndexPathsOfMines()
+        self.indexPathsOfMines = self.getIndexPathsOfMines()
+    }
+    
+    func resetGame() {
+        self.indexPathsOfMines = self.getIndexPathsOfMines()
+        self.collectionView.reloadData()
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -41,7 +46,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         let cell: CollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! CollectionViewCell
         
-        cell.hasMine = (self.minesArray.contains(indexPath))
+        cell.hasMine = (self.indexPathsOfMines.contains(indexPath))
         
         return cell
     }
@@ -56,21 +61,31 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let cell: CollectionViewCell = self.collectionView.cellForItem(at: indexPath) as! CollectionViewCell
         
         if cell.hasMine {
-            cell.numberOfMinesLabel.text = "X"
-            
+            cell.configureMineContainingCell()
             return
         }
         
         let minesInVicinity = numberOfMinesInVicinityOfCellAt(indexPath: indexPath)
-        
-        cell.numberOfMinesLabel.text = "\(minesInVicinity)"
+        cell.configureNumberOfMinesLabel(numberOfMines: minesInVicinity)
     }
     
-    func getIndexPathsOfMines() -> [IndexPath] {
-        return [IndexPath.init(row: 0, section: 0),
-                IndexPath.init(row: 2, section: 2),
-                IndexPath.init(row: 4, section: 4),
-                IndexPath.init(row: 1, section: 3)]
+    func getIndexPathsOfMines() -> Set<IndexPath> {
+        
+        var mineIndexPaths = Set<IndexPath>()
+        
+        while mineIndexPaths.count < numberOfMines {
+            let randomRow = Int.random(in: 0...(numberOfItemsInSection - 1))
+            let randomSection = Int.random(in: 0...(numberOfSections - 1))
+            let randomIndexPath = IndexPath.init(row: randomRow, section: randomSection)
+            if !mineIndexPaths.contains(randomIndexPath) {
+                mineIndexPaths.insert(randomIndexPath)
+            }
+        }
+        
+        
+        
+        
+        return mineIndexPaths
     }
     
     func numberOfMinesInVicinityOfCellAt(indexPath: IndexPath) -> Int {
