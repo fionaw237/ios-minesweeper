@@ -61,7 +61,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let cell: CollectionViewCell = self.collectionView.cellForItem(at: indexPath) as! CollectionViewCell
         
         if cell.hasMine {
-            cell.configureMineContainingCell()
+            self.showAllMines()
+            self.headerView.configureResetButtonForGameOver()
             return
         }
         
@@ -82,9 +83,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             }
         }
         
-        
-        
-        
         return mineIndexPaths
     }
     
@@ -102,14 +100,18 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                     if cell.hasMine {
                         mineCount += 1
                     }
-                    
                 }
             }
-            
         }
-        
         return mineCount
     }
-
+    
+    func showAllMines() {
+        for cell: CollectionViewCell in self.collectionView!.visibleCells as! Array<CollectionViewCell> {
+            if cell.hasMine {
+                cell.configureMineContainingCell()
+            }
+        }
+    }
 }
 

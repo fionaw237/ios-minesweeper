@@ -13,4 +13,8 @@ class HeaderView: UIView {
     @IBOutlet weak var numberOfFlagsLabel: UILabel!;
     @IBOutlet weak var timeLabel: UILabel!;
     @IBOutlet weak var resetButton: UIButton!;
+    
+    func configureResetButtonForGameOver() {
+        self.resetButton.imageView?.image = UIImage(named: "icon-sad-48")
+    }
 }
