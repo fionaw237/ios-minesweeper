@@ -93,9 +93,9 @@
                                                 <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon-game-over" translatesAutoresizingMaskIntoConstraints="NO" id="yfC-oI-n2N" userLabel="Red Cross Image View">
                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GXg-KX-lmK" userLabel="Number Of Mines Label">
-                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GXg-KX-lmK" userLabel="Number Of Mines Label">
+                                                    <rect key="frame" x="10" y="10" width="30" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -105,16 +105,16 @@
                                         <constraints>
                                             <constraint firstItem="yfC-oI-n2N" firstAttribute="centerX" secondItem="JdE-5M-QlQ" secondAttribute="centerX" id="2o0-sg-xjT"/>
                                             <constraint firstItem="JdE-5M-QlQ" firstAttribute="height" secondItem="6cV-n3-F7T" secondAttribute="height" id="4lm-PS-MNy"/>
-                                            <constraint firstItem="GXg-KX-lmK" firstAttribute="top" secondItem="6cV-n3-F7T" secondAttribute="top" id="BJu-ty-Fvo"/>
                                             <constraint firstItem="JdE-5M-QlQ" firstAttribute="width" secondItem="6cV-n3-F7T" secondAttribute="width" id="BNw-pg-c3G"/>
+                                            <constraint firstItem="GXg-KX-lmK" firstAttribute="centerX" secondItem="6cV-n3-F7T" secondAttribute="centerX" id="DkY-z5-dmI"/>
                                             <constraint firstItem="JdE-5M-QlQ" firstAttribute="centerY" secondItem="6cV-n3-F7T" secondAttribute="centerY" id="Hes-KK-0KF"/>
                                             <constraint firstItem="yfC-oI-n2N" firstAttribute="width" secondItem="JdE-5M-QlQ" secondAttribute="width" id="IZP-Zx-ec5"/>
-                                            <constraint firstAttribute="trailing" secondItem="GXg-KX-lmK" secondAttribute="trailing" id="K2l-NS-m2n"/>
+                                            <constraint firstItem="GXg-KX-lmK" firstAttribute="centerY" secondItem="6cV-n3-F7T" secondAttribute="centerY" id="JQ2-hB-bQ1"/>
+                                            <constraint firstItem="GXg-KX-lmK" firstAttribute="width" secondItem="6cV-n3-F7T" secondAttribute="width" multiplier="0.6" id="LEq-DQ-EPr"/>
                                             <constraint firstItem="JdE-5M-QlQ" firstAttribute="centerX" secondItem="6cV-n3-F7T" secondAttribute="centerX" id="MmX-1E-M7u"/>
-                                            <constraint firstItem="GXg-KX-lmK" firstAttribute="leading" secondItem="6cV-n3-F7T" secondAttribute="leading" id="bdy-hi-HAK"/>
                                             <constraint firstItem="yfC-oI-n2N" firstAttribute="centerY" secondItem="JdE-5M-QlQ" secondAttribute="centerY" id="jAs-YD-jUG"/>
                                             <constraint firstItem="yfC-oI-n2N" firstAttribute="height" secondItem="JdE-5M-QlQ" secondAttribute="height" id="lkJ-Je-rMf"/>
-                                            <constraint firstAttribute="bottom" secondItem="GXg-KX-lmK" secondAttribute="bottom" id="ofQ-Xl-Xhh"/>
+                                            <constraint firstItem="GXg-KX-lmK" firstAttribute="height" secondItem="6cV-n3-F7T" secondAttribute="height" multiplier="0.6" id="v9b-N7-cd8"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="mineImageView" destination="JdE-5M-QlQ" id="EvP-fL-Nhc"/>

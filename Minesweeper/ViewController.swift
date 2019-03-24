@@ -8,6 +8,24 @@
 
 import UIKit
 
+enum NumberOfSections: Int {
+    case beginner = 8
+    case intermediate = 10
+    case advanced = 12
+}
+
+enum NumberOfItemsInSection: Int {
+    case beginner = 8
+    case intermediate = 12
+    case advanced = 14
+}
+
+enum NumberOfMines: Int {
+    case beginner = 10
+    case intermediate = 30
+    case advanced = 40
+}
+
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet weak var headerView: HeaderView!
@@ -15,9 +33,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     var indexPathsOfMines = Set<IndexPath>()
     
-    let numberOfItemsInSection = 8
-    let numberOfSections = 8
-    let numberOfMines = 10
+    let numberOfItemsInSection = NumberOfSections.intermediate.rawValue
+    let numberOfSections = NumberOfItemsInSection.intermediate.rawValue
+    let numberOfMines = NumberOfMines.intermediate.rawValue
     var remainingFlags = 10
     
     var timerStarted = false
@@ -30,11 +48,11 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         super.viewDidLoad()
     
         self.remainingFlags = self.numberOfMines
-        self.indexPathsOfMines = self.getIndexPathsOfMines()
+        self.indexPathsOfMines = self.getRandomIndexPathsOfMines()
     }
     
     func resetGame() {
-        self.indexPathsOfMines = self.getIndexPathsOfMines()
+        self.indexPathsOfMines = self.getRandomIndexPathsOfMines()
         self.collectionView.reloadData()
     }
     
@@ -83,7 +101,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         cell.configureNumberOfMinesLabel(numberOfMines: minesInVicinity)
     }
     
-    func getIndexPathsOfMines() -> Set<IndexPath> {
+    func getRandomIndexPathsOfMines() -> Set<IndexPath> {
         
         var mineIndexPaths = Set<IndexPath>()
         
@@ -100,20 +118,16 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func numberOfMinesInVicinityOfCellAt(indexPath: IndexPath) -> Int {
-        var mineCount = 0
         
-        for i in (indexPath.row - 1)...(indexPath.row + 1) {
+        var mineCount = 0
+        let validAdjacentIndexPaths = getValidAdjacentIndexPaths(indexPath: indexPath)
+        
+        for indexPath in validAdjacentIndexPaths {
             
-            for j in (indexPath.section - 1)...(indexPath.section + 1) {
-                
-                if ( !(i == indexPath.row && j == indexPath.section) && i >= 0 && j >= 0 && i < collectionView.numberOfItems(inSection: indexPath.section) && j < collectionView.numberOfSections ) {
-                    
-                    let cell = collectionView.cellForItem(at: IndexPath.init(row: i, section: j)) as! CollectionViewCell
-                    
-                    if cell.hasMine {
-                        mineCount += 1
-                    }
-                }
+            let cell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
+            
+            if cell.hasMine {
+                mineCount += 1
             }
         }
         return mineCount
@@ -138,6 +152,30 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         self.headerView.configureResetButtonForGameOver()
         clickedCell.configureForGameOver()
         self.disableUserInteractionOnAllCells()
+    }
+    
+    func isOutOfBounds(row: Int, section: Int) -> Bool {
+        return row < 0 || section < 0 || row >= numberOfItemsInSection || section >= numberOfSections
+    }
+    
+    func isAtSelectedIndexPath(indexPath: IndexPath, row: Int, section: Int) -> Bool {
+        return (row == indexPath.row && section == indexPath.section)
+    }
+    
+    func getValidAdjacentIndexPaths(indexPath: IndexPath) -> Array<IndexPath> {
+        
+        var validIndexPaths = Array<IndexPath>()
+        
+        for i in (indexPath.row - 1)...(indexPath.row + 1) {
+            
+            for j in (indexPath.section - 1)...(indexPath.section + 1) {
+                
+                if !isOutOfBounds(row: i, section: j) && !isAtSelectedIndexPath(indexPath: indexPath, row: i, section: j) {
+                    validIndexPaths.append(IndexPath.init(row: i, section: j))
+                }
+            }
+        }
+        return validIndexPaths
     }
 }
 
