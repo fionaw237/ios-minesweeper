@@ -48,7 +48,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setUpGame()
-        self.setUpLongPressGestureRecognizer()
+        self.setUpGestureRecognizers()
     }
     
     func setUpGame() {
@@ -64,35 +64,29 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func setUpLongPressGestureRecognizer() {
-        let longPressGestureRecogniser = UILongPressGestureRecognizer(target: self, action: #selector(addFlag(gesture:)))
+        let longPressGestureRecogniser = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gesture:)))
         longPressGestureRecogniser.minimumPressDuration = 0.25
         self.collectionView.addGestureRecognizer(longPressGestureRecogniser)
     }
     
-    @objc func addFlag(gesture: UILongPressGestureRecognizer) {
-        if gesture.state == .began {
-            
-            let locationOfGesture = gesture.location(in: self.collectionView)
-            let indexPath = self.collectionView.indexPathForItem(at: locationOfGesture)
-            if indexPath != nil {
-                
-                let cell = self.collectionView.cellForItem(at: indexPath!) as! CollectionViewCell
-                
-                if (self.remainingFlags > 0 && !cell.hasFlag) {
-                    cell.hasFlag = true
-                    self.remainingFlags -= 1
-                }
-                else if cell.hasFlag {
-                    cell.hasFlag = false
-                    self.remainingFlags += 1
-                }
-                
-                cell.configureFlagContainingCell()
-            }
-            
-            self.headerView.updateFlagsLabel(numberOfFlags: self.remainingFlags)
-        }
+    func setUpTapGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(gesture:)))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        self.collectionView.addGestureRecognizer(tapGestureRecognizer)
     }
+    
+    func setUpGestureRecognizers() {
+        self.setUpTapGestureRecognizer()
+        self.setUpLongPressGestureRecognizer()
+    }
+    
+    func configureTimerForReset() {
+        self.headerView.timer.invalidate()
+        self.headerView.resetTimer()
+        self.timerStarted = false
+    }
+    
+    // UICollectionViewDelegate, UICollectionViewDataSource and UICollectionViewDelegateFlowLayout methods
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return numberOfSections
@@ -107,9 +101,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let cell: CollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! CollectionViewCell
         
         cell.hasMine = (self.indexPathsOfMines.contains(indexPath))
+        
         if cell.hasFlag == nil {
             cell.hasFlag = false
         }
+        
+        if cell.uncovered == nil {
+            cell.uncovered = false
+        }
+        
         return cell
     }
     
@@ -119,7 +119,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    // Helper functions
+    
+    func collectionView(_ collectionView: UICollectionView, tappedForCellAt indexPath: IndexPath) {
         
         if (!timerStarted) {
             timerStarted = true
@@ -128,12 +130,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         let cell: CollectionViewCell = self.collectionView.cellForItem(at: indexPath) as! CollectionViewCell
         
+        if cell.hasFlag || cell.uncovered {
+            return
+        }
+        
         if cell.hasMine {
             self.gameOver(clickedCell: cell)
             return
         }
-        
-        cell.isUserInteractionEnabled = false
         
         let minesInVicinity = numberOfMinesInVicinityOfCellAt(indexPath: indexPath)
         
@@ -156,6 +160,49 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
 //        
 //        if numberOfCellsWithZeroAdjacentMines == 0 {return}
         
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, longPressForCellAt indexPath: IndexPath) {
+        
+        let cell = self.collectionView.cellForItem(at: indexPath) as! CollectionViewCell
+        
+        if cell.uncovered {
+            return
+        }
+        
+        if (self.remainingFlags > 0 && !cell.hasFlag) {
+            cell.hasFlag = true
+            self.remainingFlags -= 1
+        }
+        else if cell.hasFlag {
+            cell.hasFlag = false
+            self.remainingFlags += 1
+        }
+        
+        cell.configureFlagContainingCell()
+        
+        self.headerView.updateFlagsLabel(numberOfFlags: self.remainingFlags)
+    }
+    
+    @objc func handleTap(gesture: UITapGestureRecognizer) {
+        if gesture.state == .ended {
+            let locationOfGesture = gesture.location(in: self.collectionView)
+            let indexPath = self.collectionView.indexPathForItem(at: locationOfGesture)
+            if (indexPath != nil) {
+                self.collectionView(self.collectionView, tappedForCellAt: indexPath!)
+            }
+        }
+    }
+    
+    @objc func handleLongPress(gesture: UILongPressGestureRecognizer) {
+        if gesture.state == .began {
+            
+            let locationOfGesture = gesture.location(in: self.collectionView)
+            let indexPath = self.collectionView.indexPathForItem(at: locationOfGesture)
+            if indexPath != nil {
+                self.collectionView(self.collectionView, longPressForCellAt: indexPath!)
+            }
+        }
     }
     
     func getRandomIndexPathsOfMines() -> Set<IndexPath> {
@@ -253,11 +300,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
 //            }
 //        }
 //    }
-    
-    func configureTimerForReset() {
-        self.headerView.timer.invalidate()
-        self.headerView.resetTimer()
-        self.timerStarted = false
-    }
+
 }
 

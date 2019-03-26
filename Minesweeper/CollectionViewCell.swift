@@ -14,10 +14,12 @@ class CollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var mineOrFlagImageView: UIImageView!
     var hasMine: Bool!
     var hasFlag: Bool!
+    var uncovered: Bool!
     
     override func prepareForReuse() {
         self.hasMine = false
         self.hasFlag = false
+        self.uncovered = false
         self.numberOfMinesLabel.text = ""
         self.mineOrFlagImageView.image = nil
         self.backgroundColor = UIColor.lightGray
@@ -25,6 +27,7 @@ class CollectionViewCell: UICollectionViewCell {
     }
     
     func configureNumberOfMinesLabel(numberOfMines: Int) {
+                
         switch numberOfMines {
         case 1:
             self.numberOfMinesLabel.text = "1"
@@ -73,6 +76,9 @@ class CollectionViewCell: UICollectionViewCell {
     }
     
     func configureForMinesInVicinity(numberOfMines: Int) {
+        
+        self.uncovered = true
+        
         if (numberOfMines == 0) {
             self.configureForZeroMinesInVicinity()
         }
