@@ -224,11 +224,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             }
         }
         
-        // FOR TESTING
-//        for i in 0...(numberOfMines - 1){
-//            mineIndexPaths.insert(IndexPath.init(row: 0, section: i))
-//        }
-        
         return mineIndexPaths
     }
     
@@ -252,6 +247,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         for cell: CollectionViewCell in self.collectionView!.visibleCells as! Array<CollectionViewCell> {
             if cell.hasMine {
                 cell.configureMineContainingCell()
+            }
+            else if cell.hasFlag {
+                cell.configureForMisplacedFlag()
             }
         }
     }
@@ -307,25 +305,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func handleGameWon() {
-        // Add flags to all uncovered cells
-        for cell: CollectionViewCell in (self.collectionView!.visibleCells as! Array<CollectionViewCell>) {
-            
-            self.headerView.timer.invalidate()
-            self.headerView.numberOfFlagsLabel.text = "0"
-            let winningTime = self.headerView.timeLabel.text
-            
-            if !cell.uncovered {
-                cell.hasFlag = true
-                cell.configureFlagContainingCell()
-            }
-            
-            self.headerView.configureResetButtonForGameWon()
-            
-            self.displayGameWonAlert(winningTime: winningTime!)
-            
-            // tell user they've won with an alert - display their time.
-        }
         
+        self.headerView.timer.invalidate()
+        self.headerView.setNumberOfFlagsLabelForGameWon()
+        self.headerView.configureResetButtonForGameWon()
+        self.addFlagsToUncoveredCells()
+        
+        let winningTime = self.headerView.timeLabel.text
+        self.displayGameWonAlert(winningTime: winningTime!)
     }
     
     func displayGameWonAlert(winningTime: String) {
@@ -339,6 +326,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func newGameHandler(alert: UIAlertAction!) {
         self.resetGame()
+    }
+    
+    func addFlagsToUncoveredCells() {
+        for cell: CollectionViewCell in (self.collectionView!.visibleCells as! Array<CollectionViewCell>) {
+            if !cell.uncovered {
+                cell.hasFlag = true
+                cell.configureFlagContainingCell()
+            }
+        }
     }
 //    func configureCellsWithZeroMinesInVicinity(indexPaths: Set<IndexPath>) {
 //        for indexPath in indexPaths {

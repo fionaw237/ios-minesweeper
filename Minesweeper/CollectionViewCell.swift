@@ -61,6 +61,10 @@ class CollectionViewCell: UICollectionViewCell {
         }
     }
     
+    func configureForMisplacedFlag() {
+        self.mineOrFlagImageView.image = UIImage(named: "icon-cross-48")
+    }
+    
     func getLabelTextColour(numberOfMines: Int) -> UIColor {
         
         let labelTextColours = [UIColor.blue, UIColor.green, UIColor.red, UIColor.purple,
