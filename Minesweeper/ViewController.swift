@@ -22,7 +22,7 @@ enum NumberOfItemsInSection: Int {
 
 enum NumberOfMines: Int {
     case beginner = 10
-    case intermediate = 20
+    case intermediate = 30
     case advanced = 40
 }
 
@@ -31,13 +31,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @IBOutlet var headerView: HeaderView!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var indexPathsOfMines = Set<IndexPath>()
+    var indexPathsOfMines: Set<IndexPath>!
     var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
     
     let numberOfItemsInSection = NumberOfSections.intermediate.rawValue
     let numberOfSections = NumberOfItemsInSection.intermediate.rawValue
-    let numberOfMines = 10
-//    let numberOfMines = NumberOfMines.intermediate.rawValue
+    let numberOfMines = NumberOfMines.intermediate.rawValue
     var remainingFlags: Int!
     
     var timerStarted = false
@@ -56,7 +55,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         self.remainingFlags = self.numberOfMines
         self.headerView.updateFlagsLabel(numberOfFlags: self.remainingFlags)
         self.headerView.configureResetButtonForNewGame()
-        self.indexPathsOfMines = self.getRandomIndexPathsOfMines()
+        self.indexPathsOfMines = []
     }
     
     func resetGame() {
@@ -126,6 +125,11 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, tappedForCellAt indexPath: IndexPath) {
         
         if (!timerStarted) {
+            
+            // Randomly distribute mines once user has selected an initial cell.
+            self.indexPathsOfMines = self.getRandomIndexPathsOfMines(indexPathOfInitialCell: indexPath)
+            self.collectionView.reloadItems(at: Array(self.indexPathsOfMines))
+            
             timerStarted = true
             self.headerView.timer = Timer.scheduledTimer(timeInterval: 1, target: self.headerView, selector: #selector(self.headerView.updateTimer), userInfo: nil, repeats: true)
         }
@@ -211,7 +215,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
-    func getRandomIndexPathsOfMines() -> Set<IndexPath> {
+    func getRandomIndexPathsOfMines(indexPathOfInitialCell: IndexPath) -> Set<IndexPath> {
         
         var mineIndexPaths = Set<IndexPath>()
         
@@ -219,7 +223,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             let randomRow = Int.random(in: 0...(numberOfItemsInSection - 1))
             let randomSection = Int.random(in: 0...(numberOfSections - 1))
             let randomIndexPath = IndexPath.init(row: randomRow, section: randomSection)
-            if !mineIndexPaths.contains(randomIndexPath) {
+            if !mineIndexPaths.contains(randomIndexPath) && (randomIndexPath != indexPathOfInitialCell) {
                 mineIndexPaths.insert(randomIndexPath)
             }
         }
