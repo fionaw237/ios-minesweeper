@@ -228,6 +228,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             }
         }
         
+//        for i in 0...9 {
+//            mineIndexPaths.insert(IndexPath.init(row: i, section: 0))
+//        }
+        
         return mineIndexPaths
     }
     
@@ -247,12 +251,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return mineCount
     }
     
-    func showAllMines() {
+    func showAllUnflaggedMines() {
         for cell: CollectionViewCell in self.collectionView!.visibleCells as! Array<CollectionViewCell> {
-            if cell.hasMine {
+
+            if cell.hasMine && !cell.hasFlag {
                 cell.configureMineContainingCell()
             }
-            else if cell.hasFlag {
+            else if !cell.hasMine && cell.hasFlag {
                 cell.configureForMisplacedFlag()
             }
         }
@@ -265,7 +270,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func gameOver(clickedCell: CollectionViewCell) {
-        self.showAllMines()
+        self.showAllUnflaggedMines()
         self.headerView.configureResetButtonForGameOver()
         clickedCell.configureForGameOver()
         self.disableUserInteractionOnAllCells()
