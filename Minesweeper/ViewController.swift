@@ -36,7 +36,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     let numberOfItemsInSection = NumberOfSections.intermediate.rawValue
     let numberOfSections = NumberOfItemsInSection.intermediate.rawValue
-    let numberOfMines = NumberOfMines.intermediate.rawValue
+    let numberOfMines = 10
+//    let numberOfMines = NumberOfMines.intermediate.rawValue
     var remainingFlags: Int!
     
     var timerStarted = false
@@ -54,6 +55,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func setUpGame() {
         self.remainingFlags = self.numberOfMines
         self.headerView.updateFlagsLabel(numberOfFlags: self.remainingFlags)
+        self.headerView.configureResetButtonForNewGame()
         self.indexPathsOfMines = self.getRandomIndexPathsOfMines()
     }
     
@@ -86,7 +88,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         self.timerStarted = false
     }
     
-    // UICollectionViewDelegate, UICollectionViewDataSource and UICollectionViewDelegateFlowLayout methods
+    // MARK: UICollectionViewDelegate, UICollectionViewDataSource and UICollectionViewDelegateFlowLayout methods
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return numberOfSections
@@ -119,7 +121,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     
-    // Helper functions
+    // MARK: Helper functions
     
     func collectionView(_ collectionView: UICollectionView, tappedForCellAt indexPath: IndexPath) {
         
@@ -142,6 +144,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let minesInVicinity = numberOfMinesInVicinityOfCellAt(indexPath: indexPath)
         
         cell.configureForMinesInVicinity(numberOfMines: minesInVicinity)
+        
+        if self.isGameWon() {
+            self.handleGameWon()
+        }
         
         // Now check adjacent cells
         
@@ -218,6 +224,11 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             }
         }
         
+        // FOR TESTING
+//        for i in 0...(numberOfMines - 1){
+//            mineIndexPaths.insert(IndexPath.init(row: 0, section: i))
+//        }
+        
         return mineIndexPaths
     }
     
@@ -247,7 +258,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func disableUserInteractionOnAllCells() {
         for cell: CollectionViewCell in (self.collectionView!.visibleCells as! Array<CollectionViewCell>) {
-            cell.isUserInteractionEnabled = false
+            cell.uncovered = true
         }
     }
     
@@ -283,6 +294,52 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return validIndexPaths
     }
     
+    func isGameWon() -> Bool {
+        var clickedCellCount = 0
+        for cell: CollectionViewCell in (self.collectionView!.visibleCells as! Array<CollectionViewCell>) {
+            if cell.hasFlag || cell.uncovered {
+                clickedCellCount += 1
+            }
+        }
+        
+        let totalNumberOfCellsInCollectionView = self.numberOfSections * self.numberOfItemsInSection
+        return clickedCellCount == totalNumberOfCellsInCollectionView - self.remainingFlags
+    }
+    
+    func handleGameWon() {
+        // Add flags to all uncovered cells
+        for cell: CollectionViewCell in (self.collectionView!.visibleCells as! Array<CollectionViewCell>) {
+            
+            self.headerView.timer.invalidate()
+            self.headerView.numberOfFlagsLabel.text = "0"
+            let winningTime = self.headerView.timeLabel.text
+            
+            if !cell.uncovered {
+                cell.hasFlag = true
+                cell.configureFlagContainingCell()
+            }
+            
+            self.headerView.configureResetButtonForGameWon()
+            
+            self.displayGameWonAlert(winningTime: winningTime!)
+            
+            // tell user they've won with an alert - display their time.
+        }
+        
+    }
+    
+    func displayGameWonAlert(winningTime: String) {
+        let alert = UIAlertController(title: "You won!", message: "Your time was \(winningTime) seconds", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "New Game", style: .default, handler: self.newGameHandler))
+        alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true)
+    }
+    
+    func newGameHandler(alert: UIAlertAction!) {
+        self.resetGame()
+    }
 //    func configureCellsWithZeroMinesInVicinity(indexPaths: Set<IndexPath>) {
 //        for indexPath in indexPaths {
 //            let cell: CollectionViewCell = self.collectionView.cellForItem(at: indexPath) as! CollectionViewCell

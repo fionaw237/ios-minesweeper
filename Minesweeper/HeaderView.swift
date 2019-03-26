@@ -32,7 +32,15 @@ class HeaderView: UIView {
         self.numberOfFlagsLabel.text = String(numberOfFlags)
     }
     
+    func configureResetButtonForNewGame() {
+        self.resetButton.imageView?.image = UIImage(named: "icon-happy-48")
+    }
+    
     func configureResetButtonForGameOver() {
         self.resetButton.imageView?.image = UIImage(named: "icon-sad-48")
+    }
+    
+    func configureResetButtonForGameWon() {
+        self.resetButton.imageView?.image = UIImage(named: "icon-cool-48")
     }
 }

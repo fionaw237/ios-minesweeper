@@ -27,35 +27,9 @@ class CollectionViewCell: UICollectionViewCell {
     }
     
     func configureNumberOfMinesLabel(numberOfMines: Int) {
-                
-        switch numberOfMines {
-        case 1:
-            self.numberOfMinesLabel.text = "1"
-            self.numberOfMinesLabel.textColor = UIColor.blue
-        case 2:
-            self.numberOfMinesLabel.text = "2"
-            self.numberOfMinesLabel.textColor = UIColor.green
-        case 3:
-            self.numberOfMinesLabel.text = "3"
-            self.numberOfMinesLabel.textColor = UIColor.red
-        case 4:
-            self.numberOfMinesLabel.text = "4"
-            self.numberOfMinesLabel.textColor = UIColor.purple
-        case 5:
-            self.numberOfMinesLabel.text = "5"
-            self.numberOfMinesLabel.textColor = UIColor.magenta
-        case 6:
-            self.numberOfMinesLabel.text = "6"
-            self.numberOfMinesLabel.textColor = UIColor.cyan
-        case 7:
-            self.numberOfMinesLabel.text = "7"
-            self.numberOfMinesLabel.textColor = UIColor.black
-        case 8:
-            self.numberOfMinesLabel.text = "8"
-            self.numberOfMinesLabel.textColor = UIColor.gray
-        default:
-            return
-        }
+        
+        self.numberOfMinesLabel.text = String(numberOfMines)
+        self.numberOfMinesLabel.textColor = self.getLabelTextColour(numberOfMines: numberOfMines)
     }
     
     func configureMineContainingCell() {
@@ -72,7 +46,7 @@ class CollectionViewCell: UICollectionViewCell {
     }
     
     func configureForZeroMinesInVicinity() {
-        self.backgroundColor = UIColor.green
+        self.backgroundColor = UIColor.white
     }
     
     func configureForMinesInVicinity(numberOfMines: Int) {
@@ -85,5 +59,13 @@ class CollectionViewCell: UICollectionViewCell {
         else {
             self.configureNumberOfMinesLabel(numberOfMines: numberOfMines)
         }
+    }
+    
+    func getLabelTextColour(numberOfMines: Int) -> UIColor {
+        
+        let labelTextColours = [UIColor.blue, UIColor.green, UIColor.red, UIColor.purple,
+                                UIColor.magenta, UIColor.cyan, UIColor.black, UIColor.gray]
+        
+        return labelTextColours[numberOfMines - 1]
     }
 }
