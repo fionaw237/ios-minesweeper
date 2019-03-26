@@ -11,22 +11,21 @@ import UIKit
 class CollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var numberOfMinesLabel: UILabel!
-    @IBOutlet weak var mineImageView: UIImageView!
+    @IBOutlet weak var mineOrFlagImageView: UIImageView!
     var hasMine: Bool!
+    var hasFlag: Bool!
     
     override func prepareForReuse() {
         self.hasMine = false
+        self.hasFlag = false
         self.numberOfMinesLabel.text = ""
-        self.mineImageView.image = nil
+        self.mineOrFlagImageView.image = nil
         self.backgroundColor = UIColor.lightGray
         self.isUserInteractionEnabled = true
     }
     
     func configureNumberOfMinesLabel(numberOfMines: Int) {
         switch numberOfMines {
-        case 0:
-            self.numberOfMinesLabel.text = "0"
-            self.numberOfMinesLabel.textColor = UIColor.orange
         case 1:
             self.numberOfMinesLabel.text = "1"
             self.numberOfMinesLabel.textColor = UIColor.blue
@@ -57,10 +56,28 @@ class CollectionViewCell: UICollectionViewCell {
     }
     
     func configureMineContainingCell() {
-        self.mineImageView.image = UIImage(named: "mine-icon-black-50")
+        self.mineOrFlagImageView.image = UIImage(named: "mine-icon-black-50")
+    }
+    
+    func configureFlagContainingCell() {
+        self.mineOrFlagImageView.image = UIImage(named: "icon-flag-48")
+        self.mineOrFlagImageView.isHidden = !self.hasFlag
     }
     
     func configureForGameOver() {
         self.backgroundColor = UIColor.red
+    }
+    
+    func configureForZeroMinesInVicinity() {
+        self.backgroundColor = UIColor.green
+    }
+    
+    func configureForMinesInVicinity(numberOfMines: Int) {
+        if (numberOfMines == 0) {
+            self.configureForZeroMinesInVicinity()
+        }
+        else {
+            self.configureNumberOfMinesLabel(numberOfMines: numberOfMines)
+        }
     }
 }

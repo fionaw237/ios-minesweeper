@@ -10,9 +10,27 @@ import UIKit
 
 class HeaderView: UIView {
 
-    @IBOutlet weak var numberOfFlagsLabel: UILabel!;
-    @IBOutlet weak var timeLabel: UILabel!;
-    @IBOutlet weak var resetButton: UIButton!;
+    @IBOutlet weak var numberOfFlagsLabel: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var resetButton: UIButton!
+    var time = 0
+    var timer = Timer()
+    
+    @objc func updateTimer() {
+        self.time += 1
+        if (timeLabel != nil) {
+            self.timeLabel.text = String(self.time)
+        }
+    }
+    
+    func resetTimer() {
+        self.time = 0
+        self.timeLabel.text = "0"
+    }
+
+    func updateFlagsLabel(numberOfFlags: Int) {
+        self.numberOfFlagsLabel.text = String(numberOfFlags)
+    }
     
     func configureResetButtonForGameOver() {
         self.resetButton.imageView?.image = UIImage(named: "icon-sad-48")

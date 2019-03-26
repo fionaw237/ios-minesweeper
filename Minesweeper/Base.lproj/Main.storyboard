@@ -24,14 +24,14 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Flags" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ttv-2p-uia" userLabel="Number of Flags Label">
                                         <rect key="frame" x="15" y="40" width="112.5" height="53.5"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                                         <color key="textColor" red="1" green="0.19124066219999999" blue="0.2452359818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H6d-LK-ZS5" userLabel="Time Label">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H6d-LK-ZS5" userLabel="Time Label">
                                         <rect key="frame" x="247.5" y="40" width="112.5" height="53.5"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                                         <color key="textColor" red="1" green="0.19124066219999999" blue="0.2452359818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -117,7 +117,7 @@
                                             <constraint firstItem="GXg-KX-lmK" firstAttribute="height" secondItem="6cV-n3-F7T" secondAttribute="height" multiplier="0.6" id="v9b-N7-cd8"/>
                                         </constraints>
                                         <connections>
-                                            <outlet property="mineImageView" destination="JdE-5M-QlQ" id="EvP-fL-Nhc"/>
+                                            <outlet property="mineOrFlagImageView" destination="JdE-5M-QlQ" id="EvP-fL-Nhc"/>
                                             <outlet property="numberOfMinesLabel" destination="GXg-KX-lmK" id="Ap5-rN-ccZ"/>
                                         </connections>
                                     </collectionViewCell>

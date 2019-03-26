@@ -22,21 +22,22 @@ enum NumberOfItemsInSection: Int {
 
 enum NumberOfMines: Int {
     case beginner = 10
-    case intermediate = 30
+    case intermediate = 20
     case advanced = 40
 }
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    @IBOutlet weak var headerView: HeaderView!
+    @IBOutlet var headerView: HeaderView!
     @IBOutlet weak var collectionView: UICollectionView!
     
     var indexPathsOfMines = Set<IndexPath>()
+    var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
     
     let numberOfItemsInSection = NumberOfSections.intermediate.rawValue
     let numberOfSections = NumberOfItemsInSection.intermediate.rawValue
     let numberOfMines = NumberOfMines.intermediate.rawValue
-    var remainingFlags = 10
+    var remainingFlags: Int!
     
     var timerStarted = false
     
@@ -46,18 +47,51 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setUpGame()
+        self.setUpLongPressGestureRecognizer()
+    }
     
+    func setUpGame() {
         self.remainingFlags = self.numberOfMines
+        self.headerView.updateFlagsLabel(numberOfFlags: self.remainingFlags)
         self.indexPathsOfMines = self.getRandomIndexPathsOfMines()
     }
     
     func resetGame() {
-        self.indexPathsOfMines = self.getRandomIndexPathsOfMines()
+        self.configureTimerForReset()
+        self.setUpGame()
         self.collectionView.reloadData()
     }
     
-    func updateTimer() {
-        print("update")
+    func setUpLongPressGestureRecognizer() {
+        let longPressGestureRecogniser = UILongPressGestureRecognizer(target: self, action: #selector(addFlag(gesture:)))
+        longPressGestureRecogniser.minimumPressDuration = 0.25
+        self.collectionView.addGestureRecognizer(longPressGestureRecogniser)
+    }
+    
+    @objc func addFlag(gesture: UILongPressGestureRecognizer) {
+        if gesture.state == .began {
+            
+            let locationOfGesture = gesture.location(in: self.collectionView)
+            let indexPath = self.collectionView.indexPathForItem(at: locationOfGesture)
+            if indexPath != nil {
+                
+                let cell = self.collectionView.cellForItem(at: indexPath!) as! CollectionViewCell
+                
+                if (self.remainingFlags > 0 && !cell.hasFlag) {
+                    cell.hasFlag = true
+                    self.remainingFlags -= 1
+                }
+                else if cell.hasFlag {
+                    cell.hasFlag = false
+                    self.remainingFlags += 1
+                }
+                
+                cell.configureFlagContainingCell()
+            }
+            
+            self.headerView.updateFlagsLabel(numberOfFlags: self.remainingFlags)
+        }
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -73,7 +107,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let cell: CollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! CollectionViewCell
         
         cell.hasMine = (self.indexPathsOfMines.contains(indexPath))
-        
+        if cell.hasFlag == nil {
+            cell.hasFlag = false
+        }
         return cell
     }
     
@@ -87,7 +123,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         if (!timerStarted) {
             timerStarted = true
-//            Timer.scheduledTimer(timeInterval: (1.0/30.0), target: self, selector: Selector(), userInfo: nil, repeats: true)
+            self.headerView.timer = Timer.scheduledTimer(timeInterval: 1, target: self.headerView, selector: #selector(self.headerView.updateTimer), userInfo: nil, repeats: true)
         }
         
         let cell: CollectionViewCell = self.collectionView.cellForItem(at: indexPath) as! CollectionViewCell
@@ -97,8 +133,29 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             return
         }
         
+        cell.isUserInteractionEnabled = false
+        
         let minesInVicinity = numberOfMinesInVicinityOfCellAt(indexPath: indexPath)
-        cell.configureNumberOfMinesLabel(numberOfMines: minesInVicinity)
+        
+        cell.configureForMinesInVicinity(numberOfMines: minesInVicinity)
+        
+        // Now check adjacent cells
+        
+//        var numberOfCellsWithZeroAdjacentMines = 0
+//        
+//        let validAdjacentIndexPaths = self.getValidAdjacentIndexPaths(indexPath: indexPath)
+//        
+//        for adjacentIndexPath in validAdjacentIndexPaths {
+//            let adjacentCell: CollectionViewCell = self.collectionView.cellForItem(at: adjacentIndexPath) as! CollectionViewCell
+//            let numberOfMinesInVicinity = numberOfMinesInVicinityOfCellAt(indexPath: adjacentIndexPath)
+//            adjacentCell.configureForMinesInVicinity(numberOfMines: numberOfMinesInVicinity)
+//            if numberOfMinesInVicinity == 0 {
+//                numberOfCellsWithZeroAdjacentMines += 1
+//            }
+//        }
+//        
+//        if numberOfCellsWithZeroAdjacentMines == 0 {return}
+        
     }
     
     func getRandomIndexPathsOfMines() -> Set<IndexPath> {
@@ -142,7 +199,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func disableUserInteractionOnAllCells() {
-        for cell: CollectionViewCell in self.collectionView!.visibleCells as! Array<CollectionViewCell> {
+        for cell: CollectionViewCell in (self.collectionView!.visibleCells as! Array<CollectionViewCell>) {
             cell.isUserInteractionEnabled = false
         }
     }
@@ -152,6 +209,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         self.headerView.configureResetButtonForGameOver()
         clickedCell.configureForGameOver()
         self.disableUserInteractionOnAllCells()
+        self.headerView.timer.invalidate()
     }
     
     func isOutOfBounds(row: Int, section: Int) -> Bool {
@@ -176,6 +234,30 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             }
         }
         return validIndexPaths
+    }
+    
+//    func configureCellsWithZeroMinesInVicinity(indexPaths: Set<IndexPath>) {
+//        for indexPath in indexPaths {
+//            let cell: CollectionViewCell = self.collectionView.cellForItem(at: indexPath) as! CollectionViewCell
+//            cell.configureForZeroMinesInVicinity()
+//        }
+//    }
+//
+//    func updateAdjacentIndexPathsWithZeroMinesInVicinity(indexPath: IndexPath) {
+//
+//        let validAdjacentIndexPaths = self.getValidAdjacentIndexPaths(indexPath: indexPath)
+//
+//        for indexPath in validAdjacentIndexPaths {
+//            if self.numberOfMinesInVicinityOfCellAt(indexPath: indexPath) == 0 {
+//                adjacentIndexPathsWithZeroMinesInVicinity.insert(indexPath)
+//            }
+//        }
+//    }
+    
+    func configureTimerForReset() {
+        self.headerView.timer.invalidate()
+        self.headerView.resetTimer()
+        self.timerStarted = false
     }
 }
 
