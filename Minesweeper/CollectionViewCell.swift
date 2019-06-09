@@ -12,9 +12,9 @@ class CollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var numberOfMinesLabel: UILabel!
     @IBOutlet weak var mineOrFlagImageView: UIImageView!
-    var hasMine: Bool!
-    var hasFlag: Bool!
-    var uncovered: Bool!
+    var hasMine = false
+    var hasFlag = false
+    var uncovered = false
     
     override func prepareForReuse() {
         self.hasMine = false

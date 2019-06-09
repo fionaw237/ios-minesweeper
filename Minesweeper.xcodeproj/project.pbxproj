@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2B54565F2250056B00AB6EAE /* WelcomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B54565E2250056B00AB6EAE /* WelcomePageViewController.swift */; };
 		2BE47CA82223FF2A00D3952A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE47CA72223FF2A00D3952A /* AppDelegate.swift */; };
 		2BE47CAA2223FF2A00D3952A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE47CA92223FF2A00D3952A /* ViewController.swift */; };
 		2BE47CAD2223FF2A00D3952A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2BE47CAB2223FF2A00D3952A /* Main.storyboard */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2B54565E2250056B00AB6EAE /* WelcomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomePageViewController.swift; sourceTree = "<group>"; };
 		2BE47CA42223FF2A00D3952A /* Minesweeper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Minesweeper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BE47CA72223FF2A00D3952A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2BE47CA92223FF2A00D3952A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				2BE47CAE2223FF2A00D3952A /* Minesweeper.xcdatamodeld */,
 				2BE47CD8222422D300D3952A /* HeaderView.swift */,
 				2BE47CDA222425A400D3952A /* CollectionViewCell.swift */,
+				2B54565E2250056B00AB6EAE /* WelcomePageViewController.swift */,
 			);
 			path = Minesweeper;
 			sourceTree = "<group>";
@@ -265,6 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B54565F2250056B00AB6EAE /* WelcomePageViewController.swift in Sources */,
 				2BE47CDB222425A400D3952A /* CollectionViewCell.swift in Sources */,
 				2BE47CB02223FF2A00D3952A /* Minesweeper.xcdatamodeld in Sources */,
 				2BE47CAA2223FF2A00D3952A /* ViewController.swift in Sources */,

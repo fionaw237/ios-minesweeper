@@ -9,21 +9,27 @@
 import UIKit
 
 enum NumberOfSections: Int {
-    case beginner = 8
-    case intermediate = 10
-    case advanced = 12
+    case Beginner = 8
+    case Intermediate = 10
+    case Advanced = 12
 }
 
 enum NumberOfItemsInSection: Int {
-    case beginner = 8
-    case intermediate = 12
-    case advanced = 14
+    case Beginner = 8
+    case Intermediate = 9
+    case Advanced = 10
 }
 
 enum NumberOfMines: Int {
-    case beginner = 10
-    case intermediate = 30
-    case advanced = 40
+    case Beginner = 15
+    case Intermediate = 30
+    case Advanced = 50
+}
+
+enum GameDifficulty: Int {
+    case Beginner = 1
+    case Intermediate = 2
+    case Advanced = 3
 }
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -31,13 +37,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @IBOutlet var headerView: HeaderView!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var indexPathsOfMines: Set<IndexPath>!
+    var indexPathsOfMines = Set<IndexPath>()
     var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
-    
-    let numberOfItemsInSection = NumberOfSections.intermediate.rawValue
-    let numberOfSections = NumberOfItemsInSection.intermediate.rawValue
-    let numberOfMines = NumberOfMines.intermediate.rawValue
-    var remainingFlags: Int!
+    var gameDifficulty: GameDifficulty?
+    var numberOfItemsInSection = 0
+    var numberOfSections = 0
+    var numberOfMines = 0
+    var remainingFlags = 0
     
     var timerStarted = false
     
@@ -51,11 +57,51 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         self.setUpGestureRecognizers()
     }
     
+    func getNumberOfMines(gameDifficulty: GameDifficulty) -> Int {
+        switch gameDifficulty {
+        case .Beginner:
+            return NumberOfMines.Beginner.rawValue
+        case .Intermediate:
+            return NumberOfMines.Intermediate.rawValue
+        case .Advanced:
+            return NumberOfMines.Advanced.rawValue
+        }
+    }
+    
+    func getNumberOfItemsInSection(gameDifficulty: GameDifficulty) -> Int {
+        switch gameDifficulty {
+        case .Beginner:
+            return NumberOfItemsInSection.Beginner.rawValue
+        case .Intermediate:
+            return NumberOfItemsInSection.Intermediate.rawValue
+        case .Advanced:
+            return NumberOfItemsInSection.Advanced.rawValue
+        }
+    }
+    
+    func getNumberOfSections(gameDifficulty: GameDifficulty) -> Int {
+        switch gameDifficulty {
+        case .Beginner:
+            return NumberOfSections.Beginner.rawValue
+        case .Intermediate:
+            return NumberOfSections.Intermediate.rawValue
+        case .Advanced:
+            return NumberOfSections.Advanced.rawValue
+        }
+    }
+    
     func setUpGame() {
-        self.remainingFlags = self.numberOfMines
-        self.headerView.updateFlagsLabel(numberOfFlags: self.remainingFlags)
-        self.headerView.configureResetButtonForNewGame()
-        self.indexPathsOfMines = []
+        
+        if let gameDifficulty = self.gameDifficulty {
+            // set game properties according to chosen difficulty
+            self.numberOfMines = self.getNumberOfMines(gameDifficulty: gameDifficulty)
+            self.numberOfItemsInSection = self.getNumberOfItemsInSection(gameDifficulty: gameDifficulty)
+            self.numberOfSections = self.getNumberOfSections(gameDifficulty: gameDifficulty)
+            self.remainingFlags = self.numberOfMines
+            self.headerView.updateFlagsLabel(numberOfFlags: self.remainingFlags)
+            self.headerView.configureResetButtonForNewGame()
+            self.indexPathsOfMines = Set<IndexPath>()
+        }
     }
     
     func resetGame() {
@@ -103,14 +149,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         cell.hasMine = (self.indexPathsOfMines.contains(indexPath))
         
-        if cell.hasFlag == nil {
-            cell.hasFlag = false
-        }
-        
-        if cell.uncovered == nil {
-            cell.uncovered = false
-        }
-        
         return cell
     }
     
@@ -126,8 +164,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         if (!timerStarted) {
             
-            // Randomly distribute mines once user has selected an initial cell.
-            self.indexPathsOfMines = self.getRandomIndexPathsOfMines(indexPathOfInitialCell: indexPath)
+            self.indexPathsOfMines = self.randomlyDistributeMines(indexPathOfInitialCell: indexPath)
             self.collectionView.reloadItems(at: Array(self.indexPathsOfMines))
             
             timerStarted = true
@@ -215,7 +252,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
-    func getRandomIndexPathsOfMines(indexPathOfInitialCell: IndexPath) -> Set<IndexPath> {
+    func randomlyDistributeMines(indexPathOfInitialCell: IndexPath) -> Set<IndexPath> {
         
         var mineIndexPaths = Set<IndexPath>()
         
