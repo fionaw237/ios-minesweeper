@@ -10,20 +10,12 @@ import UIKit
 
 class WelcomePageViewController: UIViewController {
     
-    
     @IBOutlet weak var beginnerButton: UIButton!
     @IBOutlet weak var intermediateButton: UIButton!
     @IBOutlet weak var advancedButton: UIButton!
     
-    
     @IBAction func gameDifficultyChosen(_ sender: Any) {
         performSegue(withIdentifier: "mySegue", sender: sender)
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
@@ -34,18 +26,6 @@ class WelcomePageViewController: UIViewController {
             gameViewController.gameDifficulty = chosenDifficulty
         }
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 

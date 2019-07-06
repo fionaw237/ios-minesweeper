@@ -48,13 +48,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var timerStarted = false
     
     @IBAction func resetButtonPressed(_ sender: Any) {
-        self.resetGame()
+        resetGame()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setUpGame()
-        self.setUpGestureRecognizers()
+        setUpGame()
+        setUpGestureRecognizers()
     }
     
     func getNumberOfMines(gameDifficulty: GameDifficulty) -> Int {
@@ -91,46 +91,44 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func setUpGame() {
-        
-        if let gameDifficulty = self.gameDifficulty {
-            // set game properties according to chosen difficulty
-            self.numberOfMines = self.getNumberOfMines(gameDifficulty: gameDifficulty)
-            self.numberOfItemsInSection = self.getNumberOfItemsInSection(gameDifficulty: gameDifficulty)
-            self.numberOfSections = self.getNumberOfSections(gameDifficulty: gameDifficulty)
-            self.remainingFlags = self.numberOfMines
-            self.headerView.updateFlagsLabel(numberOfFlags: self.remainingFlags)
-            self.headerView.configureResetButtonForNewGame()
-            self.indexPathsOfMines = Set<IndexPath>()
+        if let gameDifficulty = gameDifficulty {
+            numberOfMines = getNumberOfMines(gameDifficulty: gameDifficulty)
+            numberOfItemsInSection = getNumberOfItemsInSection(gameDifficulty: gameDifficulty)
+            numberOfSections = getNumberOfSections(gameDifficulty: gameDifficulty)
+            remainingFlags = numberOfMines
+            headerView.updateFlagsLabel(numberOfFlags: remainingFlags)
+            headerView.configureResetButtonForNewGame()
+            indexPathsOfMines = Set<IndexPath>()
         }
     }
     
     func resetGame() {
-        self.configureTimerForReset()
-        self.setUpGame()
-        self.collectionView.reloadData()
+        configureTimerForReset()
+        setUpGame()
+        collectionView.reloadData()
     }
     
     func setUpLongPressGestureRecognizer() {
         let longPressGestureRecogniser = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gesture:)))
         longPressGestureRecogniser.minimumPressDuration = 0.25
-        self.collectionView.addGestureRecognizer(longPressGestureRecogniser)
+        collectionView.addGestureRecognizer(longPressGestureRecogniser)
     }
     
     func setUpTapGestureRecognizer() {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(gesture:)))
         tapGestureRecognizer.numberOfTapsRequired = 1
-        self.collectionView.addGestureRecognizer(tapGestureRecognizer)
+        collectionView.addGestureRecognizer(tapGestureRecognizer)
     }
     
     func setUpGestureRecognizers() {
-        self.setUpTapGestureRecognizer()
-        self.setUpLongPressGestureRecognizer()
+        setUpTapGestureRecognizer()
+        setUpLongPressGestureRecognizer()
     }
     
     func configureTimerForReset() {
-        self.headerView.timer.invalidate()
-        self.headerView.resetTimer()
-        self.timerStarted = false
+        headerView.timer.invalidate()
+        headerView.resetTimer()
+        timerStarted = false
     }
     
     // MARK: UICollectionViewDelegate, UICollectionViewDataSource and UICollectionViewDelegateFlowLayout methods
@@ -147,7 +145,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         let cell: CollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! CollectionViewCell
         
-        cell.hasMine = (self.indexPathsOfMines.contains(indexPath))
+        cell.hasMine = (indexPathsOfMines.contains(indexPath))
         
         return cell
     }
@@ -161,24 +159,23 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     // MARK: Helper functions
     
     func collectionView(_ collectionView: UICollectionView, tappedForCellAt indexPath: IndexPath) {
-        
         if (!timerStarted) {
-            
-            self.indexPathsOfMines = self.randomlyDistributeMines(indexPathOfInitialCell: indexPath)
-            self.collectionView.reloadItems(at: Array(self.indexPathsOfMines))
+            indexPathsOfMines = randomlyDistributeMines(indexPathOfInitialCell: indexPath)
+            collectionView.reloadItems(at: Array(indexPathsOfMines))
             
             timerStarted = true
-            self.headerView.timer = Timer.scheduledTimer(timeInterval: 1, target: self.headerView, selector: #selector(self.headerView.updateTimer), userInfo: nil, repeats: true)
+            headerView.timer = Timer.scheduledTimer(timeInterval: 1, target: headerView, selector: #selector(headerView.updateTimer),
+                                                    userInfo: nil, repeats: true)
         }
         
-        let cell: CollectionViewCell = self.collectionView.cellForItem(at: indexPath) as! CollectionViewCell
+        let cell: CollectionViewCell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
         
         if cell.hasFlag || cell.uncovered {
             return
         }
         
         if cell.hasMine {
-            self.gameOver(clickedCell: cell)
+            gameOver(clickedCell: cell)
             return
         }
         
@@ -186,8 +183,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         cell.configureForMinesInVicinity(numberOfMines: minesInVicinity)
         
-        if self.isGameWon() {
-            self.handleGameWon()
+        if isGameWon() {
+            handleGameWon()
         }
         
         // Now check adjacent cells
@@ -211,32 +208,32 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, longPressForCellAt indexPath: IndexPath) {
         
-        let cell = self.collectionView.cellForItem(at: indexPath) as! CollectionViewCell
+        let cell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
         
         if cell.uncovered {
             return
         }
         
-        if (self.remainingFlags > 0 && !cell.hasFlag) {
+        if (remainingFlags > 0 && !cell.hasFlag) {
             cell.hasFlag = true
-            self.remainingFlags -= 1
+            remainingFlags -= 1
         }
         else if cell.hasFlag {
             cell.hasFlag = false
-            self.remainingFlags += 1
+            remainingFlags += 1
         }
         
         cell.configureFlagContainingCell()
         
-        self.headerView.updateFlagsLabel(numberOfFlags: self.remainingFlags)
+        headerView.updateFlagsLabel(numberOfFlags: remainingFlags)
     }
     
     @objc func handleTap(gesture: UITapGestureRecognizer) {
         if gesture.state == .ended {
-            let locationOfGesture = gesture.location(in: self.collectionView)
-            let indexPath = self.collectionView.indexPathForItem(at: locationOfGesture)
+            let locationOfGesture = gesture.location(in: collectionView)
+            let indexPath = collectionView.indexPathForItem(at: locationOfGesture)
             if (indexPath != nil) {
-                self.collectionView(self.collectionView, tappedForCellAt: indexPath!)
+                collectionView(collectionView, tappedForCellAt: indexPath!)
             }
         }
     }
@@ -244,10 +241,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @objc func handleLongPress(gesture: UILongPressGestureRecognizer) {
         if gesture.state == .began {
             
-            let locationOfGesture = gesture.location(in: self.collectionView)
-            let indexPath = self.collectionView.indexPathForItem(at: locationOfGesture)
+            let locationOfGesture = gesture.location(in: collectionView)
+            let indexPath = collectionView.indexPathForItem(at: locationOfGesture)
             if indexPath != nil {
-                self.collectionView(self.collectionView, longPressForCellAt: indexPath!)
+                collectionView(collectionView, longPressForCellAt: indexPath!)
             }
         }
     }
@@ -255,7 +252,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func randomlyDistributeMines(indexPathOfInitialCell: IndexPath) -> Set<IndexPath> {
         
         var mineIndexPaths = Set<IndexPath>()
-        
+
         while mineIndexPaths.count < numberOfMines {
             let randomRow = Int.random(in: 0...(numberOfItemsInSection - 1))
             let randomSection = Int.random(in: 0...(numberOfSections - 1))
@@ -289,7 +286,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func showAllUnflaggedMines() {
-        for cell: CollectionViewCell in self.collectionView!.visibleCells as! Array<CollectionViewCell> {
+        for cell: CollectionViewCell in collectionView!.visibleCells as! Array<CollectionViewCell> {
 
             if cell.hasMine && !cell.hasFlag {
                 cell.configureMineContainingCell()
@@ -301,17 +298,17 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func disableUserInteractionOnAllCells() {
-        for cell: CollectionViewCell in (self.collectionView!.visibleCells as! Array<CollectionViewCell>) {
+        for cell: CollectionViewCell in (collectionView!.visibleCells as! Array<CollectionViewCell>) {
             cell.uncovered = true
         }
     }
     
     func gameOver(clickedCell: CollectionViewCell) {
-        self.showAllUnflaggedMines()
-        self.headerView.configureResetButtonForGameOver()
+        showAllUnflaggedMines()
+        headerView.configureResetButtonForGameOver()
         clickedCell.configureForGameOver()
-        self.disableUserInteractionOnAllCells()
-        self.headerView.timer.invalidate()
+        disableUserInteractionOnAllCells()
+        headerView.timer.invalidate()
     }
     
     func isOutOfBounds(row: Int, section: Int) -> Bool {
@@ -340,42 +337,37 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func isGameWon() -> Bool {
         var clickedCellCount = 0
-        for cell: CollectionViewCell in (self.collectionView!.visibleCells as! Array<CollectionViewCell>) {
+        for cell: CollectionViewCell in (collectionView!.visibleCells as! Array<CollectionViewCell>) {
             if cell.hasFlag || cell.uncovered {
                 clickedCellCount += 1
             }
         }
-        
-        let totalNumberOfCellsInCollectionView = self.numberOfSections * self.numberOfItemsInSection
-        return clickedCellCount == totalNumberOfCellsInCollectionView - self.remainingFlags
+        let totalNumberOfCellsInCollectionView = numberOfSections * numberOfItemsInSection
+        return clickedCellCount == totalNumberOfCellsInCollectionView - remainingFlags
     }
     
     func handleGameWon() {
-        
-        self.headerView.timer.invalidate()
-        self.headerView.setNumberOfFlagsLabelForGameWon()
-        self.headerView.configureResetButtonForGameWon()
-        self.addFlagsToUncoveredCells()
-        
-        let winningTime = self.headerView.timeLabel.text
-        self.displayGameWonAlert(winningTime: winningTime!)
+        headerView.timer.invalidate()
+        headerView.setNumberOfFlagsLabelForGameWon()
+        headerView.configureResetButtonForGameWon()
+        addFlagsToUncoveredCells()
+        let winningTime = headerView.timeLabel.text
+        displayGameWonAlert(winningTime: winningTime!)
     }
     
     func displayGameWonAlert(winningTime: String) {
         let alert = UIAlertController(title: "You won!", message: "Your time was \(winningTime) seconds", preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "New Game", style: .default, handler: self.newGameHandler))
+        alert.addAction(UIAlertAction(title: "New Game", style: .default, handler: newGameHandler))
         alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
-        
-        self.present(alert, animated: true)
+        present(alert, animated: true)
     }
     
     func newGameHandler(alert: UIAlertAction!) {
-        self.resetGame()
+        resetGame()
     }
     
     func addFlagsToUncoveredCells() {
-        for cell: CollectionViewCell in (self.collectionView!.visibleCells as! Array<CollectionViewCell>) {
+        for cell: CollectionViewCell in (collectionView!.visibleCells as! Array<CollectionViewCell>) {
             if !cell.uncovered {
                 cell.hasFlag = true
                 cell.configureFlagContainingCell()

@@ -17,34 +17,34 @@ class HeaderView: UIView {
     var timer = Timer()
     
     @objc func updateTimer() {
-        self.time += 1
+        time += 1
         if (timeLabel != nil) {
-            self.timeLabel.text = String(self.time)
+            timeLabel.text = String(time)
         }
     }
     
     func resetTimer() {
-        self.time = 0
-        self.timeLabel.text = "0"
+        time = 0
+        timeLabel.text = "0"
     }
 
     func updateFlagsLabel(numberOfFlags: Int) {
-        self.numberOfFlagsLabel.text = String(numberOfFlags)
+        numberOfFlagsLabel.text = String(numberOfFlags)
     }
     
     func setNumberOfFlagsLabelForGameWon() {
-        self.numberOfFlagsLabel.text = "0"
+        numberOfFlagsLabel.text = "0"
     }
     
     func configureResetButtonForNewGame() {
-        self.resetButton.imageView?.image = UIImage(named: "icon-happy-48")
+        resetButton.imageView?.image = UIImage(named: "icon-happy-48")
     }
     
     func configureResetButtonForGameOver() {
-        self.resetButton.imageView?.image = UIImage(named: "icon-sad-48")
+        resetButton.imageView?.image = UIImage(named: "icon-sad-48")
     }
     
     func configureResetButtonForGameWon() {
-        self.resetButton.imageView?.image = UIImage(named: "icon-cool-48")
+        resetButton.imageView?.image = UIImage(named: "icon-cool-48")
     }
 }

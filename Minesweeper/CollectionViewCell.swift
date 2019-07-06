@@ -17,56 +17,53 @@ class CollectionViewCell: UICollectionViewCell {
     var uncovered = false
     
     override func prepareForReuse() {
-        self.hasMine = false
-        self.hasFlag = false
-        self.uncovered = false
-        self.numberOfMinesLabel.text = ""
-        self.mineOrFlagImageView.image = nil
-        self.backgroundColor = UIColor.lightGray
-        self.isUserInteractionEnabled = true
+        hasMine = false
+        hasFlag = false
+        uncovered = false
+        numberOfMinesLabel.text = ""
+        mineOrFlagImageView.image = nil
+        backgroundColor = UIColor.lightGray
+        isUserInteractionEnabled = true
     }
     
     func configureNumberOfMinesLabel(numberOfMines: Int) {
-        
-        self.numberOfMinesLabel.text = String(numberOfMines)
-        self.numberOfMinesLabel.textColor = self.getLabelTextColour(numberOfMines: numberOfMines)
+        numberOfMinesLabel.text = String(numberOfMines)
+        numberOfMinesLabel.textColor = getLabelTextColour(numberOfMines: numberOfMines)
     }
     
     func configureMineContainingCell() {
-        self.mineOrFlagImageView.image = UIImage(named: "mine-icon-black-50")
+        mineOrFlagImageView.image = UIImage(named: "mine-icon-black-50")
     }
     
     func configureFlagContainingCell() {
-        self.mineOrFlagImageView.image = UIImage(named: "icon-flag-48")
-        self.mineOrFlagImageView.isHidden = !self.hasFlag
+        mineOrFlagImageView.image = UIImage(named: "icon-flag-48")
+        mineOrFlagImageView.isHidden = !hasFlag
     }
     
     func configureForGameOver() {
-        self.backgroundColor = UIColor.red
+        backgroundColor = UIColor.red
     }
     
     func configureForZeroMinesInVicinity() {
-        self.backgroundColor = UIColor.white
+       backgroundColor = UIColor.white
     }
     
     func configureForMinesInVicinity(numberOfMines: Int) {
-        
-        self.uncovered = true
+        uncovered = true
         
         if (numberOfMines == 0) {
-            self.configureForZeroMinesInVicinity()
+            configureForZeroMinesInVicinity()
         }
         else {
-            self.configureNumberOfMinesLabel(numberOfMines: numberOfMines)
+            configureNumberOfMinesLabel(numberOfMines: numberOfMines)
         }
     }
     
     func configureForMisplacedFlag() {
-        self.mineOrFlagImageView.image = UIImage(named: "icon-cross-48")
+        mineOrFlagImageView.image = UIImage(named: "icon-cross-48")
     }
     
     func getLabelTextColour(numberOfMines: Int) -> UIColor {
-        
         let labelTextColours = [UIColor.blue, UIColor.green, UIColor.red, UIColor.purple,
                                 UIColor.magenta, UIColor.cyan, UIColor.black, UIColor.gray]
         
