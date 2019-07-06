@@ -155,7 +155,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return CGSize(width: cellWidth, height: cellWidth)
     }
     
-    
     // MARK: Helper functions
     
     func collectionView(_ collectionView: UICollectionView, tappedForCellAt indexPath: IndexPath) {
@@ -181,39 +180,20 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         let minesInVicinity = numberOfMinesInVicinityOfCellAt(indexPath: indexPath)
         
+        if minesInVicinity == 0 {
+            revealSurroundingCellsWithZeroMines(indexPath)
+        }
+        
         cell.configureForMinesInVicinity(numberOfMines: minesInVicinity)
         
         if isGameWon() {
             handleGameWon()
         }
-        
-        // Now check adjacent cells
-        
-//        var numberOfCellsWithZeroAdjacentMines = 0
-//        
-//        let validAdjacentIndexPaths = self.getValidAdjacentIndexPaths(indexPath: indexPath)
-//        
-//        for adjacentIndexPath in validAdjacentIndexPaths {
-//            let adjacentCell: CollectionViewCell = self.collectionView.cellForItem(at: adjacentIndexPath) as! CollectionViewCell
-//            let numberOfMinesInVicinity = numberOfMinesInVicinityOfCellAt(indexPath: adjacentIndexPath)
-//            adjacentCell.configureForMinesInVicinity(numberOfMines: numberOfMinesInVicinity)
-//            if numberOfMinesInVicinity == 0 {
-//                numberOfCellsWithZeroAdjacentMines += 1
-//            }
-//        }
-//        
-//        if numberOfCellsWithZeroAdjacentMines == 0 {return}
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, longPressForCellAt indexPath: IndexPath) {
-        
         let cell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
-        
-        if cell.uncovered {
-            return
-        }
-        
+        if cell.uncovered {return}
         if (remainingFlags > 0 && !cell.hasFlag) {
             cell.hasFlag = true
             remainingFlags -= 1
@@ -222,9 +202,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             cell.hasFlag = false
             remainingFlags += 1
         }
-        
         cell.configureFlagContainingCell()
-        
         headerView.updateFlagsLabel(numberOfFlags: remainingFlags)
     }
     
@@ -240,7 +218,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     @objc func handleLongPress(gesture: UILongPressGestureRecognizer) {
         if gesture.state == .began {
-            
             let locationOfGesture = gesture.location(in: collectionView)
             let indexPath = collectionView.indexPathForItem(at: locationOfGesture)
             if indexPath != nil {
@@ -250,9 +227,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func randomlyDistributeMines(indexPathOfInitialCell: IndexPath) -> Set<IndexPath> {
-        
         var mineIndexPaths = Set<IndexPath>()
-
         while mineIndexPaths.count < numberOfMines {
             let randomRow = Int.random(in: 0...(numberOfItemsInSection - 1))
             let randomSection = Int.random(in: 0...(numberOfSections - 1))
@@ -261,23 +236,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 mineIndexPaths.insert(randomIndexPath)
             }
         }
-        
-//        for i in 0...9 {
-//            mineIndexPaths.insert(IndexPath.init(row: i, section: 0))
-//        }
-        
         return mineIndexPaths
     }
     
     func numberOfMinesInVicinityOfCellAt(indexPath: IndexPath) -> Int {
-        
         var mineCount = 0
         let validAdjacentIndexPaths = getValidAdjacentIndexPaths(indexPath: indexPath)
-        
         for indexPath in validAdjacentIndexPaths {
-            
             let cell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
-            
             if cell.hasMine {
                 mineCount += 1
             }
@@ -287,7 +253,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func showAllUnflaggedMines() {
         for cell: CollectionViewCell in collectionView!.visibleCells as! Array<CollectionViewCell> {
-
             if cell.hasMine && !cell.hasFlag {
                 cell.configureMineContainingCell()
             }
@@ -320,13 +285,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func getValidAdjacentIndexPaths(indexPath: IndexPath) -> Array<IndexPath> {
-        
         var validIndexPaths = Array<IndexPath>()
-        
         for i in (indexPath.row - 1)...(indexPath.row + 1) {
-            
             for j in (indexPath.section - 1)...(indexPath.section + 1) {
-                
                 if !isOutOfBounds(row: i, section: j) && !isAtSelectedIndexPath(indexPath: indexPath, row: i, section: j) {
                     validIndexPaths.append(IndexPath.init(row: i, section: j))
                 }
@@ -374,23 +335,34 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             }
         }
     }
-//    func configureCellsWithZeroMinesInVicinity(indexPaths: Set<IndexPath>) {
-//        for indexPath in indexPaths {
-//            let cell: CollectionViewCell = self.collectionView.cellForItem(at: indexPath) as! CollectionViewCell
-//            cell.configureForZeroMinesInVicinity()
-//        }
-//    }
-//
-//    func updateAdjacentIndexPathsWithZeroMinesInVicinity(indexPath: IndexPath) {
-//
-//        let validAdjacentIndexPaths = self.getValidAdjacentIndexPaths(indexPath: indexPath)
-//
-//        for indexPath in validAdjacentIndexPaths {
-//            if self.numberOfMinesInVicinityOfCellAt(indexPath: indexPath) == 0 {
-//                adjacentIndexPathsWithZeroMinesInVicinity.insert(indexPath)
-//            }
-//        }
-//    }
-
+    
+    func revealSurroundingCellsWithZeroMines(_ indexPath: IndexPath) {
+        var cellsChecked = Set<IndexPath>()
+        cellsChecked.insert(indexPath)
+        var indexPathsWithZeroMines = Set<IndexPath>()
+        indexPathsWithZeroMines.insert(indexPath)
+        
+        while !indexPathsWithZeroMines.isEmpty {
+            var indexPathsToCheck = Set<IndexPath>()
+            for index in indexPathsWithZeroMines {
+                indexPathsToCheck.insert(index)
+            }
+            indexPathsWithZeroMines.removeAll()
+            for indexPathToCheck in indexPathsToCheck {
+                let adjacentIndexPaths = getValidAdjacentIndexPaths(indexPath: indexPathToCheck)
+                for path in adjacentIndexPaths {
+                    if !cellsChecked.contains(path) {
+                        let minesInVicinity = numberOfMinesInVicinityOfCellAt(indexPath: path)
+                        cellsChecked.insert(path)
+                        if minesInVicinity == 0 {
+                            indexPathsWithZeroMines.insert(path)
+                        }
+                        let cellAtPath = collectionView.cellForItem(at: path) as! CollectionViewCell
+                        cellAtPath.configureForMinesInVicinity(numberOfMines: minesInVicinity)
+                    }
+                }
+            }
+        }
+    }
 }
 
