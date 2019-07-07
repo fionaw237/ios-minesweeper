@@ -155,7 +155,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return CGSize(width: cellWidth, height: cellWidth)
     }
     
-    // MARK: Helper functions
+    // MARK: Functions handling tap and long press gestures
     
     func collectionView(_ collectionView: UICollectionView, tappedForCellAt indexPath: IndexPath) {
         if (!timerStarted) {
@@ -178,7 +178,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             return
         }
         
-        let minesInVicinity = numberOfMinesInVicinityOfCellAt(indexPath: indexPath)
+        let minesInVicinity = numberOfMinesInVicinityOfCell(indexPath)
         
         if minesInVicinity == 0 {
             revealSurroundingCellsWithZeroMines(indexPath)
@@ -226,6 +226,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
+    // MARK: Helper functions
+    
     func randomlyDistributeMines(indexPathOfInitialCell: IndexPath) -> Set<IndexPath> {
         var mineIndexPaths = Set<IndexPath>()
         while mineIndexPaths.count < numberOfMines {
@@ -239,7 +241,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return mineIndexPaths
     }
     
-    func numberOfMinesInVicinityOfCellAt(indexPath: IndexPath) -> Int {
+    func numberOfMinesInVicinityOfCell(_ indexPath: IndexPath) -> Int {
         var mineCount = 0
         let validAdjacentIndexPaths = getValidAdjacentIndexPaths(indexPath: indexPath)
         for indexPath in validAdjacentIndexPaths {
@@ -337,29 +339,26 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func revealSurroundingCellsWithZeroMines(_ indexPath: IndexPath) {
-        var cellsChecked = Set<IndexPath>()
-        cellsChecked.insert(indexPath)
-        var indexPathsWithZeroMines = Set<IndexPath>()
-        indexPathsWithZeroMines.insert(indexPath)
+        var indexPathsChecked: Set<IndexPath> = [indexPath]
+        var indexPathsWithZeroMines: Set<IndexPath> = [indexPath]
         
         while !indexPathsWithZeroMines.isEmpty {
             var indexPathsToCheck = Set<IndexPath>()
-            for index in indexPathsWithZeroMines {
-                indexPathsToCheck.insert(index)
-            }
+            indexPathsWithZeroMines.forEach {indexPathsToCheck.insert($0)}
             indexPathsWithZeroMines.removeAll()
-            for indexPathToCheck in indexPathsToCheck {
-                let adjacentIndexPaths = getValidAdjacentIndexPaths(indexPath: indexPathToCheck)
-                for path in adjacentIndexPaths {
-                    if !cellsChecked.contains(path) {
-                        let minesInVicinity = numberOfMinesInVicinityOfCellAt(indexPath: path)
-                        cellsChecked.insert(path)
+            
+            indexPathsToCheck.forEach { pathToCheck in
+                let adjacentIndexPaths = getValidAdjacentIndexPaths(indexPath: pathToCheck)
+                // loop through adjacent index paths which have not already been checked
+                adjacentIndexPaths.filter {!indexPathsChecked.contains($0)}
+                    .forEach { adjacentIndexPath in
+                        let minesInVicinity = numberOfMinesInVicinityOfCell(adjacentIndexPath)
+                        indexPathsChecked.insert(adjacentIndexPath)
                         if minesInVicinity == 0 {
-                            indexPathsWithZeroMines.insert(path)
+                            indexPathsWithZeroMines.insert(adjacentIndexPath)
                         }
-                        let cellAtPath = collectionView.cellForItem(at: path) as! CollectionViewCell
-                        cellAtPath.configureForMinesInVicinity(numberOfMines: minesInVicinity)
-                    }
+                        let cell = collectionView.cellForItem(at: adjacentIndexPath) as! CollectionViewCell
+                        cell.configureForMinesInVicinity(numberOfMines: minesInVicinity)
                 }
             }
         }
