@@ -50,7 +50,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpGame()
-        setUpGestureRecognizers()
+        setUpLongPressGestureRecognizer()
     }
     
     func getNumberOfMines(gameDifficulty: GameDifficulty) -> Int {
@@ -104,23 +104,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         collectionView.reloadData()
     }
     
-    func setUpLongPressGestureRecognizer() {
-        let longPressGestureRecogniser = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gesture:)))
-        longPressGestureRecogniser.minimumPressDuration = 0.25
-        collectionView.addGestureRecognizer(longPressGestureRecogniser)
-    }
-    
-//    func setUpTapGestureRecognizer() {
-//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(gesture:)))
-//        tapGestureRecognizer.numberOfTapsRequired = 1
-//        collectionView.addGestureRecognizer(tapGestureRecognizer)
-//    }
-    
-    func setUpGestureRecognizers() {
-//        setUpTapGestureRecognizer()
-        setUpLongPressGestureRecognizer()
-    }
-    
     func configureTimerForReset() {
         headerView.timer.invalidate()
         headerView.resetTimer()
@@ -150,10 +133,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return CGSize(width: cellWidth, height: cellWidth)
     }
     
-    // MARK: Functions handling tap and long press gestures
+    // MARK: CellSelectionProtocol methods
     
     func cellButtonPressed(indexPath: IndexPath) {
-//    func collectionView(_ collectionView: UICollectionView, tappedForCellAt indexPath: IndexPath) {
         if (!timerStarted) {
             indexPathsOfMines = randomlyDistributeMines(indexPathOfInitialCell: indexPath)
             collectionView.reloadItems(at: Array(indexPathsOfMines))
@@ -172,6 +154,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         if isGameWon() {handleGameWon()}
     }
     
+    // MARK: Long press methods
+    
+    func setUpLongPressGestureRecognizer() {
+        let longPressGestureRecogniser = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gesture:)))
+        longPressGestureRecogniser.minimumPressDuration = 0.25
+        collectionView.addGestureRecognizer(longPressGestureRecogniser)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, longPressForCellAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
         if cell.uncovered {return}
@@ -186,16 +176,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         cell.configureFlagContainingCell()
         headerView.updateFlagsLabel(numberOfFlags: remainingFlags)
     }
-    
-//    @objc func handleTap(gesture: UITapGestureRecognizer) {
-//        if gesture.state == .ended {
-//            let locationOfGesture = gesture.location(in: collectionView)
-//            let indexPath = collectionView.indexPathForItem(at: locationOfGesture)
-//            if (indexPath != nil) {
-//                collectionView(collectionView, tappedForCellAt: indexPath!)
-//            }
-//        }
-//    }
     
     @objc func handleLongPress(gesture: UILongPressGestureRecognizer) {
         if gesture.state == .began {
