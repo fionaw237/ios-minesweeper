@@ -175,9 +175,6 @@
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JdE-5M-QlQ">
-                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                </imageView>
                                                 <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon-game-over" translatesAutoresizingMaskIntoConstraints="NO" id="yfC-oI-n2N" userLabel="Red Cross Image View">
                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                 </imageView>
@@ -187,12 +184,26 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xE8-pv-L2E">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                    <state key="normal" title="Button" image="cellButton"/>
+                                                    <connections>
+                                                        <action selector="cellButtonTapped:" destination="6cV-n3-F7T" eventType="touchUpInside" id="GmL-9t-Nza"/>
+                                                    </connections>
+                                                </button>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JdE-5M-QlQ">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                </imageView>
                                             </subviews>
                                         </view>
                                         <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="xE8-pv-L2E" secondAttribute="bottom" id="0d3-eY-vA8"/>
+                                            <constraint firstAttribute="trailing" secondItem="xE8-pv-L2E" secondAttribute="trailing" id="25q-7h-GMD"/>
                                             <constraint firstItem="yfC-oI-n2N" firstAttribute="centerX" secondItem="JdE-5M-QlQ" secondAttribute="centerX" id="2o0-sg-xjT"/>
+                                            <constraint firstItem="xE8-pv-L2E" firstAttribute="leading" secondItem="6cV-n3-F7T" secondAttribute="leading" id="3eS-F9-Oed"/>
                                             <constraint firstItem="JdE-5M-QlQ" firstAttribute="height" secondItem="6cV-n3-F7T" secondAttribute="height" id="4lm-PS-MNy"/>
+                                            <constraint firstItem="xE8-pv-L2E" firstAttribute="top" secondItem="6cV-n3-F7T" secondAttribute="top" id="9LI-7Z-8uw"/>
                                             <constraint firstItem="JdE-5M-QlQ" firstAttribute="width" secondItem="6cV-n3-F7T" secondAttribute="width" id="BNw-pg-c3G"/>
                                             <constraint firstItem="GXg-KX-lmK" firstAttribute="centerX" secondItem="6cV-n3-F7T" secondAttribute="centerX" id="DkY-z5-dmI"/>
                                             <constraint firstItem="JdE-5M-QlQ" firstAttribute="centerY" secondItem="6cV-n3-F7T" secondAttribute="centerY" id="Hes-KK-0KF"/>
@@ -205,6 +216,7 @@
                                             <constraint firstItem="GXg-KX-lmK" firstAttribute="height" secondItem="6cV-n3-F7T" secondAttribute="height" multiplier="0.6" id="v9b-N7-cd8"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="button" destination="xE8-pv-L2E" id="Aug-cc-2zN"/>
                                             <outlet property="mineOrFlagImageView" destination="JdE-5M-QlQ" id="EvP-fL-Nhc"/>
                                             <outlet property="numberOfMinesLabel" destination="GXg-KX-lmK" id="Ap5-rN-ccZ"/>
                                         </connections>
@@ -241,6 +253,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="cellButton" width="200" height="200"/>
         <image name="icon-game-over" width="48" height="48"/>
         <image name="icon-happy-48" width="48" height="48"/>
     </resources>

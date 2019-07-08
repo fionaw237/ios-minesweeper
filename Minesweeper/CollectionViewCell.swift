@@ -8,21 +8,30 @@
 
 import UIKit
 
+protocol CellSelectionProtocol: class {
+    func cellButtonPressed(indexPath: IndexPath)
+}
+
 class CollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var numberOfMinesLabel: UILabel!
     @IBOutlet weak var mineOrFlagImageView: UIImageView!
+    @IBOutlet weak var button: UIButton!
     var hasMine = false
     var hasFlag = false
     var uncovered = false
+    var indexPath: IndexPath? = nil
+    weak var delegate: CellSelectionProtocol?
     
     override func prepareForReuse() {
+        button.isHidden = false
         hasMine = false
         hasFlag = false
         uncovered = false
         numberOfMinesLabel.text = ""
         mineOrFlagImageView.image = nil
-        backgroundColor = UIColor.lightGray
+        indexPath = nil
+        backgroundColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 1.0)
         isUserInteractionEnabled = true
     }
     
@@ -33,6 +42,7 @@ class CollectionViewCell: UICollectionViewCell {
     
     func configureMineContainingCell() {
         mineOrFlagImageView.image = UIImage(named: "mine-icon-black-50")
+        button.isHidden = true
     }
     
     func configureFlagContainingCell() {
@@ -45,10 +55,11 @@ class CollectionViewCell: UICollectionViewCell {
     }
     
     func configureForZeroMinesInVicinity() {
-       backgroundColor = UIColor.white
+        backgroundColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 1.0)
     }
     
     func configureForMinesInVicinity(numberOfMines: Int) {
+        button.isHidden = true
         uncovered = true
         
         if (numberOfMines == 0) {
@@ -61,6 +72,7 @@ class CollectionViewCell: UICollectionViewCell {
     
     func configureForMisplacedFlag() {
         mineOrFlagImageView.image = UIImage(named: "icon-cross-48")
+        button.isHidden = true
     }
     
     func getLabelTextColour(numberOfMines: Int) -> UIColor {
@@ -68,5 +80,11 @@ class CollectionViewCell: UICollectionViewCell {
                                 UIColor.magenta, UIColor.cyan, UIColor.black, UIColor.gray]
         
         return labelTextColours[numberOfMines - 1]
+    }
+    
+    @IBAction func cellButtonTapped(_ sender: Any) {
+        if let path = indexPath {
+            delegate?.cellButtonPressed(indexPath: path)
+        }
     }
 }

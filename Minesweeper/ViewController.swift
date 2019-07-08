@@ -11,7 +11,7 @@ import UIKit
 enum NumberOfSections: Int {
     case Beginner = 8
     case Intermediate = 10
-    case Advanced = 12
+    case Advanced = 16
 }
 
 enum NumberOfItemsInSection: Int {
@@ -22,8 +22,8 @@ enum NumberOfItemsInSection: Int {
 
 enum NumberOfMines: Int {
     case Beginner = 15
-    case Intermediate = 30
-    case Advanced = 50
+    case Intermediate = 20
+    case Advanced = 14
 }
 
 enum GameDifficulty: Int {
@@ -32,11 +32,10 @@ enum GameDifficulty: Int {
     case Advanced = 3
 }
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, CellSelectionProtocol {
     
     @IBOutlet var headerView: HeaderView!
     @IBOutlet weak var collectionView: UICollectionView!
-    
     var indexPathsOfMines = Set<IndexPath>()
     var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
     var gameDifficulty: GameDifficulty?
@@ -44,12 +43,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var numberOfSections = 0
     var numberOfMines = 0
     var remainingFlags = 0
-    
     var timerStarted = false
     
-    @IBAction func resetButtonPressed(_ sender: Any) {
-        resetGame()
-    }
+    @IBAction func resetButtonPressed(_ sender: Any) {resetGame()}
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,14 +110,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         collectionView.addGestureRecognizer(longPressGestureRecogniser)
     }
     
-    func setUpTapGestureRecognizer() {
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(gesture:)))
-        tapGestureRecognizer.numberOfTapsRequired = 1
-        collectionView.addGestureRecognizer(tapGestureRecognizer)
-    }
+//    func setUpTapGestureRecognizer() {
+//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(gesture:)))
+//        tapGestureRecognizer.numberOfTapsRequired = 1
+//        collectionView.addGestureRecognizer(tapGestureRecognizer)
+//    }
     
     func setUpGestureRecognizers() {
-        setUpTapGestureRecognizer()
+//        setUpTapGestureRecognizer()
         setUpLongPressGestureRecognizer()
     }
     
@@ -142,11 +138,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         let cell: CollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! CollectionViewCell
-        
         cell.hasMine = (indexPathsOfMines.contains(indexPath))
-        
+        cell.delegate = self;
+        cell.indexPath = indexPath;
         return cell
     }
     
@@ -157,38 +152,24 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     // MARK: Functions handling tap and long press gestures
     
-    func collectionView(_ collectionView: UICollectionView, tappedForCellAt indexPath: IndexPath) {
+    func cellButtonPressed(indexPath: IndexPath) {
+//    func collectionView(_ collectionView: UICollectionView, tappedForCellAt indexPath: IndexPath) {
         if (!timerStarted) {
             indexPathsOfMines = randomlyDistributeMines(indexPathOfInitialCell: indexPath)
             collectionView.reloadItems(at: Array(indexPathsOfMines))
-            
             timerStarted = true
-            headerView.timer = Timer.scheduledTimer(timeInterval: 1, target: headerView, selector: #selector(headerView.updateTimer),
-                                                    userInfo: nil, repeats: true)
+            headerView.timer = Timer.scheduledTimer(timeInterval: 1, target: headerView, selector: #selector(headerView.updateTimer), userInfo: nil, repeats: true)
         }
-        
         let cell: CollectionViewCell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
-        
-        if cell.hasFlag || cell.uncovered {
-            return
-        }
-        
+        if cell.hasFlag || cell.uncovered {return}
         if cell.hasMine {
             gameOver(clickedCell: cell)
             return
         }
-        
         let minesInVicinity = numberOfMinesInVicinityOfCell(indexPath)
-        
-        if minesInVicinity == 0 {
-            revealSurroundingCellsWithZeroMines(indexPath)
-        }
-        
+        if minesInVicinity == 0 {revealSurroundingCellsWithZeroMines(indexPath)}
         cell.configureForMinesInVicinity(numberOfMines: minesInVicinity)
-        
-        if isGameWon() {
-            handleGameWon()
-        }
+        if isGameWon() {handleGameWon()}
     }
     
     func collectionView(_ collectionView: UICollectionView, longPressForCellAt indexPath: IndexPath) {
@@ -206,15 +187,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         headerView.updateFlagsLabel(numberOfFlags: remainingFlags)
     }
     
-    @objc func handleTap(gesture: UITapGestureRecognizer) {
-        if gesture.state == .ended {
-            let locationOfGesture = gesture.location(in: collectionView)
-            let indexPath = collectionView.indexPathForItem(at: locationOfGesture)
-            if (indexPath != nil) {
-                collectionView(collectionView, tappedForCellAt: indexPath!)
-            }
-        }
-    }
+//    @objc func handleTap(gesture: UITapGestureRecognizer) {
+//        if gesture.state == .ended {
+//            let locationOfGesture = gesture.location(in: collectionView)
+//            let indexPath = collectionView.indexPathForItem(at: locationOfGesture)
+//            if (indexPath != nil) {
+//                collectionView(collectionView, tappedForCellAt: indexPath!)
+//            }
+//        }
+//    }
     
     @objc func handleLongPress(gesture: UILongPressGestureRecognizer) {
         if gesture.state == .began {
@@ -242,15 +223,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func numberOfMinesInVicinityOfCell(_ indexPath: IndexPath) -> Int {
-        var mineCount = 0
-        let validAdjacentIndexPaths = getValidAdjacentIndexPaths(indexPath: indexPath)
-        for indexPath in validAdjacentIndexPaths {
-            let cell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
-            if cell.hasMine {
-                mineCount += 1
-            }
-        }
-        return mineCount
+        return getValidAdjacentIndexPaths(indexPath: indexPath).filter {
+            (collectionView.cellForItem(at: $0) as! CollectionViewCell).hasMine
+        }.count
     }
     
     func showAllUnflaggedMines() {
@@ -299,12 +274,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func isGameWon() -> Bool {
-        var clickedCellCount = 0
-        for cell: CollectionViewCell in (collectionView!.visibleCells as! Array<CollectionViewCell>) {
-            if cell.hasFlag || cell.uncovered {
-                clickedCellCount += 1
-            }
-        }
+        let clickedCellCount = (collectionView!.visibleCells as! Array<CollectionViewCell>).filter {
+            $0.hasFlag || $0.uncovered
+        }.count
         let totalNumberOfCellsInCollectionView = numberOfSections * numberOfItemsInSection
         return clickedCellCount == totalNumberOfCellsInCollectionView - remainingFlags
     }
@@ -325,9 +297,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         present(alert, animated: true)
     }
     
-    func newGameHandler(alert: UIAlertAction!) {
-        resetGame()
-    }
+    func newGameHandler(alert: UIAlertAction!) {resetGame()}
     
     func addFlagsToUncoveredCells() {
         for cell: CollectionViewCell in (collectionView!.visibleCells as! Array<CollectionViewCell>) {
@@ -346,7 +316,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             var indexPathsToCheck = Set<IndexPath>()
             indexPathsWithZeroMines.forEach {indexPathsToCheck.insert($0)}
             indexPathsWithZeroMines.removeAll()
-            
             indexPathsToCheck.forEach { pathToCheck in
                 let adjacentIndexPaths = getValidAdjacentIndexPaths(indexPath: pathToCheck)
                 // loop through adjacent index paths which have not already been checked
