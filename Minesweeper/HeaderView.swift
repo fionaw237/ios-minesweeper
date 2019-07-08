@@ -18,9 +18,7 @@ class HeaderView: UIView {
     
     @objc func updateTimer() {
         time += 1
-        if (timeLabel != nil) {
-            timeLabel.text = String(time)
-        }
+        if timeLabel != nil {timeLabel.text = String(time)}
     }
     
     func resetTimer() {
@@ -28,7 +26,7 @@ class HeaderView: UIView {
         timeLabel.text = "0"
     }
 
-    func updateFlagsLabel(numberOfFlags: Int) {
+    func updateFlagsLabel(_ numberOfFlags: Int) {
         numberOfFlagsLabel.text = String(numberOfFlags)
     }
     

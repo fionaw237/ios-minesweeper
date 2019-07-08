@@ -11,7 +11,7 @@ import UIKit
 enum NumberOfSections: Int {
     case Beginner = 8
     case Intermediate = 10
-    case Advanced = 16
+    case Advanced = 12
 }
 
 enum NumberOfItemsInSection: Int {
@@ -23,7 +23,7 @@ enum NumberOfItemsInSection: Int {
 enum NumberOfMines: Int {
     case Beginner = 15
     case Intermediate = 20
-    case Advanced = 14
+    case Advanced = 30
 }
 
 enum GameDifficulty: Int {
@@ -53,7 +53,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         setUpLongPressGestureRecognizer()
     }
     
-    func getNumberOfMines(gameDifficulty: GameDifficulty) -> Int {
+    func getNumberOfMines(_ gameDifficulty: GameDifficulty) -> Int {
         switch gameDifficulty {
         case .Beginner:
             return NumberOfMines.Beginner.rawValue
@@ -64,7 +64,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
-    func getNumberOfItemsInSection(gameDifficulty: GameDifficulty) -> Int {
+    func getNumberOfItemsInSection(_ gameDifficulty: GameDifficulty) -> Int {
         switch gameDifficulty {
         case .Beginner:
             return NumberOfItemsInSection.Beginner.rawValue
@@ -75,7 +75,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
-    func getNumberOfSections(gameDifficulty: GameDifficulty) -> Int {
+    func getNumberOfSections(_ gameDifficulty: GameDifficulty) -> Int {
         switch gameDifficulty {
         case .Beginner:
             return NumberOfSections.Beginner.rawValue
@@ -88,11 +88,11 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func setUpGame() {
         if let gameDifficulty = gameDifficulty {
-            numberOfMines = getNumberOfMines(gameDifficulty: gameDifficulty)
-            numberOfItemsInSection = getNumberOfItemsInSection(gameDifficulty: gameDifficulty)
-            numberOfSections = getNumberOfSections(gameDifficulty: gameDifficulty)
+            numberOfMines = getNumberOfMines(gameDifficulty)
+            numberOfItemsInSection = getNumberOfItemsInSection(gameDifficulty)
+            numberOfSections = getNumberOfSections(gameDifficulty)
             remainingFlags = numberOfMines
-            headerView.updateFlagsLabel(numberOfFlags: remainingFlags)
+            headerView.updateFlagsLabel(remainingFlags)
             headerView.configureResetButtonForNewGame()
             indexPathsOfMines = Set<IndexPath>()
         }
@@ -135,7 +135,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     // MARK: CellSelectionProtocol methods
     
-    func cellButtonPressed(indexPath: IndexPath) {
+    func cellButtonPressed(_ indexPath: IndexPath) {
         if (!timerStarted) {
             indexPathsOfMines = randomlyDistributeMines(indexPathOfInitialCell: indexPath)
             collectionView.reloadItems(at: Array(indexPathsOfMines))
@@ -150,7 +150,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
         let minesInVicinity = numberOfMinesInVicinityOfCell(indexPath)
         if minesInVicinity == 0 {revealSurroundingCellsWithZeroMines(indexPath)}
-        cell.configureForMinesInVicinity(numberOfMines: minesInVicinity)
+        cell.configureForNumberOfMinesInVicinity(minesInVicinity)
         if isGameWon() {handleGameWon()}
     }
     
@@ -174,16 +174,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             remainingFlags += 1
         }
         cell.configureFlagContainingCell()
-        headerView.updateFlagsLabel(numberOfFlags: remainingFlags)
+        headerView.updateFlagsLabel(remainingFlags)
     }
     
     @objc func handleLongPress(gesture: UILongPressGestureRecognizer) {
         if gesture.state == .began {
             let locationOfGesture = gesture.location(in: collectionView)
             let indexPath = collectionView.indexPathForItem(at: locationOfGesture)
-            if indexPath != nil {
-                collectionView(collectionView, longPressForCellAt: indexPath!)
-            }
+            if let path = indexPath {collectionView(collectionView, longPressForCellAt: path)}
         }
     }
     
@@ -203,19 +201,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func numberOfMinesInVicinityOfCell(_ indexPath: IndexPath) -> Int {
-        return getValidAdjacentIndexPaths(indexPath: indexPath).filter {
+        return getValidIndexPathsSurroundingCell(indexPath).filter {
             (collectionView.cellForItem(at: $0) as! CollectionViewCell).hasMine
         }.count
     }
     
     func showAllUnflaggedMines() {
         for cell: CollectionViewCell in collectionView!.visibleCells as! Array<CollectionViewCell> {
-            if cell.hasMine && !cell.hasFlag {
-                cell.configureMineContainingCell()
-            }
-            else if !cell.hasMine && cell.hasFlag {
-                cell.configureForMisplacedFlag()
-            }
+            if cell.hasMine && !cell.hasFlag {cell.configureMineContainingCell()}
+            else if !cell.hasMine && cell.hasFlag {cell.configureForMisplacedFlag()}
         }
     }
     
@@ -241,7 +235,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return (row == indexPath.row && section == indexPath.section)
     }
     
-    func getValidAdjacentIndexPaths(indexPath: IndexPath) -> Array<IndexPath> {
+    func getValidIndexPathsSurroundingCell(_ indexPath: IndexPath) -> Array<IndexPath> {
         var validIndexPaths = Array<IndexPath>()
         for i in (indexPath.row - 1)...(indexPath.row + 1) {
             for j in (indexPath.section - 1)...(indexPath.section + 1) {
@@ -266,8 +260,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         headerView.setNumberOfFlagsLabelForGameWon()
         headerView.configureResetButtonForGameWon()
         addFlagsToUncoveredCells()
-        let winningTime = headerView.timeLabel.text
-        displayGameWonAlert(winningTime: winningTime!)
+        if let winningTime = headerView.timeLabel.text {displayGameWonAlert(winningTime: winningTime)}
     }
     
     func displayGameWonAlert(winningTime: String) {
@@ -297,7 +290,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             indexPathsWithZeroMines.forEach {indexPathsToCheck.insert($0)}
             indexPathsWithZeroMines.removeAll()
             indexPathsToCheck.forEach { pathToCheck in
-                let adjacentIndexPaths = getValidAdjacentIndexPaths(indexPath: pathToCheck)
+                let adjacentIndexPaths = getValidIndexPathsSurroundingCell(pathToCheck)
                 // loop through adjacent index paths which have not already been checked
                 adjacentIndexPaths.filter {!indexPathsChecked.contains($0)}
                     .forEach { adjacentIndexPath in
@@ -307,7 +300,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                             indexPathsWithZeroMines.insert(adjacentIndexPath)
                         }
                         let cell = collectionView.cellForItem(at: adjacentIndexPath) as! CollectionViewCell
-                        cell.configureForMinesInVicinity(numberOfMines: minesInVicinity)
+                        cell.configureForNumberOfMinesInVicinity(minesInVicinity)
                 }
             }
         }

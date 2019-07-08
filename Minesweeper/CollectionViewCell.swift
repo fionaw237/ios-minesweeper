@@ -9,11 +9,10 @@
 import UIKit
 
 protocol CellSelectionProtocol: class {
-    func cellButtonPressed(indexPath: IndexPath)
+    func cellButtonPressed(_ indexPath: IndexPath)
 }
 
 class CollectionViewCell: UICollectionViewCell {
-    
     @IBOutlet weak var numberOfMinesLabel: UILabel!
     @IBOutlet weak var mineOrFlagImageView: UIImageView!
     @IBOutlet weak var button: UIButton!
@@ -31,7 +30,7 @@ class CollectionViewCell: UICollectionViewCell {
         numberOfMinesLabel.text = ""
         mineOrFlagImageView.image = nil
         indexPath = nil
-        backgroundColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 1.0)
+        backgroundColor = UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 1.0)
         isUserInteractionEnabled = true
     }
     
@@ -54,20 +53,10 @@ class CollectionViewCell: UICollectionViewCell {
         backgroundColor = UIColor.red
     }
     
-    func configureForZeroMinesInVicinity() {
-        backgroundColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 1.0)
-    }
-    
-    func configureForMinesInVicinity(numberOfMines: Int) {
+    func configureForNumberOfMinesInVicinity(_ numberOfMines: Int) {
         button.isHidden = true
         uncovered = true
-        
-        if (numberOfMines == 0) {
-            configureForZeroMinesInVicinity()
-        }
-        else {
-            configureNumberOfMinesLabel(numberOfMines: numberOfMines)
-        }
+        if numberOfMines != 0 {configureNumberOfMinesLabel(numberOfMines: numberOfMines)}
     }
     
     func configureForMisplacedFlag() {
@@ -78,13 +67,10 @@ class CollectionViewCell: UICollectionViewCell {
     func getLabelTextColour(numberOfMines: Int) -> UIColor {
         let labelTextColours = [UIColor.blue, UIColor.green, UIColor.red, UIColor.purple,
                                 UIColor.magenta, UIColor.cyan, UIColor.black, UIColor.gray]
-        
         return labelTextColours[numberOfMines - 1]
     }
     
     @IBAction func cellButtonTapped(_ sender: Any) {
-        if let path = indexPath {
-            delegate?.cellButtonPressed(indexPath: path)
-        }
+        if let path = indexPath {delegate?.cellButtonPressed(path)}
     }
 }
