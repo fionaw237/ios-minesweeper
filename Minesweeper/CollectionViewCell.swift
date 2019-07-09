@@ -15,6 +15,7 @@ protocol CellSelectionProtocol: class {
 class CollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var numberOfMinesLabel: UILabel!
     @IBOutlet weak var mineOrFlagImageView: UIImageView!
+    @IBOutlet weak var redCrossImageView: UIImageView!
     @IBOutlet weak var button: UIButton!
     var hasMine = false
     var hasFlag = false
@@ -24,6 +25,7 @@ class CollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         button.isHidden = false
+        redCrossImageView.isHidden = true
         hasMine = false
         hasFlag = false
         uncovered = false
@@ -60,8 +62,8 @@ class CollectionViewCell: UICollectionViewCell {
     }
     
     func configureForMisplacedFlag() {
-        mineOrFlagImageView.image = UIImage(named: "icon-cross-48")
-        button.isHidden = true
+        configureMineContainingCell()
+        redCrossImageView.isHidden = false
     }
     
     func getLabelTextColour(numberOfMines: Int) -> UIColor {

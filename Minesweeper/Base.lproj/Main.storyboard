@@ -175,11 +175,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon-game-over" translatesAutoresizingMaskIntoConstraints="NO" id="yfC-oI-n2N" userLabel="Red Cross Image View">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GXg-KX-lmK" userLabel="Number Of Mines Label">
                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GXg-KX-lmK" userLabel="Number Of Mines Label">
-                                                    <rect key="frame" x="10" y="10" width="30" height="30"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <nil key="textColor"/>
@@ -193,7 +190,11 @@
                                                     </connections>
                                                 </button>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JdE-5M-QlQ">
+                                                    <rect key="frame" x="5" y="5" width="40" height="40"/>
+                                                </imageView>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon-game-over" translatesAutoresizingMaskIntoConstraints="NO" id="yfC-oI-n2N" userLabel="Red Cross Image View">
                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </imageView>
                                             </subviews>
                                         </view>
@@ -201,25 +202,26 @@
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="xE8-pv-L2E" secondAttribute="bottom" id="0d3-eY-vA8"/>
                                             <constraint firstAttribute="trailing" secondItem="xE8-pv-L2E" secondAttribute="trailing" id="25q-7h-GMD"/>
-                                            <constraint firstItem="yfC-oI-n2N" firstAttribute="centerX" secondItem="JdE-5M-QlQ" secondAttribute="centerX" id="2o0-sg-xjT"/>
                                             <constraint firstItem="xE8-pv-L2E" firstAttribute="leading" secondItem="6cV-n3-F7T" secondAttribute="leading" id="3eS-F9-Oed"/>
-                                            <constraint firstItem="JdE-5M-QlQ" firstAttribute="height" secondItem="6cV-n3-F7T" secondAttribute="height" id="4lm-PS-MNy"/>
+                                            <constraint firstItem="GXg-KX-lmK" firstAttribute="top" secondItem="6cV-n3-F7T" secondAttribute="top" id="6mo-6b-btC"/>
                                             <constraint firstItem="xE8-pv-L2E" firstAttribute="top" secondItem="6cV-n3-F7T" secondAttribute="top" id="9LI-7Z-8uw"/>
-                                            <constraint firstItem="JdE-5M-QlQ" firstAttribute="width" secondItem="6cV-n3-F7T" secondAttribute="width" id="BNw-pg-c3G"/>
-                                            <constraint firstItem="GXg-KX-lmK" firstAttribute="centerX" secondItem="6cV-n3-F7T" secondAttribute="centerX" id="DkY-z5-dmI"/>
-                                            <constraint firstItem="JdE-5M-QlQ" firstAttribute="centerY" secondItem="6cV-n3-F7T" secondAttribute="centerY" id="Hes-KK-0KF"/>
-                                            <constraint firstItem="yfC-oI-n2N" firstAttribute="width" secondItem="JdE-5M-QlQ" secondAttribute="width" id="IZP-Zx-ec5"/>
-                                            <constraint firstItem="GXg-KX-lmK" firstAttribute="centerY" secondItem="6cV-n3-F7T" secondAttribute="centerY" id="JQ2-hB-bQ1"/>
-                                            <constraint firstItem="GXg-KX-lmK" firstAttribute="width" secondItem="6cV-n3-F7T" secondAttribute="width" multiplier="0.6" id="LEq-DQ-EPr"/>
-                                            <constraint firstItem="JdE-5M-QlQ" firstAttribute="centerX" secondItem="6cV-n3-F7T" secondAttribute="centerX" id="MmX-1E-M7u"/>
-                                            <constraint firstItem="yfC-oI-n2N" firstAttribute="centerY" secondItem="JdE-5M-QlQ" secondAttribute="centerY" id="jAs-YD-jUG"/>
-                                            <constraint firstItem="yfC-oI-n2N" firstAttribute="height" secondItem="JdE-5M-QlQ" secondAttribute="height" id="lkJ-Je-rMf"/>
-                                            <constraint firstItem="GXg-KX-lmK" firstAttribute="height" secondItem="6cV-n3-F7T" secondAttribute="height" multiplier="0.6" id="v9b-N7-cd8"/>
+                                            <constraint firstAttribute="bottom" secondItem="GXg-KX-lmK" secondAttribute="bottom" id="B0n-3t-eBt"/>
+                                            <constraint firstAttribute="trailing" secondItem="GXg-KX-lmK" secondAttribute="trailing" id="BtW-B5-BvO"/>
+                                            <constraint firstItem="GXg-KX-lmK" firstAttribute="leading" secondItem="6cV-n3-F7T" secondAttribute="leading" id="D90-jm-uSN"/>
+                                            <constraint firstItem="JdE-5M-QlQ" firstAttribute="leading" secondItem="6cV-n3-F7T" secondAttribute="leading" constant="5" id="LFx-MM-CXd"/>
+                                            <constraint firstItem="yfC-oI-n2N" firstAttribute="leading" secondItem="6cV-n3-F7T" secondAttribute="leading" id="NNn-7b-CVZ"/>
+                                            <constraint firstAttribute="trailing" secondItem="JdE-5M-QlQ" secondAttribute="trailing" constant="5" id="PUb-0R-rEf"/>
+                                            <constraint firstItem="yfC-oI-n2N" firstAttribute="top" secondItem="6cV-n3-F7T" secondAttribute="top" id="aD8-ko-cNl"/>
+                                            <constraint firstItem="JdE-5M-QlQ" firstAttribute="top" secondItem="6cV-n3-F7T" secondAttribute="top" constant="5" id="dvb-ZH-4Jp"/>
+                                            <constraint firstAttribute="bottom" secondItem="JdE-5M-QlQ" secondAttribute="bottom" constant="5" id="g1z-OJ-vS2"/>
+                                            <constraint firstAttribute="bottom" secondItem="yfC-oI-n2N" secondAttribute="bottom" id="jaQ-kz-Cwd"/>
+                                            <constraint firstAttribute="trailing" secondItem="yfC-oI-n2N" secondAttribute="trailing" id="lQa-oj-3lb"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="button" destination="xE8-pv-L2E" id="Aug-cc-2zN"/>
                                             <outlet property="mineOrFlagImageView" destination="JdE-5M-QlQ" id="EvP-fL-Nhc"/>
                                             <outlet property="numberOfMinesLabel" destination="GXg-KX-lmK" id="Ap5-rN-ccZ"/>
+                                            <outlet property="redCrossImageView" destination="yfC-oI-n2N" id="snx-BI-QDE"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
