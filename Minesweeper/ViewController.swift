@@ -23,7 +23,7 @@ enum NumberOfItemsInSection: Int {
 enum NumberOfMines: Int {
     case Beginner = 15
     case Intermediate = 20
-    case Advanced = 30
+    case Advanced = 21
 }
 
 enum GameDifficulty: Int {
@@ -193,7 +193,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             let randomRow = Int.random(in: 0...(numberOfItemsInSection - 1))
             let randomSection = Int.random(in: 0...(numberOfSections - 1))
             let randomIndexPath = IndexPath.init(row: randomRow, section: randomSection)
-            if !mineIndexPaths.contains(randomIndexPath) && (randomIndexPath != indexPathOfInitialCell) {
+            if randomIndexPath != indexPathOfInitialCell {
                 mineIndexPaths.insert(randomIndexPath)
             }
         }
@@ -300,7 +300,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                             indexPathsWithZeroMines.insert(adjacentIndexPath)
                         }
                         let cell = collectionView.cellForItem(at: adjacentIndexPath) as! CollectionViewCell
-                        cell.configureForNumberOfMinesInVicinity(minesInVicinity)
+                        if !cell.hasFlag {
+                             cell.configureForNumberOfMinesInVicinity(minesInVicinity)
+                        }
                 }
             }
         }
