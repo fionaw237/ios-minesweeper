@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WelcomePageViewController: UIViewController {
+class WelcomeScreenViewController: UIViewController {
     
     @IBOutlet weak var beginnerButton: UIButton!
     @IBOutlet weak var intermediateButton: UIButton!
@@ -22,12 +22,8 @@ class WelcomePageViewController: UIViewController {
         if segue.identifier == "mySegue" {
             let button = sender as! UIButton
             let chosenDifficulty = GameDifficulty(rawValue: button.tag)
-            let gameViewController = segue.destination as! ViewController
+            let gameViewController = segue.destination as! GameScreenViewController
             gameViewController.gameDifficulty = chosenDifficulty
         }
     }
 }
-
-
-
-

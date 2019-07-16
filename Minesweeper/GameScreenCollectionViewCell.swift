@@ -12,7 +12,7 @@ protocol CellSelectionProtocol: class {
     func cellButtonPressed(_ indexPath: IndexPath)
 }
 
-class CollectionViewCell: UICollectionViewCell {
+class GameScreenCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var numberOfMinesLabel: UILabel!
     @IBOutlet weak var mineOrFlagImageView: UIImageView!
     @IBOutlet weak var redCrossImageView: UIImageView!

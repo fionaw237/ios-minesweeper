@@ -32,9 +32,9 @@ enum GameDifficulty: Int {
     case Advanced = 3
 }
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, CellSelectionProtocol {
+class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, CellSelectionProtocol {
     
-    @IBOutlet var headerView: HeaderView!
+    @IBOutlet var headerView: GameScreenHeaderView!
     @IBOutlet weak var collectionView: UICollectionView!
     var indexPathsOfMines = Set<IndexPath>()
     var indexPathsOfFlags = Set<IndexPath>()
@@ -125,7 +125,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: CollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! CollectionViewCell
+        let cell: GameScreenCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! GameScreenCollectionViewCell
         cell.hasMine = indexPathsOfMines.contains(indexPath)
         cell.hasFlag = indexPathsOfFlags.contains(indexPath)
         cell.configureFlagImageView()
@@ -148,7 +148,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             timerStarted = true
             headerView.timer = Timer.scheduledTimer(timeInterval: 1, target: headerView, selector: #selector(headerView.updateTimer), userInfo: nil, repeats: true)
         }
-        let cell: CollectionViewCell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
+        let cell: GameScreenCollectionViewCell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
         if cell.hasFlag || cell.uncovered {return}
         if cell.hasMine {
             gameOver(clickedCell: cell)
@@ -173,7 +173,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, longPressForCellAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
+        let cell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
         if cell.uncovered {return}
         if (remainingFlags > 0 && !cell.hasFlag) {
             cell.hasFlag = true
@@ -220,12 +220,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func numberOfMinesInVicinityOfCell(_ indexPath: IndexPath) -> Int {
         return getValidIndexPathsSurroundingCell(indexPath).filter {
-            (collectionView.cellForItem(at: $0) as! CollectionViewCell).hasMine
+            (collectionView.cellForItem(at: $0) as! GameScreenCollectionViewCell).hasMine
         }.count
     }
     
     func showAllUnflaggedMines() {
-        for cell: CollectionViewCell in collectionView!.visibleCells as! Array<CollectionViewCell> {
+        for cell: GameScreenCollectionViewCell in collectionView!.visibleCells as! Array<GameScreenCollectionViewCell> {
             if cell.hasMine && !cell.hasFlag {
                 cell.configureMineContainingCell()
             }
@@ -236,12 +236,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func disableUserInteractionOnAllCells() {
-        for cell: CollectionViewCell in (collectionView!.visibleCells as! Array<CollectionViewCell>) {
+        for cell: GameScreenCollectionViewCell in (collectionView!.visibleCells as! Array<GameScreenCollectionViewCell>) {
             cell.uncovered = true
         }
     }
     
-    func gameOver(clickedCell: CollectionViewCell) {
+    func gameOver(clickedCell: GameScreenCollectionViewCell) {
         showAllUnflaggedMines()
         headerView.configureResetButtonForGameOver()
         clickedCell.configureForGameOver()
@@ -270,7 +270,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func isGameWon() -> Bool {
-        let clickedCellCount = (collectionView!.visibleCells as! Array<CollectionViewCell>).filter {
+        let clickedCellCount = (collectionView!.visibleCells as! Array<GameScreenCollectionViewCell>).filter {
             $0.hasFlag || $0.uncovered
         }.count
         let totalNumberOfCellsInCollectionView = numberOfSections * numberOfItemsInSection
@@ -299,7 +299,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func addFlagsToUncoveredCells() {
-        for cell: CollectionViewCell in (collectionView!.visibleCells as! Array<CollectionViewCell>) {
+        for cell: GameScreenCollectionViewCell in (collectionView!.visibleCells as! Array<GameScreenCollectionViewCell>) {
             if !cell.uncovered {
                 cell.hasFlag = true
                 cell.configureFlagImageView()
@@ -325,7 +325,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                         if minesInVicinity == 0 {
                             indexPathsWithZeroMines.insert(adjacentIndexPath)
                         }
-                        let cell = collectionView.cellForItem(at: adjacentIndexPath) as! CollectionViewCell
+                        let cell = collectionView.cellForItem(at: adjacentIndexPath) as! GameScreenCollectionViewCell
                         if !cell.hasFlag {
                              cell.configureForNumberOfMinesInVicinity(minesInVicinity)
                         }

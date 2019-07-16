@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HeaderView: UIView {
+class GameScreenHeaderView: UIView {
 
     @IBOutlet weak var numberOfFlagsLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
