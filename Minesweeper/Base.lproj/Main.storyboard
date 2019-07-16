@@ -113,7 +113,7 @@
                         <outlet property="advancedButton" destination="mgT-bQ-tgo" id="UIf-Ro-HPS"/>
                         <outlet property="beginnerButton" destination="3EP-2G-fIO" id="7b6-mb-SRG"/>
                         <outlet property="intermediateButton" destination="HtK-OO-ucH" id="RuB-kS-6ND"/>
-                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="mySegue" id="pmC-CK-gaq"/>
+                        <segue destination="BYZ-38-t0r" kind="showDetail" identifier="mySegue" id="pmC-CK-gaq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3IX-8r-PbN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -166,6 +166,9 @@
                                                 <integer key="value" value="5"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="homeButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Liq-si-NzX"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.86274509803921573" green="0.86274509803921573" blue="0.86274509803921573" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -197,6 +197,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
+    // MARK: Return to welcome screem
+    
+    @IBAction func homeButtonPressed(_ sender: Any) {
+        self.presentingViewController?.dismiss(animated: true, completion:nil)
+    }
+    
     // MARK: Helper functions
     
     func randomlyDistributeMines(indexPathOfInitialCell: IndexPath) -> Set<IndexPath> {
