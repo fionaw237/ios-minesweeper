@@ -21,7 +21,7 @@ enum NumberOfItemsInSection: Int {
 }
 
 enum NumberOfMines: Int {
-    case Beginner = 4
+    case Beginner = 15
     case Intermediate = 20
     case Advanced = 21
 }
@@ -201,19 +201,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func randomlyDistributeMines(indexPathOfInitialCell: IndexPath) -> Set<IndexPath> {
         var mineIndexPaths = Set<IndexPath>()
-//        while mineIndexPaths.count < numberOfMines {
-//            let randomRow = Int.random(in: 0...(numberOfItemsInSection - 1))
-//            let randomSection = Int.random(in: 0...(numberOfSections - 1))
-//            let randomIndexPath = IndexPath.init(row: randomRow, section: randomSection)
-//            if randomIndexPath != indexPathOfInitialCell {
-//                mineIndexPaths.insert(randomIndexPath)
-//            }
-//        }
-        mineIndexPaths.insert(IndexPath.init(row: 7, section: 4))
-        mineIndexPaths.insert(IndexPath.init(row: 4, section: 4))
-        mineIndexPaths.insert(IndexPath.init(row: 4, section: 5))
-        mineIndexPaths.insert(IndexPath.init(row: 4, section: 6))
-
+        while mineIndexPaths.count < numberOfMines {
+            let randomRow = Int.random(in: 0...(numberOfItemsInSection - 1))
+            let randomSection = Int.random(in: 0...(numberOfSections - 1))
+            let randomIndexPath = IndexPath.init(row: randomRow, section: randomSection)
+            if randomIndexPath != indexPathOfInitialCell {
+                mineIndexPaths.insert(randomIndexPath)
+            }
+        }
         return mineIndexPaths
     }
     

@@ -18,8 +18,8 @@ class HeaderView: UIView {
     
     @objc func updateTimer() {
         time += 1
-        if timeLabel != nil {
-            timeLabel.text = String(time)
+        if let label = timeLabel {
+            label.text = String(time)
         }
     }
     
