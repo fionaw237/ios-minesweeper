@@ -36,6 +36,7 @@ class CollectionViewCell: UICollectionViewCell {
         isUserInteractionEnabled = true
     }
     
+    
     func configureNumberOfMinesLabel(numberOfMines: Int) {
         numberOfMinesLabel.text = String(numberOfMines)
         numberOfMinesLabel.textColor = getLabelTextColour(numberOfMines: numberOfMines)
@@ -46,9 +47,8 @@ class CollectionViewCell: UICollectionViewCell {
         button.isHidden = true
     }
     
-    func configureFlagContainingCell() {
-        mineOrFlagImageView.image = UIImage(named: "icon-flag-48")
-        mineOrFlagImageView.isHidden = !hasFlag
+    func configureFlagImageView() {
+        mineOrFlagImageView.image = hasFlag ? UIImage(named: "icon-flag-48") : nil
     }
     
     func configureForGameOver() {
@@ -58,7 +58,9 @@ class CollectionViewCell: UICollectionViewCell {
     func configureForNumberOfMinesInVicinity(_ numberOfMines: Int) {
         button.isHidden = true
         uncovered = true
-        if numberOfMines != 0 {configureNumberOfMinesLabel(numberOfMines: numberOfMines)}
+        if numberOfMines != 0 {
+            configureNumberOfMinesLabel(numberOfMines: numberOfMines)
+        }
     }
     
     func configureForMisplacedFlag() {
@@ -73,6 +75,8 @@ class CollectionViewCell: UICollectionViewCell {
     }
     
     @IBAction func cellButtonTapped(_ sender: Any) {
-        if let path = indexPath {delegate?.cellButtonPressed(path)}
+        if let path = indexPath {
+            delegate?.cellButtonPressed(path)
+        }
     }
 }

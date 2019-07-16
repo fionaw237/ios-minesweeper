@@ -21,7 +21,7 @@ enum NumberOfItemsInSection: Int {
 }
 
 enum NumberOfMines: Int {
-    case Beginner = 15
+    case Beginner = 4
     case Intermediate = 20
     case Advanced = 21
 }
@@ -37,6 +37,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @IBOutlet var headerView: HeaderView!
     @IBOutlet weak var collectionView: UICollectionView!
     var indexPathsOfMines = Set<IndexPath>()
+    var indexPathsOfFlags = Set<IndexPath>()
     var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
     var gameDifficulty: GameDifficulty?
     var numberOfItemsInSection = 0
@@ -45,7 +46,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var remainingFlags = 0
     var timerStarted = false
     
-    @IBAction func resetButtonPressed(_ sender: Any) {resetGame()}
+    @IBAction func resetButtonPressed(_ sender: Any) {
+        resetGame()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,6 +98,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             headerView.updateFlagsLabel(remainingFlags)
             headerView.configureResetButtonForNewGame()
             indexPathsOfMines = Set<IndexPath>()
+            indexPathsOfFlags = Set<IndexPath>()
         }
     }
     
@@ -122,7 +126,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: CollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! CollectionViewCell
-        cell.hasMine = (indexPathsOfMines.contains(indexPath))
+        cell.hasMine = indexPathsOfMines.contains(indexPath)
+        cell.hasFlag = indexPathsOfFlags.contains(indexPath)
+        cell.configureFlagImageView()
         cell.delegate = self;
         cell.indexPath = indexPath;
         return cell
@@ -149,9 +155,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             return
         }
         let minesInVicinity = numberOfMinesInVicinityOfCell(indexPath)
-        if minesInVicinity == 0 {revealSurroundingCellsWithZeroMines(indexPath)}
+        if minesInVicinity == 0 {
+            revealSurroundingCellsWithZeroMines(indexPath)
+        }
         cell.configureForNumberOfMinesInVicinity(minesInVicinity)
-        if isGameWon() {handleGameWon()}
+        if isGameWon() {
+            handleGameWon()
+        }
     }
     
     // MARK: Long press methods
@@ -167,13 +177,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         if cell.uncovered {return}
         if (remainingFlags > 0 && !cell.hasFlag) {
             cell.hasFlag = true
+            indexPathsOfFlags.insert(indexPath)
             remainingFlags -= 1
         }
         else if cell.hasFlag {
             cell.hasFlag = false
+            indexPathsOfFlags.remove(indexPath)
             remainingFlags += 1
         }
-        cell.configureFlagContainingCell()
+        cell.configureFlagImageView()
         headerView.updateFlagsLabel(remainingFlags)
     }
     
@@ -189,14 +201,19 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func randomlyDistributeMines(indexPathOfInitialCell: IndexPath) -> Set<IndexPath> {
         var mineIndexPaths = Set<IndexPath>()
-        while mineIndexPaths.count < numberOfMines {
-            let randomRow = Int.random(in: 0...(numberOfItemsInSection - 1))
-            let randomSection = Int.random(in: 0...(numberOfSections - 1))
-            let randomIndexPath = IndexPath.init(row: randomRow, section: randomSection)
-            if randomIndexPath != indexPathOfInitialCell {
-                mineIndexPaths.insert(randomIndexPath)
-            }
-        }
+//        while mineIndexPaths.count < numberOfMines {
+//            let randomRow = Int.random(in: 0...(numberOfItemsInSection - 1))
+//            let randomSection = Int.random(in: 0...(numberOfSections - 1))
+//            let randomIndexPath = IndexPath.init(row: randomRow, section: randomSection)
+//            if randomIndexPath != indexPathOfInitialCell {
+//                mineIndexPaths.insert(randomIndexPath)
+//            }
+//        }
+        mineIndexPaths.insert(IndexPath.init(row: 7, section: 4))
+        mineIndexPaths.insert(IndexPath.init(row: 4, section: 4))
+        mineIndexPaths.insert(IndexPath.init(row: 4, section: 5))
+        mineIndexPaths.insert(IndexPath.init(row: 4, section: 6))
+
         return mineIndexPaths
     }
     
@@ -208,8 +225,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func showAllUnflaggedMines() {
         for cell: CollectionViewCell in collectionView!.visibleCells as! Array<CollectionViewCell> {
-            if cell.hasMine && !cell.hasFlag {cell.configureMineContainingCell()}
-            else if !cell.hasMine && cell.hasFlag {cell.configureForMisplacedFlag()}
+            if cell.hasMine && !cell.hasFlag {
+                cell.configureMineContainingCell()
+            }
+            else if !cell.hasMine && cell.hasFlag {
+                cell.configureForMisplacedFlag()
+            }
         }
     }
     
@@ -260,7 +281,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         headerView.setNumberOfFlagsLabelForGameWon()
         headerView.configureResetButtonForGameWon()
         addFlagsToUncoveredCells()
-        if let winningTime = headerView.timeLabel.text {displayGameWonAlert(winningTime: winningTime)}
+        if let winningTime = headerView.timeLabel.text {
+            displayGameWonAlert(winningTime: winningTime)
+        }
     }
     
     func displayGameWonAlert(winningTime: String) {
@@ -270,13 +293,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         present(alert, animated: true)
     }
     
-    func newGameHandler(alert: UIAlertAction!) {resetGame()}
+    func newGameHandler(alert: UIAlertAction!) {
+        resetGame()
+    }
     
     func addFlagsToUncoveredCells() {
         for cell: CollectionViewCell in (collectionView!.visibleCells as! Array<CollectionViewCell>) {
             if !cell.uncovered {
                 cell.hasFlag = true
-                cell.configureFlagContainingCell()
+                cell.configureFlagImageView()
             }
         }
     }
