@@ -132,21 +132,21 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="133.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Flags" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ttv-2p-uia" userLabel="Number of Flags Label">
-                                        <rect key="frame" x="15" y="40" width="112.5" height="53.5"/>
+                                        <rect key="frame" x="25" y="40" width="97.5" height="53.5"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                                         <color key="textColor" red="1" green="0.19124066219999999" blue="0.2452359818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H6d-LK-ZS5" userLabel="Time Label">
-                                        <rect key="frame" x="247.5" y="40" width="112.5" height="53.5"/>
+                                        <rect key="frame" x="212.5" y="40" width="97.5" height="53.5"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                                         <color key="textColor" red="1" green="0.19124066219999999" blue="0.2452359818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pVa-Rr-U7a">
-                                        <rect key="frame" x="167.5" y="46.5" width="40" height="40"/>
+                                        <rect key="frame" x="147.5" y="46.5" width="40" height="40"/>
                                         <color key="backgroundColor" red="0.60200536039999997" green="0.60200536039999997" blue="0.60200536039999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="pVa-Rr-U7a" secondAttribute="height" multiplier="1:1" id="yb6-Oe-JxG"/>
@@ -157,21 +157,33 @@
                                             <action selector="resetButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="iDT-U4-Gv6"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7jV-qo-EUk">
+                                        <rect key="frame" x="341" y="46.5" width="24" height="40"/>
+                                        <color key="backgroundColor" red="0.73333333329999995" green="0.72941176470000002" blue="0.73333333329999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" image="icons8-home-24"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.86274509803921573" green="0.86274509803921573" blue="0.86274509803921573" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="pVa-Rr-U7a" firstAttribute="centerY" secondItem="Cha-Yd-rC7" secondAttribute="centerY" id="7Zj-ol-tPI"/>
-                                    <constraint firstItem="H6d-LK-ZS5" firstAttribute="leading" secondItem="pVa-Rr-U7a" secondAttribute="trailing" constant="40" id="Ban-VK-hiA"/>
+                                    <constraint firstItem="H6d-LK-ZS5" firstAttribute="leading" secondItem="pVa-Rr-U7a" secondAttribute="trailing" constant="25" id="Ban-VK-hiA"/>
                                     <constraint firstItem="Ttv-2p-uia" firstAttribute="centerY" secondItem="pVa-Rr-U7a" secondAttribute="centerY" id="CD1-Mf-SYc"/>
-                                    <constraint firstItem="pVa-Rr-U7a" firstAttribute="centerX" secondItem="Cha-Yd-rC7" secondAttribute="centerX" id="Dp8-go-0Vh"/>
+                                    <constraint firstItem="pVa-Rr-U7a" firstAttribute="centerX" secondItem="Cha-Yd-rC7" secondAttribute="centerX" constant="-20" id="Dp8-go-0Vh"/>
                                     <constraint firstItem="pVa-Rr-U7a" firstAttribute="height" secondItem="Cha-Yd-rC7" secondAttribute="height" multiplier="0.3" id="FOa-lo-cbe"/>
-                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="H6d-LK-ZS5" secondAttribute="trailing" constant="10" id="GZw-u0-sBd"/>
                                     <constraint firstItem="H6d-LK-ZS5" firstAttribute="centerY" secondItem="pVa-Rr-U7a" secondAttribute="centerY" id="QhC-zB-1sS"/>
+                                    <constraint firstItem="7jV-qo-EUk" firstAttribute="height" secondItem="pVa-Rr-U7a" secondAttribute="height" id="S5g-eS-aqG"/>
+                                    <constraint firstItem="7jV-qo-EUk" firstAttribute="centerY" secondItem="pVa-Rr-U7a" secondAttribute="centerY" id="WbI-RU-Dvc"/>
+                                    <constraint firstAttribute="trailing" secondItem="7jV-qo-EUk" secondAttribute="trailing" constant="10" id="Wiq-mT-mU8"/>
                                     <constraint firstItem="Ttv-2p-uia" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Cha-Yd-rC7" secondAttribute="leading" constant="10" id="abv-lx-jQN"/>
-                                    <constraint firstItem="H6d-LK-ZS5" firstAttribute="width" secondItem="Cha-Yd-rC7" secondAttribute="width" multiplier="0.3" id="faM-WK-DIX"/>
-                                    <constraint firstItem="Ttv-2p-uia" firstAttribute="width" secondItem="Cha-Yd-rC7" secondAttribute="width" multiplier="0.3" id="hxa-qd-S46"/>
+                                    <constraint firstItem="H6d-LK-ZS5" firstAttribute="width" secondItem="Cha-Yd-rC7" secondAttribute="width" multiplier="0.26" id="faM-WK-DIX"/>
+                                    <constraint firstItem="Ttv-2p-uia" firstAttribute="width" secondItem="Cha-Yd-rC7" secondAttribute="width" multiplier="0.26" id="hxa-qd-S46"/>
                                     <constraint firstItem="H6d-LK-ZS5" firstAttribute="height" secondItem="Cha-Yd-rC7" secondAttribute="height" multiplier="0.4" id="jNz-Vf-nSH"/>
-                                    <constraint firstItem="pVa-Rr-U7a" firstAttribute="leading" secondItem="Ttv-2p-uia" secondAttribute="trailing" constant="40" id="kdU-fC-CJQ"/>
+                                    <constraint firstItem="pVa-Rr-U7a" firstAttribute="leading" secondItem="Ttv-2p-uia" secondAttribute="trailing" constant="25" id="kdU-fC-CJQ"/>
                                     <constraint firstItem="Ttv-2p-uia" firstAttribute="height" secondItem="Cha-Yd-rC7" secondAttribute="height" multiplier="0.4" id="q3w-XS-tbW"/>
                                 </constraints>
                                 <connections>
@@ -281,6 +293,7 @@
         <image name="cellButton" width="200" height="200"/>
         <image name="icon-game-over" width="48" height="48"/>
         <image name="icon-happy-48" width="48" height="48"/>
+        <image name="icons8-home-24" width="24" height="24"/>
         <image name="mine-icon-black-50" width="50" height="50"/>
     </resources>
 </document>
