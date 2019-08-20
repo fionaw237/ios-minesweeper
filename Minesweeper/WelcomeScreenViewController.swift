@@ -13,9 +13,14 @@ class WelcomeScreenViewController: UIViewController {
     @IBOutlet weak var beginnerButton: UIButton!
     @IBOutlet weak var intermediateButton: UIButton!
     @IBOutlet weak var advancedButton: UIButton!
+    @IBOutlet weak var bestTimesButton: UIButton!
     
     @IBAction func gameDifficultyChosen(_ sender: Any) {
         performSegue(withIdentifier: "mySegue", sender: sender)
+    }
+    
+    @IBAction func bestTimesButtonPressed(_ sender: Any) {
+        performSegue(withIdentifier: "bestTimesSegue", sender: sender)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {

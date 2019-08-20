@@ -91,20 +91,21 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mB7-wW-KE4">
                                 <rect key="frame" x="0.0" y="508" width="320" height="60"/>
                                 <subviews>
-                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l7k-ts-zQa" userLabel="High Scores Button">
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l7k-ts-zQa" userLabel="Best Times Button">
                                         <rect key="frame" x="60" y="10" width="200" height="40"/>
                                         <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="JaQ-bK-qCO"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <state key="normal" title="View High Scores"/>
+                                        <state key="normal" title="Best Times"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                 <integer key="value" value="5"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
+                                            <action selector="bestTimesButtonPressed:" destination="u3e-n8-ewN" eventType="touchUpInside" id="WOa-R8-dPI"/>
                                             <action selector="gameDifficultyChosen:" destination="u3e-n8-ewN" eventType="touchUpInside" id="Dgc-ie-wkZ"/>
                                         </connections>
                                     </button>
@@ -147,8 +148,10 @@
                     <connections>
                         <outlet property="advancedButton" destination="mgT-bQ-tgo" id="UIf-Ro-HPS"/>
                         <outlet property="beginnerButton" destination="3EP-2G-fIO" id="7b6-mb-SRG"/>
+                        <outlet property="bestTimesButton" destination="l7k-ts-zQa" id="DzK-Cg-1Q4"/>
                         <outlet property="intermediateButton" destination="HtK-OO-ucH" id="RuB-kS-6ND"/>
                         <segue destination="BYZ-38-t0r" kind="showDetail" identifier="mySegue" id="pmC-CK-gaq"/>
+                        <segue destination="H2L-aF-44V" kind="showDetail" identifier="bestTimesSegue" id="3h4-bT-W5l"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3IX-8r-PbN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -332,20 +335,64 @@
             </objects>
             <point key="canvasLocation" x="133.125" y="133.09859154929578"/>
         </scene>
-        <!--High Scores View Controller-->
+        <!--Best Times View Controller-->
         <scene sceneID="yqP-gv-cxv">
             <objects>
-                <viewController id="H2L-aF-44V" userLabel="High Scores View Controller" sceneMemberID="viewController">
+                <viewController id="H2L-aF-44V" userLabel="Best Times View Controller" customClass="BestTimesViewController" customModule="Minesweeper" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="BrY-Mv-jOm">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="mine-icon-black-50" translatesAutoresizingMaskIntoConstraints="NO" id="BwQ-XB-xQY">
+                                <rect key="frame" x="23" y="46" width="91" height="51"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="180" id="oJz-nF-YGf"/>
+                                    <constraint firstAttribute="height" constant="100" id="zeG-14-4VM"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Best Times" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mfG-Bw-JBT">
+                                <rect key="frame" x="122" y="46" width="161" height="51"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <color key="textColor" red="0.092556603190000003" green="0.19203083039999999" blue="0.92928432679999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qQE-1q-aX2" userLabel="Menu Button">
+                                <rect key="frame" x="50" y="502.5" width="220" height="45.5"/>
+                                <color key="backgroundColor" red="0.73333333329999995" green="0.72941176470000002" blue="0.73333333329999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <inset key="contentEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>
+                                <inset key="titleEdgeInsets" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="-20" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Return to Menu" image="icons8-home-24">
+                                    <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <integer key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="homeButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ai5-bJ-yEb"/>
+                                    <action selector="menuButtonPressed:" destination="H2L-aF-44V" eventType="touchUpInside" id="yIl-1X-EKu"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.86299999999999999" green="0.86299999999999999" blue="0.86299999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="AcU-H8-q71" firstAttribute="trailing" secondItem="qQE-1q-aX2" secondAttribute="trailing" constant="50" id="1d0-W6-QdP"/>
+                            <constraint firstItem="AcU-H8-q71" firstAttribute="bottom" secondItem="qQE-1q-aX2" secondAttribute="bottom" constant="20" id="SKR-Wg-JSB"/>
+                            <constraint firstItem="qQE-1q-aX2" firstAttribute="leading" secondItem="AcU-H8-q71" secondAttribute="leading" constant="50" id="byn-U4-pcO"/>
+                            <constraint firstItem="qQE-1q-aX2" firstAttribute="height" secondItem="BrY-Mv-jOm" secondAttribute="height" multiplier="0.08" id="oEB-4h-vT6"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="AcU-H8-q71"/>
                     </view>
+                    <connections>
+                        <outlet property="menuButton" destination="qQE-1q-aX2" id="nne-Sy-An0"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ldZ-cS-nnT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-327" y="830"/>
+            <point key="canvasLocation" x="-305.625" y="891.54929577464793"/>
         </scene>
     </scenes>
     <resources>

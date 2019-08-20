@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2B54565F2250056B00AB6EAE /* WelcomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B54565E2250056B00AB6EAE /* WelcomeScreenViewController.swift */; };
+		2BD85B47230C08520077776F /* BestTimesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD85B46230C08520077776F /* BestTimesViewController.swift */; };
 		2BE47CA82223FF2A00D3952A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE47CA72223FF2A00D3952A /* AppDelegate.swift */; };
 		2BE47CAA2223FF2A00D3952A /* GameScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE47CA92223FF2A00D3952A /* GameScreenViewController.swift */; };
 		2BE47CAD2223FF2A00D3952A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2BE47CAB2223FF2A00D3952A /* Main.storyboard */; };
@@ -39,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		2B54565E2250056B00AB6EAE /* WelcomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScreenViewController.swift; sourceTree = "<group>"; };
+		2BD85B46230C08520077776F /* BestTimesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestTimesViewController.swift; sourceTree = "<group>"; };
 		2BE47CA42223FF2A00D3952A /* Minesweeper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Minesweeper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BE47CA72223FF2A00D3952A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2BE47CA92223FF2A00D3952A /* GameScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScreenViewController.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				2BE47CA72223FF2A00D3952A /* AppDelegate.swift */,
 				2BE47CA92223FF2A00D3952A /* GameScreenViewController.swift */,
 				2BE47CAB2223FF2A00D3952A /* Main.storyboard */,
+				2BD85B46230C08520077776F /* BestTimesViewController.swift */,
 				2BE47CB12223FF2C00D3952A /* Assets.xcassets */,
 				2BE47CB32223FF2C00D3952A /* LaunchScreen.storyboard */,
 				2BE47CB62223FF2C00D3952A /* Info.plist */,
@@ -269,6 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2B54565F2250056B00AB6EAE /* WelcomeScreenViewController.swift in Sources */,
+				2BD85B47230C08520077776F /* BestTimesViewController.swift in Sources */,
 				2BE47CDB222425A400D3952A /* GameScreenCollectionViewCell.swift in Sources */,
 				2BE47CB02223FF2A00D3952A /* Minesweeper.xcdatamodeld in Sources */,
 				2BE47CAA2223FF2A00D3952A /* GameScreenViewController.swift in Sources */,
