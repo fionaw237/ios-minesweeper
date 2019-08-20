@@ -290,6 +290,10 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func displayGameWonAlert(winningTime: String) {
+        // check if new high score and, if it is, ask user to enter name
+        
+        
+        // Otherwise display the following:
         let alert = UIAlertController(title: "You won!", message: "Your time was \(winningTime) seconds", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "New Game", style: .default, handler: newGameHandler))
         alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))

@@ -8,10 +8,18 @@
 
 import UIKit
 
-class BestTimesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class BestTimesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource {
     
     @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var bestTimesTableView: UITableView!
+    @IBOutlet weak var pickerView: UIPickerView!
+    
+    var pickerData: [String] = []
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        pickerData = ["Beginner", "Intermediate", "Advanced"]
+    }
     
     @IBAction func menuButtonPressed(_ sender: Any) {
         self.presentingViewController?.dismiss(animated: true, completion:nil)
@@ -25,5 +33,16 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: BestTimesTableViewCell.self), for: indexPath) as! BestTimesTableViewCell
         return cell
     }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerData.count
+    }
 
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerData[row]
+    }
 }
