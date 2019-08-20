@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class BestTimesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource {
     
@@ -15,6 +16,33 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var pickerView: UIPickerView!
     
     var pickerData = ["Beginner", "Intermediate", "Advanced"]
+    var bestTimes: [BestTimeEntry] = []
+    var currentDifficulty = "Beginner"
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    var context: NSManagedObjectContext = NSManagedObjectContext()
+    
+    override func viewDidLoad() {
+        context = appDelegate.persistentContainer.viewContext
+        fetchEntriesForCurrentDifficulty()
+        
+        // use this to add test entries to core data
+//                let entity = NSEntityDescription.entity(forEntityName: "BestTimeEntry", in: context)
+//                let newEntry = NSManagedObject(entity: entity!, insertInto: context)
+//                newEntry.setValue("Fiona", forKey: "name")
+//                newEntry.setValue("45s", forKey: "time")
+//                newEntry.setValue("Intermediate", forKey: "difficulty")
+//
+//                let newEntry2 = NSManagedObject(entity: entity!, insertInto: context)
+//                newEntry2.setValue("Merlin", forKey: "name")
+//                newEntry2.setValue("577s", forKey: "time")
+//                newEntry2.setValue("Advanced", forKey: "difficulty")
+//
+//                do {
+//                    try context.save()
+//                } catch {
+//                    print("Failed saving")
+//                }
+    }
     
     @IBAction func menuButtonPressed(_ sender: Any) {
         self.presentingViewController?.dismiss(animated: true, completion:nil)
@@ -23,11 +51,13 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     // MARK: table view delegate methods
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return bestTimes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: BestTimesTableViewCell.self), for: indexPath) as! BestTimesTableViewCell
+        cell.nameLabel.text = bestTimes[indexPath.row].name
+        cell.timeLabel.text = bestTimes[indexPath.row].time
         return cell
     }
     
@@ -46,6 +76,49 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        // set bestTimes by fetching appropriate entries from core data
+        switch row {
+        case 0:
+            currentDifficulty = "Beginner"
+            break
+        case 1:
+            currentDifficulty = "Intermediate"
+            break
+        case 2:
+            currentDifficulty = "Advanced"
+            break
+        default:
+            break
+        }
+
+        fetchEntriesForCurrentDifficulty()
+        bestTimesTableView.reloadData()
+    }
+    
+    func fetchEntriesForCurrentDifficulty() {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "BestTimeEntry")
+        request.predicate = NSPredicate(format: "difficulty == %@", currentDifficulty)
+        request.returnsObjectsAsFaults = false
+        do {
+            bestTimes = try context.fetch(request) as! [BestTimeEntry]
+        } catch {
+            print("Failed")
+        }
+    }
+    
+    func clearAllSavedData() {
+//         create the delete request for the specified entity
+                let fetchRequest: NSFetchRequest<NSFetchRequestResult>(entityName: "BestTimeEntry")
+                let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         
+                // get reference to the persistent container
+                let persistentContainer = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+        
+                // perform the delete
+                do {
+                    try persistentContainer.viewContext.execute(deleteRequest)
+                } catch let error as NSError {
+                    print(error)
+                }
     }
 }

@@ -290,7 +290,24 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func displayGameWonAlert(winningTime: String) {
-        // check if new high score and, if it is, ask user to enter name
+        // check if new high score and, if it is, ask user to enter name, then store in core data
+        
+//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//        let context = appDelegate.persistentContainer.viewContext
+        //        let entity = NSEntityDescription.entity(forEntityName: "BestTimeEntry", in: context)
+        //        let newEntry = NSManagedObject(entity: entity!, insertInto: context)
+        //        newEntry.setValue("Fiona", forKey: "name")
+        //        newEntry.setValue("45s", forKey: "time")
+        //
+        //        let newEntry2 = NSManagedObject(entity: entity!, insertInto: context)
+        //        newEntry2.setValue("Merlin", forKey: "name")
+        //        newEntry2.setValue("56s", forKey: "time")
+        //
+        //        do {
+        //            try context.save()
+        //        } catch {
+        //            print("Failed saving")
+        //        }
         
         
         // Otherwise display the following:
