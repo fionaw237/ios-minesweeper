@@ -8,22 +8,22 @@
 
 import UIKit
 
-enum NumberOfSections: Int {
-    case Beginner = 8
-    case Intermediate = 10
-    case Advanced = 12
-}
-
-enum NumberOfItemsInSection: Int {
-    case Beginner = 8
-    case Intermediate = 9
-    case Advanced = 10
-}
+//enum NumberOfSections: Int {
+//    case Beginner = 8
+//    case Intermediate = 10
+//    case Advanced = 12
+//}
+//
+//enum NumberOfItemsInSection: Int {
+//    case Beginner = 8
+//    case Intermediate = 9
+//    case Advanced = 10
+//}
 
 enum NumberOfMines: Int {
-    case Beginner = 15
-    case Intermediate = 20
-    case Advanced = 21
+    case Beginner = 10
+    case Intermediate = 16
+    case Advanced = 22
 }
 
 enum GameDifficulty: Int {
@@ -68,25 +68,27 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func getNumberOfItemsInSection(_ gameDifficulty: GameDifficulty) -> Int {
-        switch gameDifficulty {
-        case .Beginner:
-            return NumberOfItemsInSection.Beginner.rawValue
-        case .Intermediate:
-            return NumberOfItemsInSection.Intermediate.rawValue
-        case .Advanced:
-            return NumberOfItemsInSection.Advanced.rawValue
-        }
+        return 8
+//        switch gameDifficulty {
+//        case .Beginner:
+//            return NumberOfItemsInSection.Beginner.rawValue
+//        case .Intermediate:
+//            return NumberOfItemsInSection.Intermediate.rawValue
+//        case .Advanced:
+//            return NumberOfItemsInSection.Advanced.rawValue
+//        }
     }
     
     func getNumberOfSections(_ gameDifficulty: GameDifficulty) -> Int {
-        switch gameDifficulty {
-        case .Beginner:
-            return NumberOfSections.Beginner.rawValue
-        case .Intermediate:
-            return NumberOfSections.Intermediate.rawValue
-        case .Advanced:
-            return NumberOfSections.Advanced.rawValue
-        }
+        return 9
+//        switch gameDifficulty {
+//        case .Beginner:
+//            return NumberOfSections.Beginner.rawValue
+//        case .Intermediate:
+//            return NumberOfSections.Intermediate.rawValue
+//        case .Advanced:
+//            return NumberOfSections.Advanced.rawValue
+//        }
     }
     
     func setUpGame() {
