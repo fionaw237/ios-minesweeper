@@ -17,13 +17,12 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     
     var pickerData = ["Beginner", "Intermediate", "Advanced"]
     var bestTimes: [BestTimeEntry] = []
-    var currentDifficulty = "Beginner"
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var context: NSManagedObjectContext = NSManagedObjectContext()
     
     override func viewDidLoad() {
         context = appDelegate.persistentContainer.viewContext
-        fetchEntriesForCurrentDifficulty()
+        fetchEntriesForDifficulty("Beginner")
         
         // use this to add test entries to core data
 //                let entity = NSEntityDescription.entity(forEntityName: "BestTimeEntry", in: context)
@@ -76,28 +75,25 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        // set bestTimes by fetching appropriate entries from core data
         switch row {
         case 0:
-            currentDifficulty = "Beginner"
+            fetchEntriesForDifficulty("Beginner")
             break
         case 1:
-            currentDifficulty = "Intermediate"
+            fetchEntriesForDifficulty("Intermediate")
             break
         case 2:
-            currentDifficulty = "Advanced"
+            fetchEntriesForDifficulty("Advanced")
             break
         default:
             break
         }
-
-        fetchEntriesForCurrentDifficulty()
         bestTimesTableView.reloadData()
     }
     
-    func fetchEntriesForCurrentDifficulty() {
+    func fetchEntriesForDifficulty(_ difficulty: String) {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "BestTimeEntry")
-        request.predicate = NSPredicate(format: "difficulty == %@", currentDifficulty)
+        request.predicate = NSPredicate(format: "difficulty == %@", difficulty)
         request.returnsObjectsAsFaults = false
         do {
             bestTimes = try context.fetch(request) as! [BestTimeEntry]
@@ -106,19 +102,19 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
-    func clearAllSavedData() {
-//         create the delete request for the specified entity
-                let fetchRequest: NSFetchRequest<NSFetchRequestResult>(entityName: "BestTimeEntry")
-                let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        
-                // get reference to the persistent container
-                let persistentContainer = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-        
-                // perform the delete
-                do {
-                    try persistentContainer.viewContext.execute(deleteRequest)
-                } catch let error as NSError {
-                    print(error)
-                }
-    }
+//    func clearAllSavedData() {
+////         create the delete request for the specified entity
+//                let fetchRequest: NSFetchRequest<NSFetchRequestResult>(entityName: "BestTimeEntry")
+//                let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+//
+//                // get reference to the persistent container
+//                let persistentContainer = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+//
+//                // perform the delete
+//                do {
+//                    try persistentContainer.viewContext.execute(deleteRequest)
+//                } catch let error as NSError {
+//                    print(error)
+//                }
+//    }
 }
