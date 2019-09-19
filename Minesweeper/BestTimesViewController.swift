@@ -19,14 +19,34 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     var bestTimes: [BestTimeEntry] = []
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var managedObjectContext: NSManagedObjectContext?
+    var defaultDifficulty = "Beginner"
     
     override func viewDidLoad() {
         managedObjectContext = appDelegate.persistentContainer.viewContext
-        bestTimes = BestTimesViewController.fetchEntriesForDifficulty("Beginner", context: managedObjectContext)
+        bestTimes = BestTimesViewController.fetchEntriesForDifficulty(defaultDifficulty, context: managedObjectContext)
+        setSelectedDifficultyInPickerView()
     }
     
     @IBAction func menuButtonPressed(_ sender: Any) {
         self.presentingViewController?.dismiss(animated: true, completion:nil)
+    }
+    
+    func setSelectedDifficultyInPickerView() {
+        var row = 0
+        switch defaultDifficulty {
+        case "Beginner":
+            row = 0
+            break
+        case "Intermediate":
+            row = 1
+            break
+        case "Advanced":
+            row = 2
+            break
+        default:
+            break
+        }
+        pickerView.selectRow(row, inComponent: 0, animated: true)
     }
     
     // MARK: table view delegate methods

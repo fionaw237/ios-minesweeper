@@ -432,5 +432,12 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
         }
         return ""
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
+        if segue.identifier == "newHighScoreSegue" {
+            let bestTimesViewController = segue.destination as! BestTimesViewController
+            bestTimesViewController.defaultDifficulty = gameDifficultyToStringEnumMapping(gameDifficulty)
+        }
+    }
 }
 
