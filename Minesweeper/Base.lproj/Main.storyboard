@@ -328,6 +328,7 @@
                     <connections>
                         <outlet property="collectionView" destination="XC7-qC-mJ5" id="hw2-Bd-wev"/>
                         <outlet property="headerView" destination="Cha-Yd-rC7" id="ofs-Ze-Tcc"/>
+                        <segue destination="H2L-aF-44V" kind="showDetail" identifier="newHighScoreSegue" id="2P6-Xe-YUS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -585,4 +586,7 @@
         <image name="icons8-home-24" width="24" height="24"/>
         <image name="mine-icon-black-50" width="50" height="50"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="2P6-Xe-YUS"/>
+    </inferredMetricsTieBreakers>
 </document>

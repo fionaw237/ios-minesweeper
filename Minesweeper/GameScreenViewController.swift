@@ -202,7 +202,20 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     // MARK: Return to welcome screem
     
     @IBAction func homeButtonPressed(_ sender: Any) {
-        self.presentingViewController?.dismiss(animated: true, completion:nil)
+        timerStarted ? presentWarningAlertForReturnToHome() : self.presentingViewController?.dismiss(animated: true, completion:nil)
+    }
+    
+    func presentWarningAlertForReturnToHome() {
+        let alert: UIAlertController = UIAlertController.init(title: "Warning!",
+                                                              message: "This will quit the game and return to the home screen",
+                                                              preferredStyle: .alert)
+        let dismissAction = UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil)
+        let continueAction = UIAlertAction.init(title: "Quit Game", style: .default) { (action) in
+            self.presentingViewController?.dismiss(animated: true, completion:nil)
+        }
+        alert.addAction(dismissAction)
+        alert.addAction(continueAction)
+        self.present(alert, animated: true, completion: nil)
     }
     
     // MARK: Helper functions
@@ -308,13 +321,38 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
         //        } catch {
         //            print("Failed saving")
         //        }
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        alert.title = isHighScore(winningTime) ? "New high score!" : "You won!"
+        alert.message = "Your time was \(winningTime) seconds"
         
-        
-        // Otherwise display the following:
-        let alert = UIAlertController(title: "You won!", message: "Your time was \(winningTime) seconds", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "New Game", style: .default, handler: newGameHandler))
-        alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
+        if (isHighScore(winningTime)) {
+            
+            alert.addTextField { (textField) in
+                textField.placeholder = "Enter your name"
+            }
+            
+            alert.addAction(UIAlertAction(title: "Submit", style: .default, handler: { (action) in
+                if let textfields = alert.textFields {
+                    if let enteredText = textfields[0].text {
+                        let name = (enteredText == "") ? "Anonymous" : enteredText
+                        self.storeHighScore(time: winningTime, name: name)
+                        self.performSegue(withIdentifier: "newHighScoreSegue", sender: nil)
+                    }
+                }
+            }))
+        } else {
+            alert.addAction(UIAlertAction(title: "New Game", style: .default, handler: newGameHandler))
+            alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
+        }
         present(alert, animated: true)
+    }
+    
+    func storeHighScore(time: String, name: String) {
+        
+    }
+    
+    func isHighScore(_ winningTime: String) -> Bool {
+        return true
     }
     
     func newGameHandler(alert: UIAlertAction!) {
