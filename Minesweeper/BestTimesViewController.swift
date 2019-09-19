@@ -18,29 +18,11 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     var pickerData = ["Beginner", "Intermediate", "Advanced"]
     var bestTimes: [BestTimeEntry] = []
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    var context: NSManagedObjectContext = NSManagedObjectContext()
+    var managedObjectContext: NSManagedObjectContext?
     
     override func viewDidLoad() {
-        context = appDelegate.persistentContainer.viewContext
+        managedObjectContext = appDelegate.persistentContainer.viewContext
         fetchEntriesForDifficulty("Beginner")
-        
-        // use this to add test entries to core data
-//                let entity = NSEntityDescription.entity(forEntityName: "BestTimeEntry", in: context)
-//                let newEntry = NSManagedObject(entity: entity!, insertInto: context)
-//                newEntry.setValue("Fiona", forKey: "name")
-//                newEntry.setValue("45s", forKey: "time")
-//                newEntry.setValue("Intermediate", forKey: "difficulty")
-//
-//                let newEntry2 = NSManagedObject(entity: entity!, insertInto: context)
-//                newEntry2.setValue("Merlin", forKey: "name")
-//                newEntry2.setValue("577s", forKey: "time")
-//                newEntry2.setValue("Advanced", forKey: "difficulty")
-//
-//                do {
-//                    try context.save()
-//                } catch {
-//                    print("Failed saving")
-//                }
     }
     
     @IBAction func menuButtonPressed(_ sender: Any) {
@@ -92,14 +74,17 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func fetchEntriesForDifficulty(_ difficulty: String) {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "BestTimeEntry")
-        request.predicate = NSPredicate(format: "difficulty == %@", difficulty)
-        request.returnsObjectsAsFaults = false
-        do {
-            bestTimes = try context.fetch(request) as! [BestTimeEntry]
-        } catch {
-            print("Failed")
+        if let context = managedObjectContext {
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "BestTimeEntry")
+            request.predicate = NSPredicate(format: "difficulty == %@", difficulty)
+            request.returnsObjectsAsFaults = false
+            do {
+                bestTimes = try context.fetch(request) as! [BestTimeEntry]
+            } catch {
+                print("Failed")
+            }
         }
+        
     }
     
 //    func clearAllSavedData() {

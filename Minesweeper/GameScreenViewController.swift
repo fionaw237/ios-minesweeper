@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 //enum NumberOfSections: Int {
 //    case Beginner = 8
@@ -22,8 +23,8 @@ import UIKit
 
 enum NumberOfMines: Int {
     case Beginner = 10
-    case Intermediate = 16
-    case Advanced = 22
+    case Intermediate = 11
+    case Advanced = 12
 }
 
 enum GameDifficulty: Int {
@@ -45,6 +46,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     var numberOfMines = 0
     var remainingFlags = 0
     var timerStarted = false
+    var managedObjectContext: NSManagedObjectContext?
     
     @IBAction func resetButtonPressed(_ sender: Any) {
         resetGame()
@@ -54,6 +56,9 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
         super.viewDidLoad()
         setUpGame()
         setUpLongPressGestureRecognizer()
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        managedObjectContext = appDelegate.persistentContainer.viewContext
     }
     
     func getNumberOfMines(_ gameDifficulty: GameDifficulty) -> Int {
@@ -303,24 +308,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func displayGameWonAlert(winningTime: String) {
-        // check if new high score and, if it is, ask user to enter name, then store in core data
-        
-//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-//        let context = appDelegate.persistentContainer.viewContext
-        //        let entity = NSEntityDescription.entity(forEntityName: "BestTimeEntry", in: context)
-        //        let newEntry = NSManagedObject(entity: entity!, insertInto: context)
-        //        newEntry.setValue("Fiona", forKey: "name")
-        //        newEntry.setValue("45s", forKey: "time")
-        //
-        //        let newEntry2 = NSManagedObject(entity: entity!, insertInto: context)
-        //        newEntry2.setValue("Merlin", forKey: "name")
-        //        newEntry2.setValue("56s", forKey: "time")
-        //
-        //        do {
-        //            try context.save()
-        //        } catch {
-        //            print("Failed saving")
-        //        }
+
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         alert.title = isHighScore(winningTime) ? "New high score!" : "You won!"
         alert.message = "Your time was \(winningTime) seconds"
@@ -348,7 +336,19 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func storeHighScore(time: String, name: String) {
-        
+        if let context = managedObjectContext {
+            let entity = NSEntityDescription.entity(forEntityName: "BestTimeEntry", in: context)
+            let newEntry = NSManagedObject(entity: entity!, insertInto: context)
+            newEntry.setValue(name, forKey: "name")
+            newEntry.setValue(time, forKey: "time")
+            newEntry.setValue(gameDifficultyToStringEnumMapping(gameDifficulty), forKey: "difficulty")
+            
+            do {
+                try context.save()
+            } catch {
+                print("Failed saving")
+            }
+        }
     }
     
     func isHighScore(_ winningTime: String) -> Bool {
@@ -393,6 +393,21 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
                 }
             }
         }
+    }
+    
+    func gameDifficultyToStringEnumMapping(_ difficulty: GameDifficulty?) -> String {
+        if let diff = gameDifficulty {
+            switch diff {
+            case .Beginner:
+                return "Beginner"
+            case .Intermediate:
+                return "Intermediate"
+            case .Advanced:
+                return "Advanced"
+            }
+            
+        }
+        return ""
     }
 }
 
