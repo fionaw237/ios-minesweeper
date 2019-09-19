@@ -32,21 +32,9 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func setSelectedDifficultyInPickerView() {
-        var row = 0
-        switch defaultDifficulty {
-        case "Beginner":
-            row = 0
-            break
-        case "Intermediate":
-            row = 1
-            break
-        case "Advanced":
-            row = 2
-            break
-        default:
-            break
+        if let rowToSelect = pickerData.index(of: defaultDifficulty) {
+            pickerView.selectRow(rowToSelect, inComponent: 0, animated: true)
         }
-        pickerView.selectRow(row, inComponent: 0, animated: true)
     }
     
     // MARK: table view delegate methods

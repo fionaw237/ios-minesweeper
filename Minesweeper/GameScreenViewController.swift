@@ -23,8 +23,8 @@ import CoreData
 
 enum NumberOfMines: Int {
     case Beginner = 10
-    case Intermediate = 15
-    case Advanced = 20
+    case Intermediate = 14
+    case Advanced = 18
 }
 
 enum GameDifficulty: Int {
