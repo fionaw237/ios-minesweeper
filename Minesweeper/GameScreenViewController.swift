@@ -23,8 +23,8 @@ import CoreData
 
 enum NumberOfMines: Int {
     case Beginner = 10
-    case Intermediate = 11
-    case Advanced = 12
+    case Intermediate = 15
+    case Advanced = 20
 }
 
 enum GameDifficulty: Int {
@@ -47,6 +47,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     var remainingFlags = 0
     var timerStarted = false
     var managedObjectContext: NSManagedObjectContext?
+    let numberOfHighScoresToDisplay = 10
     
     @IBAction func resetButtonPressed(_ sender: Any) {
         resetGame()
@@ -341,7 +342,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     func storeHighScore(time: Int, name: String) {
         if let context = managedObjectContext {
             let highScores = BestTimesViewController.fetchEntriesForDifficulty(gameDifficultyToStringEnumMapping(gameDifficulty!), context: managedObjectContext)
-            if highScores.count >= 3 {
+            if highScores.count >= numberOfHighScoresToDisplay {
                 // Update the lowest score with the new values
                 if let lowestScore = highScores.last {
                     lowestScore.name = name
@@ -368,7 +369,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
         if let difficulty = gameDifficulty {
             let highScores = BestTimesViewController.fetchEntriesForDifficulty(gameDifficultyToStringEnumMapping(difficulty), context: managedObjectContext)
             
-            if (highScores.count < 3) {return true}
+            if (highScores.count < numberOfHighScoresToDisplay) {return true}
             
             if let lowestStoredEntry = highScores.last {
                 return winningTime < lowestStoredEntry.time
