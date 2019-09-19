@@ -303,11 +303,13 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
         headerView.configureResetButtonForGameWon()
         addFlagsToUncoveredCells()
         if let winningTime = headerView.timeLabel.text {
-            displayGameWonAlert(winningTime: winningTime)
+            if let time = Int(winningTime) {
+                displayGameWonAlert(winningTime: time)
+            }
         }
     }
     
-    func displayGameWonAlert(winningTime: String) {
+    func displayGameWonAlert(winningTime: Int) {
 
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         alert.title = isHighScore(winningTime) ? "New high score!" : "You won!"
@@ -323,6 +325,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
                 if let textfields = alert.textFields {
                     if let enteredText = textfields[0].text {
                         let name = (enteredText == "") ? "Anonymous" : enteredText
+//                        self.removeLastHighScoreEntry()
                         self.storeHighScore(time: winningTime, name: name)
                         self.performSegue(withIdentifier: "newHighScoreSegue", sender: nil)
                     }
@@ -335,13 +338,23 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
         present(alert, animated: true)
     }
     
-    func storeHighScore(time: String, name: String) {
+    func storeHighScore(time: Int, name: String) {
         if let context = managedObjectContext {
-            let entity = NSEntityDescription.entity(forEntityName: "BestTimeEntry", in: context)
-            let newEntry = NSManagedObject(entity: entity!, insertInto: context)
-            newEntry.setValue(name, forKey: "name")
-            newEntry.setValue(time, forKey: "time")
-            newEntry.setValue(gameDifficultyToStringEnumMapping(gameDifficulty), forKey: "difficulty")
+            let highScores = BestTimesViewController.fetchEntriesForDifficulty(gameDifficultyToStringEnumMapping(gameDifficulty!), context: managedObjectContext)
+            if highScores.count >= 3 {
+                // Update the lowest score with the new values
+                if let lowestScore = highScores.last {
+                    lowestScore.name = name
+                    lowestScore.time = Int32(time)
+                }
+            } else {
+                // No low score exists - create new entry
+                let entity = NSEntityDescription.entity(forEntityName: "BestTimeEntry", in: context)
+                let newEntry = NSManagedObject(entity: entity!, insertInto: context)
+                newEntry.setValue(name, forKey: "name")
+                newEntry.setValue(time, forKey: "time")
+                newEntry.setValue(gameDifficultyToStringEnumMapping(gameDifficulty), forKey: "difficulty")
+            }
             
             do {
                 try context.save()
@@ -351,8 +364,17 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
         }
     }
     
-    func isHighScore(_ winningTime: String) -> Bool {
-        return true
+    func isHighScore(_ winningTime: Int) -> Bool {
+        if let difficulty = gameDifficulty {
+            let highScores = BestTimesViewController.fetchEntriesForDifficulty(gameDifficultyToStringEnumMapping(difficulty), context: managedObjectContext)
+            
+            if (highScores.count < 3) {return true}
+            
+            if let lowestStoredEntry = highScores.last {
+                return winningTime < lowestStoredEntry.time
+            }
+        }
+        return false
     }
     
     func newGameHandler(alert: UIAlertAction!) {

@@ -13,4 +13,10 @@ class BestTimesTableViewCell: UITableViewCell {
     @IBOutlet weak var positionLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
+    
+    func configure(row: Int, timeEntry: BestTimeEntry) {
+        positionLabel.text = "\(row + 1)"
+        nameLabel.text = timeEntry.name
+        timeLabel.text = "\(timeEntry.time)s"
+    }
 }

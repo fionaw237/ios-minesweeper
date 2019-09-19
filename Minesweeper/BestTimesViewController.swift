@@ -22,7 +22,7 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         managedObjectContext = appDelegate.persistentContainer.viewContext
-        fetchEntriesForDifficulty("Beginner")
+        bestTimes = BestTimesViewController.fetchEntriesForDifficulty("Beginner", context: managedObjectContext)
     }
     
     @IBAction func menuButtonPressed(_ sender: Any) {
@@ -37,8 +37,7 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: BestTimesTableViewCell.self), for: indexPath) as! BestTimesTableViewCell
-        cell.nameLabel.text = bestTimes[indexPath.row].name
-        cell.timeLabel.text = bestTimes[indexPath.row].time
+        cell.configure(row:indexPath.row, timeEntry:bestTimes[indexPath.row])
         return cell
     }
     
@@ -59,13 +58,13 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch row {
         case 0:
-            fetchEntriesForDifficulty("Beginner")
+            bestTimes = BestTimesViewController.fetchEntriesForDifficulty("Beginner", context: managedObjectContext)
             break
         case 1:
-            fetchEntriesForDifficulty("Intermediate")
+            bestTimes = BestTimesViewController.fetchEntriesForDifficulty("Intermediate", context: managedObjectContext)
             break
         case 2:
-            fetchEntriesForDifficulty("Advanced")
+            bestTimes = BestTimesViewController.fetchEntriesForDifficulty("Advanced", context: managedObjectContext)
             break
         default:
             break
@@ -73,18 +72,19 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
         bestTimesTableView.reloadData()
     }
     
-    func fetchEntriesForDifficulty(_ difficulty: String) {
-        if let context = managedObjectContext {
+    static func fetchEntriesForDifficulty(_ difficulty: String, context: NSManagedObjectContext?) -> [BestTimeEntry] {
+        if let ctx = context {
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: "BestTimeEntry")
             request.predicate = NSPredicate(format: "difficulty == %@", difficulty)
             request.returnsObjectsAsFaults = false
             do {
-                bestTimes = try context.fetch(request) as! [BestTimeEntry]
+                let results = try ctx.fetch(request) as! [BestTimeEntry]
+                return results.sorted(by: {$0.time < $1.time})
             } catch {
-                print("Failed")
+               print("fetch failed for high scores")
             }
         }
-        
+        return []
     }
     
 //    func clearAllSavedData() {
