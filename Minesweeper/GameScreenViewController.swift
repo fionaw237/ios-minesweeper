@@ -8,6 +8,8 @@
 
 import UIKit
 import CoreData
+import AVFoundation
+import AudioToolbox
 
 //enum NumberOfSections: Int {
 //    case Beginner = 8
@@ -48,6 +50,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     var timerStarted = false
     var managedObjectContext: NSManagedObjectContext?
     let numberOfHighScoresToDisplay = 10
+    var audioPlayer = AVAudioPlayer()
     
     @IBAction func resetButtonPressed(_ sender: Any) {
         resetGame()
@@ -60,6 +63,13 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         managedObjectContext = appDelegate.persistentContainer.viewContext
+    }
+    
+    func playSound(_ filename: String) {
+        let soundFile = Bundle.main.path(forResource: filename, ofType: nil)
+        let url = URL(fileURLWithPath: soundFile!)
+        audioPlayer = try! AVAudioPlayer(contentsOf: url as URL)
+        audioPlayer.play()
     }
     
     func getNumberOfMines(_ gameDifficulty: GameDifficulty) -> Int {
@@ -111,6 +121,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func resetGame() {
+        playSound("click.wav")
         configureTimerForReset()
         setUpGame()
         collectionView.reloadData()
@@ -167,9 +178,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
             revealSurroundingCellsWithZeroMines(indexPath)
         }
         cell.configureForNumberOfMinesInVicinity(minesInVicinity)
-        if isGameWon() {
-            handleGameWon()
-        }
+        isGameWon() ? handleGameWon() : playSound("click.wav")
     }
     
     // MARK: Long press methods
@@ -195,6 +204,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
         }
         cell.configureFlagImageView()
         headerView.updateFlagsLabel(remainingFlags)
+        playSound("flag.wav")
     }
     
     @objc func handleLongPress(gesture: UILongPressGestureRecognizer) {
@@ -263,6 +273,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func gameOver(clickedCell: GameScreenCollectionViewCell) {
+        playSound("game_over.mp3")
         showAllUnflaggedMines()
         headerView.configureResetButtonForGameOver()
         clickedCell.configureForGameOver()
@@ -299,6 +310,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func handleGameWon() {
+        playSound("game_won.wav")
         headerView.timer.invalidate()
         headerView.setNumberOfFlagsLabelForGameWon()
         headerView.configureResetButtonForGameWon()
