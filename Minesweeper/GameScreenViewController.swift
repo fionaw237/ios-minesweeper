@@ -192,7 +192,9 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     func collectionView(_ collectionView: UICollectionView, longPressForCellAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
         if cell.uncovered {return}
-        if (remainingFlags > 0 && !cell.hasFlag) {
+        if (remainingFlags == 0 && !cell.hasFlag) {
+            presentNoFlagsWarning()
+        } else if (remainingFlags > 0 && !cell.hasFlag) {
             cell.hasFlag = true
             indexPathsOfFlags.insert(indexPath)
             remainingFlags -= 1
@@ -231,6 +233,15 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
         }
         alert.addAction(dismissAction)
         alert.addAction(continueAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func presentNoFlagsWarning() {
+        let alert: UIAlertController = UIAlertController.init(title: "No flags left!",
+                                                              message: "Remove an existing flag to place it elsewhere",
+                                                              preferredStyle: .alert)
+        let dismissAction = UIAlertAction.init(title: "Dismiss", style: .cancel, handler: nil)
+        alert.addAction(dismissAction)
         self.present(alert, animated: true, completion: nil)
     }
     
