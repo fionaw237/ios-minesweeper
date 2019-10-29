@@ -32,7 +32,7 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func setSelectedDifficultyInPickerView() {
-        if let rowToSelect = pickerData.index(of: defaultDifficulty) {
+        if let rowToSelect = pickerData.firstIndex(of: defaultDifficulty) {
             pickerView.selectRow(rowToSelect, inComponent: 0, animated: true)
         }
     }
@@ -58,9 +58,9 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return pickerData.count
     }
-
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerData[row]
+    
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        return NSAttributedString(string: pickerData[row], attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -79,6 +79,8 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         bestTimesTableView.reloadData()
     }
+    
+    // MARK: core data fetch
     
     static func fetchEntriesForDifficulty(_ difficulty: String, context: NSManagedObjectContext?) -> [BestTimeEntry] {
         if let ctx = context {

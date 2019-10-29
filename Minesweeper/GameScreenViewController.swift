@@ -9,7 +9,6 @@
 import UIKit
 import CoreData
 import AVFoundation
-import AudioToolbox
 
 //enum NumberOfSections: Int {
 //    case Beginner = 8
@@ -50,7 +49,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     var timerStarted = false
     var managedObjectContext: NSManagedObjectContext?
     let numberOfHighScoresToDisplay = 10
-    var audioPlayer = AVAudioPlayer()
+    var audioPlayer: AVAudioPlayer?
     
     @IBAction func resetButtonPressed(_ sender: Any) {
         resetGame()
@@ -66,10 +65,15 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func playSound(_ filename: String) {
-        let soundFile = Bundle.main.path(forResource: filename, ofType: nil)
-        let url = URL(fileURLWithPath: soundFile!)
-        audioPlayer = try! AVAudioPlayer(contentsOf: url as URL)
-        audioPlayer.play()
+        let soundFile = Bundle.main.path(forResource: filename, ofType: nil)!
+        let url = URL(fileURLWithPath: soundFile)
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer?.play()
+        }
+        catch {
+            print("Sound file \(filename) not found")
+        }
     }
     
     func getNumberOfMines(_ gameDifficulty: GameDifficulty) -> Int {
@@ -165,7 +169,9 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
             indexPathsOfMines = randomlyDistributeMines(indexPathOfInitialCell: indexPath)
             collectionView.reloadItems(at: Array(indexPathsOfMines))
             timerStarted = true
-            headerView.timer = Timer.scheduledTimer(timeInterval: 1, target: headerView, selector: #selector(headerView.updateTimer), userInfo: nil, repeats: true)
+            if let header = headerView {
+                header.timer = Timer.scheduledTimer(timeInterval: 1, target: header, selector: #selector(headerView.updateTimer), userInfo: nil, repeats: true)
+            }
         }
         let cell: GameScreenCollectionViewCell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
         if cell.hasFlag || cell.uncovered {return}

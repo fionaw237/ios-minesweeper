@@ -45,6 +45,7 @@
 
 /* Begin PBXFileReference section */
 		2B54565E2250056B00AB6EAE /* WelcomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScreenViewController.swift; sourceTree = "<group>"; };
+		2B69799923685DA60077DB4C /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		2BBE641D23355CAC00A3057C /* game_over.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = game_over.mp3; path = ../../../Downloads/game_over.mp3; sourceTree = "<group>"; };
 		2BBE641F2335618D00A3057C /* game_won.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = game_won.wav; path = ../../../Downloads/game_won.wav; sourceTree = "<group>"; };
 		2BBE64232335636500A3057C /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = click.wav; path = ../../../Downloads/click.wav; sourceTree = "<group>"; };
@@ -94,6 +95,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2B69799823685DA60077DB4C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2B69799923685DA60077DB4C /* libc++.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		2BE47C9B2223FF2A00D3952A = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +110,7 @@
 				2BE47CBE2223FF2C00D3952A /* MinesweeperTests */,
 				2BE47CC92223FF2C00D3952A /* MinesweeperUITests */,
 				2BE47CA52223FF2A00D3952A /* Products */,
+				2B69799823685DA60077DB4C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -223,13 +233,16 @@
 				TargetAttributes = {
 					2BE47CA32223FF2A00D3952A = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1110;
 					};
 					2BE47CBA2223FF2C00D3952A = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1110;
 						TestTargetID = 2BE47CA32223FF2A00D3952A;
 					};
 					2BE47CC52223FF2C00D3952A = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1110;
 						TestTargetID = 2BE47CA32223FF2A00D3952A;
 					};
 				};
@@ -475,13 +488,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CWJT96K455;
 				INFOPLIST_FILE = Minesweeper/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fw.Minesweeper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -493,13 +507,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CWJT96K455;
 				INFOPLIST_FILE = Minesweeper/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fw.Minesweeper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -519,7 +534,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fw.MinesweeperTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Minesweeper.app/Minesweeper";
 			};
@@ -540,7 +555,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fw.MinesweeperTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Minesweeper.app/Minesweeper";
 			};
@@ -560,7 +575,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fw.MinesweeperUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Minesweeper;
 			};
@@ -580,7 +595,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fw.MinesweeperUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Minesweeper;
 			};
