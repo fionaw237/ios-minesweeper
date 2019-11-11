@@ -369,7 +369,7 @@
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Best Times" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mfG-Bw-JBT">
-                                        <rect key="frame" x="100" y="27.5" width="120" height="30"/>
+                                        <rect key="frame" x="100" y="17.5" width="120" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                         <color key="textColor" red="0.092556603190000003" green="0.19203083039999999" blue="0.92928432679999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -381,17 +381,26 @@
                                             <constraint firstAttribute="height" constant="50" id="zeG-14-4VM"/>
                                         </constraints>
                                     </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z6R-jj-LYZ" userLabel="Clear All">
+                                        <rect key="frame" x="130" y="45" width="60" height="30"/>
+                                        <state key="normal" title="Reset All"/>
+                                        <connections>
+                                            <action selector="ResetAllBestTimesButtonPressed:" destination="H2L-aF-44V" eventType="touchUpInside" id="Vvc-Mj-5Qv"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.86299999999999999" green="0.86299999999999999" blue="0.86299999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
+                                    <constraint firstItem="mfG-Bw-JBT" firstAttribute="top" secondItem="hwf-Ox-kk0" secondAttribute="top" id="05N-aa-SGY"/>
                                     <constraint firstItem="hwf-Ox-kk0" firstAttribute="centerY" secondItem="oY3-kw-vGt" secondAttribute="centerY" id="0Bv-Y3-fOu"/>
                                     <constraint firstItem="qQE-1q-aX2" firstAttribute="leading" secondItem="oY3-kw-vGt" secondAttribute="leading" constant="8" id="2uO-hm-0KZ"/>
                                     <constraint firstItem="qQE-1q-aX2" firstAttribute="top" secondItem="oY3-kw-vGt" secondAttribute="top" constant="8" id="QPj-qh-W2J"/>
                                     <constraint firstItem="BwQ-XB-xQY" firstAttribute="centerY" secondItem="oY3-kw-vGt" secondAttribute="centerY" id="Usk-vT-ecT"/>
                                     <constraint firstItem="mfG-Bw-JBT" firstAttribute="leading" secondItem="BwQ-XB-xQY" secondAttribute="trailing" constant="15" id="Uw1-vh-2HS"/>
                                     <constraint firstItem="hwf-Ox-kk0" firstAttribute="leading" secondItem="mfG-Bw-JBT" secondAttribute="trailing" constant="15" id="Z2w-8Q-K0D"/>
-                                    <constraint firstItem="mfG-Bw-JBT" firstAttribute="centerY" secondItem="oY3-kw-vGt" secondAttribute="centerY" id="hc8-Mt-T71"/>
+                                    <constraint firstItem="z6R-jj-LYZ" firstAttribute="centerX" secondItem="mfG-Bw-JBT" secondAttribute="centerX" id="eJr-92-AZO"/>
                                     <constraint firstItem="mfG-Bw-JBT" firstAttribute="centerX" secondItem="oY3-kw-vGt" secondAttribute="centerX" id="lFh-V5-Ugt"/>
+                                    <constraint firstItem="z6R-jj-LYZ" firstAttribute="top" secondItem="mfG-Bw-JBT" secondAttribute="bottom" constant="-2.5" id="p54-JP-JL4"/>
                                 </constraints>
                             </view>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MqD-SQ-do3">

@@ -97,19 +97,48 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
         return []
     }
     
-//    func clearAllSavedData() {
-////         create the delete request for the specified entity
-//                let fetchRequest: NSFetchRequest<NSFetchRequestResult>(entityName: "BestTimeEntry")
-//                let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-//
-//                // get reference to the persistent container
-//                let persistentContainer = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-//
-//                // perform the delete
-//                do {
-//                    try persistentContainer.viewContext.execute(deleteRequest)
-//                } catch let error as NSError {
-//                    print(error)
-//                }
-//    }
+    // MARK: Core data delete all
+    
+    @IBAction func ResetAllBestTimesButtonPressed(_ sender: Any) {
+        if let context = managedObjectContext {
+            if scoresAreNotEmpty(context) {
+                let alert: UIAlertController = UIAlertController.init(title: "Are you sure you want to reset all best times?",
+                                                                      message: nil,
+                                                                      preferredStyle: .alert)
+                let dismissAction = UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil)
+                let continueAction = UIAlertAction.init(title: "Reset All", style: .default) { (action) in
+                    self.resetAllBestTimes(context)
+                }
+                alert.addAction(dismissAction)
+                alert.addAction(continueAction)
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    private func resetAllBestTimes(_ context: NSManagedObjectContext) {
+        let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "BestTimeEntry")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
+        do
+        {
+            try context.execute(deleteRequest)
+            try context.save()
+        }
+        catch
+        {
+            print ("There was an error deleting best times")
+        }
+        bestTimes = BestTimesViewController.fetchEntriesForDifficulty(defaultDifficulty, context: managedObjectContext)
+        bestTimesTableView.reloadData()
+    }
+    
+    private func scoresAreNotEmpty(_ context: NSManagedObjectContext) -> Bool {
+        for difficulty in pickerData {
+            if !BestTimesViewController.fetchEntriesForDifficulty(difficulty, context: context).isEmpty {
+                return true
+            }
+        }
+        return false
+    }
+    
 }
