@@ -32,6 +32,8 @@ class GameScreenViewController: UIViewController {
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         managedObjectContext = appDelegate.persistentContainer.viewContext
+        
+        gameLogic.delegate = self
     }
     
     func playSound(_ filename: String) {
@@ -77,20 +79,9 @@ class GameScreenViewController: UIViewController {
     
     func collectionView(_ collectionView: UICollectionView, longPressForCellAt indexPath: IndexPath) {
         let gridCell = gameLogic.gridCells[indexPath.row][indexPath.section]
-        let cell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
         if gridCell.uncovered {return}
-        if (gameLogic.remainingFlags == 0 && !gridCell.hasFlag) {
-            presentNoFlagsWarning()
-        } else if (gameLogic.remainingFlags > 0 && !gridCell.hasFlag) {
-            gridCell.hasFlag = true
-            gameLogic.indexPathsOfFlags.insert(indexPath)
-            gameLogic.remainingFlags -= 1
-        }
-        else if gridCell.hasFlag {
-            gridCell.hasFlag = false
-            gameLogic.indexPathsOfFlags.remove(indexPath)
-            gameLogic.remainingFlags += 1
-        }
+        gameLogic.setCellPropertiesAfterLongPress(for: indexPath)
+        let cell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
         cell.configureFlagImageView(gridCell.getFlagImageName())
         headerView.updateFlagsLabel(gameLogic.remainingFlags)
         playSound("flag.wav")
@@ -123,18 +114,7 @@ class GameScreenViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    func presentNoFlagsWarning() {
-        let alert: UIAlertController = UIAlertController.init(title: "No flags left!",
-                                                              message: "Remove an existing flag to place it elsewhere",
-                                                              preferredStyle: .alert)
-        let dismissAction = UIAlertAction.init(title: "Dismiss", style: .cancel, handler: nil)
-        alert.addAction(dismissAction)
-        self.present(alert, animated: true, completion: nil)
-    }
-    
     // MARK: Helper functions
-
-    
     func numberOfMinesInVicinityOfCell(_ indexPath: IndexPath) -> Int {
         return gameLogic.getValidIndexPathsSurroundingCell(indexPath).filter {
             (collectionView.cellForItem(at: $0) as! GameScreenCollectionViewCell).hasMine
@@ -360,6 +340,17 @@ extension GameScreenViewController: CellSelectionProtocol {
         }
         cell.configureForNumberOfMinesInVicinity(minesInVicinity)
         isGameWon() ? handleGameWon() : playSound("click.wav")
+    }
+}
+
+extension GameScreenViewController: GameAlertDelegate {
+    func presentNoFlagsWarning() {
+        let alert: UIAlertController = UIAlertController.init(title: "No flags left!",
+                                                              message: "Remove an existing flag to place it elsewhere",
+                                                              preferredStyle: .alert)
+        let dismissAction = UIAlertAction.init(title: "Dismiss", style: .cancel, handler: nil)
+        alert.addAction(dismissAction)
+        self.present(alert, animated: true, completion: nil)
     }
 }
 

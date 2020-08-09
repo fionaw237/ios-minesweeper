@@ -7,7 +7,13 @@
 //
 import Foundation
 
+protocol GameAlertDelegate {
+    func presentNoFlagsWarning()
+}
+
 struct GameLogic {
+    var delegate: GameAlertDelegate?
+    
     var gridCells: [[GridCell]] = []
     var difficulty: GameDifficulty = .Beginner
     
@@ -121,6 +127,22 @@ struct GameLogic {
             }
         }
         indexPathsOfMines = mineIndexPaths
+    }
+    
+    mutating func setCellPropertiesAfterLongPress(for indexPath: IndexPath) {
+        let gridCell = gridCells[indexPath.row][indexPath.section]
+        if (remainingFlags == 0 && !gridCell.hasFlag) {
+            delegate?.presentNoFlagsWarning()
+        } else if (remainingFlags > 0 && !gridCell.hasFlag) {
+            gridCell.hasFlag = true
+            indexPathsOfFlags.insert(indexPath)
+            remainingFlags -= 1
+        }
+        else if gridCell.hasFlag {
+            gridCell.hasFlag = false
+            indexPathsOfFlags.remove(indexPath)
+            remainingFlags += 1
+        }
     }
         
 //    mutating func reconfigureGridCells() {
