@@ -26,6 +26,7 @@
 		BA1FF28C24E05BF9006AE7B8 /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = BA1FF28824E05BF9006AE7B8 /* click.wav */; };
 		BA1FF28F24E0606A006AE7B8 /* GridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF28E24E0606A006AE7B8 /* GridCell.swift */; };
 		BA1FF29124E0609E006AE7B8 /* GameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF29024E0609E006AE7B8 /* GameLogic.swift */; };
+		BA1FF29524E0656C006AE7B8 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF29424E0656C006AE7B8 /* Enums.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		BA1FF28824E05BF9006AE7B8 /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
 		BA1FF28E24E0606A006AE7B8 /* GridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridCell.swift; sourceTree = "<group>"; };
 		BA1FF29024E0609E006AE7B8 /* GameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLogic.swift; sourceTree = "<group>"; };
+		BA1FF29424E0656C006AE7B8 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 		2BE47CA62223FF2A00D3952A /* Minesweeper */ = {
 			isa = PBXGroup;
 			children = (
+				BA1FF29224E0654A006AE7B8 /* Utilities */,
 				BA1FF28D24E0604F006AE7B8 /* Models */,
 				BA1FF28424E05BF9006AE7B8 /* sounds */,
 				2BE47CA72223FF2A00D3952A /* AppDelegate.swift */,
@@ -185,6 +188,22 @@
 				BA1FF29024E0609E006AE7B8 /* GameLogic.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		BA1FF29224E0654A006AE7B8 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				BA1FF29324E06557006AE7B8 /* Enums */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		BA1FF29324E06557006AE7B8 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				BA1FF29424E0656C006AE7B8 /* Enums.swift */,
+			);
+			path = Enums;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -335,6 +354,7 @@
 				2BE47CA82223FF2A00D3952A /* AppDelegate.swift in Sources */,
 				BA1FF29124E0609E006AE7B8 /* GameLogic.swift in Sources */,
 				2BE47CD9222422D300D3952A /* GameScreenHeaderView.swift in Sources */,
+				BA1FF29524E0656C006AE7B8 /* Enums.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

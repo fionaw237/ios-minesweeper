@@ -10,43 +10,11 @@ import UIKit
 import CoreData
 import AVFoundation
 
-//enum NumberOfSections: Int {
-//    case Beginner = 8
-//    case Intermediate = 10
-//    case Advanced = 12
-//}
-//
-//enum NumberOfItemsInSection: Int {
-//    case Beginner = 8
-//    case Intermediate = 9
-//    case Advanced = 10
-//}
-
-enum NumberOfMines: Int {
-    case Beginner = 10
-    case Intermediate = 14
-    case Advanced = 18
-}
-
-enum GameDifficulty: Int {
-    case Beginner = 1
-    case Intermediate = 2
-    case Advanced = 3
-}
-
 class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, CellSelectionProtocol {
     
     @IBOutlet var headerView: GameScreenHeaderView!
     @IBOutlet weak var collectionView: UICollectionView!
-    var indexPathsOfMines = Set<IndexPath>()
-    var indexPathsOfFlags = Set<IndexPath>()
-    var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
     var gameDifficulty: GameDifficulty?
-    var numberOfItemsInSection = 0
-    var numberOfSections = 0
-    var numberOfMines = 0
-    var remainingFlags = 0
-    var timerStarted = false
     var managedObjectContext: NSManagedObjectContext?
     let numberOfHighScoresToDisplay = 10
     var audioPlayer: AVAudioPlayer?
@@ -78,51 +46,18 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
         }
     }
     
-    func getNumberOfMines(_ gameDifficulty: GameDifficulty) -> Int {
-        switch gameDifficulty {
-        case .Beginner:
-            return NumberOfMines.Beginner.rawValue
-        case .Intermediate:
-            return NumberOfMines.Intermediate.rawValue
-        case .Advanced:
-            return NumberOfMines.Advanced.rawValue
-        }
-    }
-    
-    func getNumberOfItemsInSection(_ gameDifficulty: GameDifficulty) -> Int {
-        return 8
-//        switch gameDifficulty {
-//        case .Beginner:
-//            return NumberOfItemsInSection.Beginner.rawValue
-//        case .Intermediate:
-//            return NumberOfItemsInSection.Intermediate.rawValue
-//        case .Advanced:
-//            return NumberOfItemsInSection.Advanced.rawValue
-//        }
-    }
-    
-    func getNumberOfSections(_ gameDifficulty: GameDifficulty) -> Int {
-        return 9
-//        switch gameDifficulty {
-//        case .Beginner:
-//            return NumberOfSections.Beginner.rawValue
-//        case .Intermediate:
-//            return NumberOfSections.Intermediate.rawValue
-//        case .Advanced:
-//            return NumberOfSections.Advanced.rawValue
-//        }
-    }
+
     
     func setUpGame() {
         if let gameDifficulty = gameDifficulty {
-            numberOfMines = getNumberOfMines(gameDifficulty)
-            numberOfItemsInSection = getNumberOfItemsInSection(gameDifficulty)
-            numberOfSections = getNumberOfSections(gameDifficulty)
-            remainingFlags = numberOfMines
-            headerView.updateFlagsLabel(remainingFlags)
+           
+            
+            gameLogic = GameLogic(difficulty: gameDifficulty)
+            
+            headerView.updateFlagsLabel(gameLogic.remainingFlags)
             headerView.configureResetButtonForNewGame()
-            indexPathsOfMines = Set<IndexPath>()
-            indexPathsOfFlags = Set<IndexPath>()
+            gameLogic.indexPathsOfMines = Set<IndexPath>()
+            gameLogic.indexPathsOfFlags = Set<IndexPath>()
         }
     }
     
@@ -136,24 +71,24 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     func configureTimerForReset() {
         headerView.timer.invalidate()
         headerView.resetTimer()
-        timerStarted = false
+        gameLogic.timerStarted = false
     }
     
     // MARK: UICollectionViewDelegate, UICollectionViewDataSource and UICollectionViewDelegateFlowLayout methods
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return numberOfSections
+        return gameLogic.numberOfSections
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return numberOfItemsInSection
+        return gameLogic.numberOfItemsInSection
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let gridCell = gameLogic.gridCells[indexPath.row][indexPath.section]
+//        let gridCell = gameLogic.gridCells[indexPath.row][indexPath.section]
         let cell: GameScreenCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! GameScreenCollectionViewCell
-        cell.hasMine = indexPathsOfMines.contains(indexPath)
-        cell.hasFlag = indexPathsOfFlags.contains(indexPath)
+        cell.hasMine = gameLogic.indexPathsOfMines.contains(indexPath)
+        cell.hasFlag = gameLogic.indexPathsOfFlags.contains(indexPath)
         cell.configureFlagImageView()
         cell.delegate = self;
         cell.indexPath = indexPath;
@@ -161,17 +96,17 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = (collectionView.frame.width / CGFloat(numberOfItemsInSection)) - 2
+        let cellWidth = (collectionView.frame.width / CGFloat(gameLogic.numberOfItemsInSection)) - 2
         return CGSize(width: cellWidth, height: cellWidth)
     }
     
     // MARK: CellSelectionProtocol methods
     
     func cellButtonPressed(_ indexPath: IndexPath) {
-        if (!timerStarted) {
-            indexPathsOfMines = randomlyDistributeMines(indexPathOfInitialCell: indexPath)
-            collectionView.reloadItems(at: Array(indexPathsOfMines))
-            timerStarted = true
+        if (!gameLogic.timerStarted) {
+            gameLogic.indexPathsOfMines = randomlyDistributeMines(indexPathOfInitialCell: indexPath)
+            collectionView.reloadItems(at: Array(gameLogic.indexPathsOfMines))
+            gameLogic.timerStarted = true
             if let header = headerView {
                 header.timer = Timer.scheduledTimer(timeInterval: 1, target: header, selector: #selector(headerView.updateTimer), userInfo: nil, repeats: true)
             }
@@ -201,20 +136,20 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     func collectionView(_ collectionView: UICollectionView, longPressForCellAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
         if cell.uncovered {return}
-        if (remainingFlags == 0 && !cell.hasFlag) {
+        if (gameLogic.remainingFlags == 0 && !cell.hasFlag) {
             presentNoFlagsWarning()
-        } else if (remainingFlags > 0 && !cell.hasFlag) {
+        } else if (gameLogic.remainingFlags > 0 && !cell.hasFlag) {
             cell.hasFlag = true
-            indexPathsOfFlags.insert(indexPath)
-            remainingFlags -= 1
+            gameLogic.indexPathsOfFlags.insert(indexPath)
+            gameLogic.remainingFlags -= 1
         }
         else if cell.hasFlag {
             cell.hasFlag = false
-            indexPathsOfFlags.remove(indexPath)
-            remainingFlags += 1
+            gameLogic.indexPathsOfFlags.remove(indexPath)
+            gameLogic.remainingFlags += 1
         }
         cell.configureFlagImageView()
-        headerView.updateFlagsLabel(remainingFlags)
+        headerView.updateFlagsLabel(gameLogic.remainingFlags)
         playSound("flag.wav")
     }
     
@@ -229,7 +164,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     // MARK: Return to welcome screem
     
     @IBAction func homeButtonPressed(_ sender: Any) {
-        timerStarted ? presentWarningAlertForReturnToHome() : self.presentingViewController?.dismiss(animated: true, completion:nil)
+        gameLogic.timerStarted ? presentWarningAlertForReturnToHome() : self.presentingViewController?.dismiss(animated: true, completion:nil)
     }
     
     func presentWarningAlertForReturnToHome() {
@@ -258,9 +193,9 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     
     func randomlyDistributeMines(indexPathOfInitialCell: IndexPath) -> Set<IndexPath> {
         var mineIndexPaths = Set<IndexPath>()
-        while mineIndexPaths.count < numberOfMines {
-            let randomRow = Int.random(in: 0...(numberOfItemsInSection - 1))
-            let randomSection = Int.random(in: 0...(numberOfSections - 1))
+        while mineIndexPaths.count < gameLogic.numberOfMines {
+            let randomRow = Int.random(in: 0...(gameLogic.numberOfItemsInSection - 1))
+            let randomSection = Int.random(in: 0...(gameLogic.numberOfSections - 1))
             let randomIndexPath = IndexPath.init(row: randomRow, section: randomSection)
             if randomIndexPath != indexPathOfInitialCell {
                 mineIndexPaths.insert(randomIndexPath)
@@ -302,7 +237,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func isOutOfBounds(row: Int, section: Int) -> Bool {
-        return row < 0 || section < 0 || row >= numberOfItemsInSection || section >= numberOfSections
+        return row < 0 || section < 0 || row >= gameLogic.numberOfItemsInSection || section >= gameLogic.numberOfSections
     }
     
     func isAtSelectedIndexPath(indexPath: IndexPath, row: Int, section: Int) -> Bool {
@@ -325,8 +260,8 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
         let clickedCellCount = (collectionView!.visibleCells as! Array<GameScreenCollectionViewCell>).filter {
             $0.hasFlag || $0.uncovered
         }.count
-        let totalNumberOfCellsInCollectionView = numberOfSections * numberOfItemsInSection
-        return clickedCellCount == totalNumberOfCellsInCollectionView - remainingFlags
+        let totalNumberOfCellsInCollectionView = gameLogic.numberOfSections * gameLogic.numberOfItemsInSection
+        return clickedCellCount == totalNumberOfCellsInCollectionView - gameLogic.remainingFlags
     }
     
     func handleGameWon() {
