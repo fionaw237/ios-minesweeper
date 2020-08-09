@@ -24,6 +24,9 @@
 		BA1FF28A24E05BF9006AE7B8 /* game_won.wav in Resources */ = {isa = PBXBuildFile; fileRef = BA1FF28624E05BF9006AE7B8 /* game_won.wav */; };
 		BA1FF28B24E05BF9006AE7B8 /* flag.wav in Resources */ = {isa = PBXBuildFile; fileRef = BA1FF28724E05BF9006AE7B8 /* flag.wav */; };
 		BA1FF28C24E05BF9006AE7B8 /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = BA1FF28824E05BF9006AE7B8 /* click.wav */; };
+		BA1FF28F24E0606A006AE7B8 /* GridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF28E24E0606A006AE7B8 /* GridCell.swift */; };
+		BA1FF29124E0609E006AE7B8 /* GameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF29024E0609E006AE7B8 /* GameLogic.swift */; };
+		BA1FF29524E0656C006AE7B8 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF29424E0656C006AE7B8 /* Enums.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +71,9 @@
 		BA1FF28624E05BF9006AE7B8 /* game_won.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = game_won.wav; sourceTree = "<group>"; };
 		BA1FF28724E05BF9006AE7B8 /* flag.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = flag.wav; sourceTree = "<group>"; };
 		BA1FF28824E05BF9006AE7B8 /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
+		BA1FF28E24E0606A006AE7B8 /* GridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridCell.swift; sourceTree = "<group>"; };
+		BA1FF29024E0609E006AE7B8 /* GameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLogic.swift; sourceTree = "<group>"; };
+		BA1FF29424E0656C006AE7B8 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,19 +133,15 @@
 		2BE47CA62223FF2A00D3952A /* Minesweeper */ = {
 			isa = PBXGroup;
 			children = (
+				BA1FF29724E07027006AE7B8 /* Views */,
+				BA1FF29224E0654A006AE7B8 /* Utilities */,
+				BA1FF28D24E0604F006AE7B8 /* Models */,
+				BA1FF29624E06FF2006AE7B8 /* Controllers */,
 				BA1FF28424E05BF9006AE7B8 /* sounds */,
 				2BE47CA72223FF2A00D3952A /* AppDelegate.swift */,
-				2BE47CA92223FF2A00D3952A /* GameScreenViewController.swift */,
-				2BE47CAB2223FF2A00D3952A /* Main.storyboard */,
-				2BD85B46230C08520077776F /* BestTimesViewController.swift */,
 				2BE47CB12223FF2C00D3952A /* Assets.xcassets */,
-				2BE47CB32223FF2C00D3952A /* LaunchScreen.storyboard */,
 				2BE47CB62223FF2C00D3952A /* Info.plist */,
 				2BE47CAE2223FF2A00D3952A /* Minesweeper.xcdatamodeld */,
-				2BE47CD8222422D300D3952A /* GameScreenHeaderView.swift */,
-				2BE47CDA222425A400D3952A /* GameScreenCollectionViewCell.swift */,
-				2B54565E2250056B00AB6EAE /* WelcomeScreenViewController.swift */,
-				2BD85B48230C1D5C0077776F /* BestTimesTableViewCell.swift */,
 			);
 			path = Minesweeper;
 			sourceTree = "<group>";
@@ -171,6 +173,53 @@
 				BA1FF28824E05BF9006AE7B8 /* click.wav */,
 			);
 			path = sounds;
+			sourceTree = "<group>";
+		};
+		BA1FF28D24E0604F006AE7B8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BA1FF28E24E0606A006AE7B8 /* GridCell.swift */,
+				BA1FF29024E0609E006AE7B8 /* GameLogic.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		BA1FF29224E0654A006AE7B8 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				BA1FF29324E06557006AE7B8 /* Enums */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		BA1FF29324E06557006AE7B8 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				BA1FF29424E0656C006AE7B8 /* Enums.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
+		BA1FF29624E06FF2006AE7B8 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				2BE47CA92223FF2A00D3952A /* GameScreenViewController.swift */,
+				2BD85B46230C08520077776F /* BestTimesViewController.swift */,
+				2B54565E2250056B00AB6EAE /* WelcomeScreenViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		BA1FF29724E07027006AE7B8 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2BE47CAB2223FF2A00D3952A /* Main.storyboard */,
+				2BE47CB32223FF2C00D3952A /* LaunchScreen.storyboard */,
+				2BE47CD8222422D300D3952A /* GameScreenHeaderView.swift */,
+				2BE47CDA222425A400D3952A /* GameScreenCollectionViewCell.swift */,
+				2BD85B48230C1D5C0077776F /* BestTimesTableViewCell.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -316,9 +365,12 @@
 				2BD85B49230C1D5C0077776F /* BestTimesTableViewCell.swift in Sources */,
 				2BE47CDB222425A400D3952A /* GameScreenCollectionViewCell.swift in Sources */,
 				2BE47CB02223FF2A00D3952A /* Minesweeper.xcdatamodeld in Sources */,
+				BA1FF28F24E0606A006AE7B8 /* GridCell.swift in Sources */,
 				2BE47CAA2223FF2A00D3952A /* GameScreenViewController.swift in Sources */,
 				2BE47CA82223FF2A00D3952A /* AppDelegate.swift in Sources */,
+				BA1FF29124E0609E006AE7B8 /* GameLogic.swift in Sources */,
 				2BE47CD9222422D300D3952A /* GameScreenHeaderView.swift in Sources */,
+				BA1FF29524E0656C006AE7B8 /* Enums.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
