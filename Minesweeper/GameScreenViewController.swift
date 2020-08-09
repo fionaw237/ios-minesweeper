@@ -51,6 +51,8 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     let numberOfHighScoresToDisplay = 10
     var audioPlayer: AVAudioPlayer?
     
+    var gameLogic = GameLogic()
+    
     @IBAction func resetButtonPressed(_ sender: Any) {
         resetGame()
     }
@@ -148,6 +150,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let gridCell = gameLogic.gridCells[indexPath.row][indexPath.section]
         let cell: GameScreenCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! GameScreenCollectionViewCell
         cell.hasMine = indexPathsOfMines.contains(indexPath)
         cell.hasFlag = indexPathsOfFlags.contains(indexPath)
