@@ -46,18 +46,13 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
         }
     }
     
-
-    
     func setUpGame() {
         if let gameDifficulty = gameDifficulty {
            
-            
             gameLogic = GameLogic(difficulty: gameDifficulty)
             
             headerView.updateFlagsLabel(gameLogic.remainingFlags)
             headerView.configureResetButtonForNewGame()
-            gameLogic.indexPathsOfMines = Set<IndexPath>()
-            gameLogic.indexPathsOfFlags = Set<IndexPath>()
         }
     }
     
@@ -104,7 +99,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     
     func cellButtonPressed(_ indexPath: IndexPath) {
         if (!gameLogic.timerStarted) {
-            gameLogic.indexPathsOfMines = randomlyDistributeMines(indexPathOfInitialCell: indexPath)
+            gameLogic.indexPathsOfMines = gameLogic.randomlyDistributeMines(indexPathOfInitialCell: indexPath)
             collectionView.reloadItems(at: Array(gameLogic.indexPathsOfMines))
             gameLogic.timerStarted = true
             if let header = headerView {
@@ -190,22 +185,10 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     // MARK: Helper functions
-    
-    func randomlyDistributeMines(indexPathOfInitialCell: IndexPath) -> Set<IndexPath> {
-        var mineIndexPaths = Set<IndexPath>()
-        while mineIndexPaths.count < gameLogic.numberOfMines {
-            let randomRow = Int.random(in: 0...(gameLogic.numberOfItemsInSection - 1))
-            let randomSection = Int.random(in: 0...(gameLogic.numberOfSections - 1))
-            let randomIndexPath = IndexPath.init(row: randomRow, section: randomSection)
-            if randomIndexPath != indexPathOfInitialCell {
-                mineIndexPaths.insert(randomIndexPath)
-            }
-        }
-        return mineIndexPaths
-    }
+
     
     func numberOfMinesInVicinityOfCell(_ indexPath: IndexPath) -> Int {
-        return getValidIndexPathsSurroundingCell(indexPath).filter {
+        return gameLogic.getValidIndexPathsSurroundingCell(indexPath).filter {
             (collectionView.cellForItem(at: $0) as! GameScreenCollectionViewCell).hasMine
         }.count
     }
@@ -234,26 +217,6 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
         clickedCell.configureForGameOver()
         disableUserInteractionOnAllCells()
         headerView.timer.invalidate()
-    }
-    
-    func isOutOfBounds(row: Int, section: Int) -> Bool {
-        return row < 0 || section < 0 || row >= gameLogic.numberOfItemsInSection || section >= gameLogic.numberOfSections
-    }
-    
-    func isAtSelectedIndexPath(indexPath: IndexPath, row: Int, section: Int) -> Bool {
-        return (row == indexPath.row && section == indexPath.section)
-    }
-    
-    func getValidIndexPathsSurroundingCell(_ indexPath: IndexPath) -> Array<IndexPath> {
-        var validIndexPaths = Array<IndexPath>()
-        for i in (indexPath.row - 1)...(indexPath.row + 1) {
-            for j in (indexPath.section - 1)...(indexPath.section + 1) {
-                if !isOutOfBounds(row: i, section: j) && !isAtSelectedIndexPath(indexPath: indexPath, row: i, section: j) {
-                    validIndexPaths.append(IndexPath.init(row: i, section: j))
-                }
-            }
-        }
-        return validIndexPaths
     }
     
     func isGameWon() -> Bool {
@@ -308,7 +271,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     
     func storeHighScore(time: Int, name: String) {
         if let context = managedObjectContext {
-            let highScores = BestTimesViewController.fetchEntriesForDifficulty(gameDifficultyToStringEnumMapping(gameDifficulty!), context: managedObjectContext)
+            let highScores = BestTimesViewController.fetchEntriesForDifficulty(gameLogic.gameDifficultyToStringEnumMapping(), context: managedObjectContext)
             if highScores.count >= numberOfHighScoresToDisplay {
                 // Update the lowest score with the new values
                 if let lowestScore = highScores.last {
@@ -321,7 +284,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
                 let newEntry = NSManagedObject(entity: entity!, insertInto: context)
                 newEntry.setValue(name, forKey: "name")
                 newEntry.setValue(time, forKey: "time")
-                newEntry.setValue(gameDifficultyToStringEnumMapping(gameDifficulty), forKey: "difficulty")
+                newEntry.setValue(gameLogic.gameDifficultyToStringEnumMapping(), forKey: "difficulty")
             }
             
             do {
@@ -333,14 +296,12 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func isHighScore(_ winningTime: Int) -> Bool {
-        if let difficulty = gameDifficulty {
-            let highScores = BestTimesViewController.fetchEntriesForDifficulty(gameDifficultyToStringEnumMapping(difficulty), context: managedObjectContext)
-            
-            if (highScores.count < numberOfHighScoresToDisplay) {return true}
-            
-            if let lowestStoredEntry = highScores.last {
-                return winningTime < lowestStoredEntry.time
-            }
+        let highScores = BestTimesViewController.fetchEntriesForDifficulty(gameLogic.gameDifficultyToStringEnumMapping(), context: managedObjectContext)
+        
+        if (highScores.count < numberOfHighScoresToDisplay) {return true}
+        
+        if let lowestStoredEntry = highScores.last {
+            return winningTime < lowestStoredEntry.time
         }
         return false
     }
@@ -367,7 +328,7 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
             indexPathsWithZeroMines.forEach {indexPathsToCheck.insert($0)}
             indexPathsWithZeroMines.removeAll()
             indexPathsToCheck.forEach { pathToCheck in
-                let adjacentIndexPaths = getValidIndexPathsSurroundingCell(pathToCheck)
+                let adjacentIndexPaths = gameLogic.getValidIndexPathsSurroundingCell(pathToCheck)
                 // loop through adjacent index paths which have not already been checked
                 adjacentIndexPaths.filter {!indexPathsChecked.contains($0)}
                     .forEach { adjacentIndexPath in
@@ -385,25 +346,10 @@ class GameScreenViewController: UIViewController, UICollectionViewDelegate, UICo
         }
     }
     
-    func gameDifficultyToStringEnumMapping(_ difficulty: GameDifficulty?) -> String {
-        if let diff = gameDifficulty {
-            switch diff {
-            case .Beginner:
-                return "Beginner"
-            case .Intermediate:
-                return "Intermediate"
-            case .Advanced:
-                return "Advanced"
-            }
-            
-        }
-        return ""
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         if segue.identifier == "newHighScoreSegue" {
             let bestTimesViewController = segue.destination as! BestTimesViewController
-            bestTimesViewController.defaultDifficulty = gameDifficultyToStringEnumMapping(gameDifficulty)
+            bestTimesViewController.defaultDifficulty = gameLogic.gameDifficultyToStringEnumMapping()
         }
     }
 }

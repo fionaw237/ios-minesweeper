@@ -78,4 +78,48 @@ struct GameLogic {
             return NumberOfMines.Advanced.rawValue
         }
     }
+    
+    func gameDifficultyToStringEnumMapping() -> String {
+        switch difficulty {
+        case .Beginner:
+            return "Beginner"
+        case .Intermediate:
+            return "Intermediate"
+        case .Advanced:
+            return "Advanced"
+        }
+    }
+    
+    func isOutOfBounds(row: Int, section: Int) -> Bool {
+        return row < 0 || section < 0 || row >= numberOfItemsInSection || section >= numberOfSections
+    }
+    
+    func isAtSelectedIndexPath(indexPath: IndexPath, row: Int, section: Int) -> Bool {
+        return (row == indexPath.row && section == indexPath.section)
+    }
+    
+    func getValidIndexPathsSurroundingCell(_ indexPath: IndexPath) -> Array<IndexPath> {
+        var validIndexPaths = Array<IndexPath>()
+        for i in (indexPath.row - 1)...(indexPath.row + 1) {
+            for j in (indexPath.section - 1)...(indexPath.section + 1) {
+                if !isOutOfBounds(row: i, section: j) && !isAtSelectedIndexPath(indexPath: indexPath, row: i, section: j) {
+                    validIndexPaths.append(IndexPath.init(row: i, section: j))
+                }
+            }
+        }
+        return validIndexPaths
+    }
+    
+    func randomlyDistributeMines(indexPathOfInitialCell: IndexPath) -> Set<IndexPath> {
+        var mineIndexPaths = Set<IndexPath>()
+        while mineIndexPaths.count < numberOfMines {
+            let randomRow = Int.random(in: 0...(numberOfItemsInSection - 1))
+            let randomSection = Int.random(in: 0...(numberOfSections - 1))
+            let randomIndexPath = IndexPath.init(row: randomRow, section: randomSection)
+            if randomIndexPath != indexPathOfInitialCell {
+                mineIndexPaths.insert(randomIndexPath)
+            }
+        }
+        return mineIndexPaths
+    }
 }
