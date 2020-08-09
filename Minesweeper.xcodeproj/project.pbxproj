@@ -27,6 +27,7 @@
 		BA1FF28F24E0606A006AE7B8 /* GridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF28E24E0606A006AE7B8 /* GridCell.swift */; };
 		BA1FF29124E0609E006AE7B8 /* GameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF29024E0609E006AE7B8 /* GameLogic.swift */; };
 		BA1FF29524E0656C006AE7B8 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF29424E0656C006AE7B8 /* Enums.swift */; };
+		BA1FF29924E08E39006AE7B8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF29824E08E39006AE7B8 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		BA1FF28E24E0606A006AE7B8 /* GridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridCell.swift; sourceTree = "<group>"; };
 		BA1FF29024E0609E006AE7B8 /* GameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLogic.swift; sourceTree = "<group>"; };
 		BA1FF29424E0656C006AE7B8 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		BA1FF29824E08E39006AE7B8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,17 +189,10 @@
 		BA1FF29224E0654A006AE7B8 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				BA1FF29324E06557006AE7B8 /* Enums */,
-			);
-			path = Utilities;
-			sourceTree = "<group>";
-		};
-		BA1FF29324E06557006AE7B8 /* Enums */ = {
-			isa = PBXGroup;
-			children = (
+				BA1FF29824E08E39006AE7B8 /* Constants.swift */,
 				BA1FF29424E0656C006AE7B8 /* Enums.swift */,
 			);
-			path = Enums;
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		BA1FF29624E06FF2006AE7B8 /* Controllers */ = {
@@ -371,6 +366,7 @@
 				BA1FF29124E0609E006AE7B8 /* GameLogic.swift in Sources */,
 				2BE47CD9222422D300D3952A /* GameScreenHeaderView.swift in Sources */,
 				BA1FF29524E0656C006AE7B8 /* Enums.swift in Sources */,
+				BA1FF29924E08E39006AE7B8 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

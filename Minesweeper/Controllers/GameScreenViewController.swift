@@ -14,11 +14,11 @@ class GameScreenViewController: UIViewController {
     
     @IBOutlet var headerView: GameScreenHeaderView!
     @IBOutlet weak var collectionView: UICollectionView!
+    
     var gameDifficulty: GameDifficulty?
     var managedObjectContext: NSManagedObjectContext?
     let numberOfHighScoresToDisplay = 10
     var audioPlayer: AVAudioPlayer?
-    
     var gameLogic = GameLogic()
     
     @IBAction func resetButtonPressed(_ sender: Any) {
@@ -48,9 +48,7 @@ class GameScreenViewController: UIViewController {
     
     func setUpGame() {
         if let gameDifficulty = gameDifficulty {
-           
             gameLogic = GameLogic(difficulty: gameDifficulty)
-            
             headerView.updateFlagsLabel(gameLogic.remainingFlags)
             headerView.configureResetButtonForNewGame()
         }
@@ -78,21 +76,22 @@ class GameScreenViewController: UIViewController {
     }
     
     func collectionView(_ collectionView: UICollectionView, longPressForCellAt indexPath: IndexPath) {
+        let gridCell = gameLogic.gridCells[indexPath.row][indexPath.section]
         let cell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
-        if cell.uncovered {return}
-        if (gameLogic.remainingFlags == 0 && !cell.hasFlag) {
+        if gridCell.uncovered {return}
+        if (gameLogic.remainingFlags == 0 && !gridCell.hasFlag) {
             presentNoFlagsWarning()
-        } else if (gameLogic.remainingFlags > 0 && !cell.hasFlag) {
-            cell.hasFlag = true
+        } else if (gameLogic.remainingFlags > 0 && !gridCell.hasFlag) {
+            gridCell.hasFlag = true
             gameLogic.indexPathsOfFlags.insert(indexPath)
             gameLogic.remainingFlags -= 1
         }
-        else if cell.hasFlag {
-            cell.hasFlag = false
+        else if gridCell.hasFlag {
+            gridCell.hasFlag = false
             gameLogic.indexPathsOfFlags.remove(indexPath)
             gameLogic.remainingFlags += 1
         }
-        cell.configureFlagImageView()
+        cell.configureFlagImageView(gridCell.getFlagImageName())
         headerView.updateFlagsLabel(gameLogic.remainingFlags)
         playSound("flag.wav")
     }
@@ -157,6 +156,9 @@ class GameScreenViewController: UIViewController {
         for cell: GameScreenCollectionViewCell in (collectionView!.visibleCells as! Array<GameScreenCollectionViewCell>) {
             cell.uncovered = true
         }
+        for cell in gameLogic.gridCells.flatMap {$0} {
+            cell.uncovered = true
+        }
     }
     
     func gameOver(clickedCell: GameScreenCollectionViewCell) {
@@ -169,7 +171,10 @@ class GameScreenViewController: UIViewController {
     }
     
     func isGameWon() -> Bool {
-        let clickedCellCount = (collectionView!.visibleCells as! Array<GameScreenCollectionViewCell>).filter {
+//        let clickedCellCount = (collectionView!.visibleCells as! Array<GameScreenCollectionViewCell>).filter {
+//            $0.hasFlag || $0.uncovered
+//        }.count
+        let clickedCellCount = gameLogic.gridCells.flatMap{$0}.filter {
             $0.hasFlag || $0.uncovered
         }.count
         let totalNumberOfCellsInCollectionView = gameLogic.numberOfSections * gameLogic.numberOfItemsInSection
@@ -260,12 +265,12 @@ class GameScreenViewController: UIViewController {
     }
     
     func addFlagsToUncoveredCells() {
-        for cell: GameScreenCollectionViewCell in (collectionView!.visibleCells as! Array<GameScreenCollectionViewCell>) {
-            if !cell.uncovered {
-                cell.hasFlag = true
-                cell.configureFlagImageView()
-            }
-        }
+//        for cell: GameScreenCollectionViewCell in (collectionView!.visibleCells as! Array<GameScreenCollectionViewCell>) {
+//            if !cell.uncovered {
+//                cell.hasFlag = true
+//                cell.configureFlagImageView()
+//            }
+//        }
     }
     
     func revealSurroundingCellsWithZeroMines(_ indexPath: IndexPath) {
@@ -313,13 +318,14 @@ extension GameScreenViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        //        let gridCell = gameLogic.gridCells[indexPath.row][indexPath.section]
+        let gridCell = gameLogic.gridCells[indexPath.row][indexPath.section]
+        gridCell.hasMine = gameLogic.indexPathsOfMines.contains(indexPath)
+
         let cell: GameScreenCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! GameScreenCollectionViewCell
-        cell.hasMine = gameLogic.indexPathsOfMines.contains(indexPath)
-        cell.hasFlag = gameLogic.indexPathsOfFlags.contains(indexPath)
-        cell.configureFlagImageView()
-        cell.delegate = self;
-        cell.indexPath = indexPath;
+        cell.hasMine = gridCell.hasMine
+        cell.configureFlagImageView(gridCell.getFlagImageName())
+        cell.delegate = self
+        cell.indexPath = indexPath
         return cell
     }
 }
@@ -334,7 +340,8 @@ extension GameScreenViewController: UICollectionViewDelegateFlowLayout {
 extension GameScreenViewController: CellSelectionProtocol {
     func cellButtonPressed(_ indexPath: IndexPath) {
         if (!gameLogic.timerStarted) {
-            gameLogic.indexPathsOfMines = gameLogic.randomlyDistributeMines(indexPathOfInitialCell: indexPath)
+            gameLogic.randomlyDistributeMines(indexPathOfInitialCell: indexPath)
+//            gameLogic.reconfigureGridCells()
             collectionView.reloadItems(at: Array(gameLogic.indexPathsOfMines))
             gameLogic.timerStarted = true
             if let header = headerView {

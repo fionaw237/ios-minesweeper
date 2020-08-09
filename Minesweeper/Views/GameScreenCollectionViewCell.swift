@@ -43,12 +43,16 @@ class GameScreenCollectionViewCell: UICollectionViewCell {
     }
     
     func configureMineContainingCell() {
-        mineOrFlagImageView.image = UIImage(named: "mine-icon-black-50")
+        mineOrFlagImageView.image = UIImage(named: Constants.mineImage)
         button.isHidden = true
     }
     
-    func configureFlagImageView() {
-        mineOrFlagImageView.image = hasFlag ? UIImage(named: "icon-flag-48") : nil
+    func configureFlagImageView(_ imageName: String?) {
+        if let name = imageName {
+            mineOrFlagImageView.image = UIImage(named: name)
+        } else {
+            mineOrFlagImageView.image = nil
+        }
     }
     
     func configureForGameOver() {

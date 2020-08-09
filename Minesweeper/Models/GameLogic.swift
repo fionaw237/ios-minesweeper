@@ -31,9 +31,9 @@ struct GameLogic {
         remainingFlags = numberOfMines
 
         
-        for _ in 0..<numberOfSections {
+        for _ in 0..<numberOfItemsInSection {
             var newRow: [GridCell] = []
-            for _ in 0..<numberOfItemsInSection {
+            for _ in 0..<numberOfSections {
                 newRow.append(GridCell())
             }
             gridCells.append(newRow)
@@ -110,7 +110,7 @@ struct GameLogic {
         return validIndexPaths
     }
     
-    func randomlyDistributeMines(indexPathOfInitialCell: IndexPath) -> Set<IndexPath> {
+    mutating func randomlyDistributeMines(indexPathOfInitialCell: IndexPath) {
         var mineIndexPaths = Set<IndexPath>()
         while mineIndexPaths.count < numberOfMines {
             let randomRow = Int.random(in: 0...(numberOfItemsInSection - 1))
@@ -120,6 +120,18 @@ struct GameLogic {
                 mineIndexPaths.insert(randomIndexPath)
             }
         }
-        return mineIndexPaths
+        indexPathsOfMines = mineIndexPaths
     }
+        
+//    mutating func reconfigureGridCells() {
+//        for item in 0..<numberOfItemsInSection {
+//            var newRow: [GridCell] = []
+//            for section in 0..<numberOfSections {
+//                var cell = GridCell()
+//                cell.hasMine = indexPathsOfMines.contains(IndexPath(row: item, section: section))
+//                newRow.append(cell)
+//            }
+//            gridCells.append(newRow)
+//        }
+//    }
 }

@@ -37,14 +37,14 @@ class GameScreenHeaderView: UIView {
     }
     
     func configureResetButtonForNewGame() {
-        resetButton.imageView?.image = UIImage(named: "icon-happy-48")
+        resetButton.imageView?.image = UIImage(named: Constants.happyFaceImage)
     }
     
     func configureResetButtonForGameOver() {
-        resetButton.imageView?.image = UIImage(named: "icon-sad-48")
+        resetButton.imageView?.image = UIImage(named: Constants.sadFaceImage)
     }
     
     func configureResetButtonForGameWon() {
-        resetButton.imageView?.image = UIImage(named: "icon-cool-48")
+        resetButton.imageView?.image = UIImage(named: Constants.coolFaceImage)
     }
 }

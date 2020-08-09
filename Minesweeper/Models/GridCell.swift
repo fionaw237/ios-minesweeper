@@ -8,8 +8,13 @@
 
 import Foundation
 
-struct GridCell {
+class GridCell {
     var hasMine = false
     var hasFlag = false
     var uncovered = false
+    
+    func getFlagImageName() -> String? {
+        return hasFlag ? Constants.flagImage : nil
+    }
 }
+
