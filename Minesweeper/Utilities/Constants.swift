@@ -9,9 +9,25 @@
 import Foundation
 
 struct Constants {
-    static let mineImage = "mine-icon-black-50"
-    static let flagImage = "icon-flag-48"
-    static let happyFaceImage = "icon-happy-48"
-    static let sadFaceImage = "icon-sad-48"
-    static let coolFaceImage = "icon-cool-48"
+    
+    struct Images {
+        static let mine = "mine-icon-black-50"
+        static let flag = "icon-flag-48"
+        static let happyFace = "icon-happy-48"
+        static let sadFace = "icon-sad-48"
+        static let coolFace = "icon-cool-48"
+    }
+
+    struct Sounds {
+        static let click = "click.wav"
+        static let flag = "flag.wav"
+        static let gameWon = "game_won.wav"
+        static let gameOver = "game_over.mp3"
+    }
+    
+    struct Segues {
+        static let newHighScore = "newHighScoreSegue"
+        static let viewHighScores = "bestTimesSegue"
+        static let goToGameScreen = "mySegue"
+    }
 }

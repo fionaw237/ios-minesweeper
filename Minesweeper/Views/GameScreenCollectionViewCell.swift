@@ -43,7 +43,7 @@ class GameScreenCollectionViewCell: UICollectionViewCell {
     }
     
     func configureMineContainingCell() {
-        mineOrFlagImageView.image = UIImage(named: Constants.mineImage)
+        mineOrFlagImageView.image = UIImage(named: Constants.Images.mine)
         button.isHidden = true
     }
     
@@ -61,7 +61,7 @@ class GameScreenCollectionViewCell: UICollectionViewCell {
     
     func configureForNumberOfMinesInVicinity(_ numberOfMines: Int) {
         button.isHidden = true
-        uncovered = true
+//        uncovered = true
         if numberOfMines != 0 {
             configureNumberOfMinesLabel(numberOfMines: numberOfMines)
         }

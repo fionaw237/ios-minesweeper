@@ -14,7 +14,7 @@ class GridCell {
     var uncovered = false
     
     func getFlagImageName() -> String? {
-        return hasFlag ? Constants.flagImage : nil
+        return hasFlag ? Constants.Images.flag : nil
     }
 }
 

@@ -16,15 +16,15 @@ class WelcomeScreenViewController: UIViewController {
     @IBOutlet weak var bestTimesButton: UIButton!
     
     @IBAction func gameDifficultyChosen(_ sender: Any) {
-        performSegue(withIdentifier: "mySegue", sender: sender)
+        performSegue(withIdentifier: Constants.Segues.goToGameScreen, sender: sender)
     }
     
     @IBAction func bestTimesButtonPressed(_ sender: Any) {
-        performSegue(withIdentifier: "bestTimesSegue", sender: sender)
+        performSegue(withIdentifier: Constants.Segues.viewHighScores, sender: sender)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
-        if segue.identifier == "mySegue" {
+        if segue.identifier == Constants.Segues.goToGameScreen {
             let button = sender as! UIButton
             let chosenDifficulty = GameDifficulty(rawValue: button.tag)
             let gameViewController = segue.destination as! GameScreenViewController
