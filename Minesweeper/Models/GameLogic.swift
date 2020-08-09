@@ -144,16 +144,18 @@ struct GameLogic {
             remainingFlags += 1
         }
     }
-        
-//    mutating func reconfigureGridCells() {
-//        for item in 0..<numberOfItemsInSection {
-//            var newRow: [GridCell] = []
-//            for section in 0..<numberOfSections {
-//                var cell = GridCell()
-//                cell.hasMine = indexPathsOfMines.contains(IndexPath(row: item, section: section))
-//                newRow.append(cell)
-//            }
-//            gridCells.append(newRow)
-//        }
-//    }
+    
+    func getTotalNumberOfCells() -> Int {
+        return gridCells.flatMap{$0}.count
+    }
+    
+    func numberOfMinesInVicinityOfCell(_ indexPath: IndexPath) -> Int {
+        return getValidIndexPathsSurroundingCell(indexPath).filter {
+            gridCells[$0.row][$0.section].hasMine
+        }.count
+    }
+    
+    func get1DGridCellsArray() -> [GridCell] {
+        return gridCells.flatMap({$0})
+    }
 }

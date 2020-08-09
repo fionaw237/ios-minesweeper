@@ -61,7 +61,6 @@ class GameScreenCollectionViewCell: UICollectionViewCell {
     
     func configureForNumberOfMinesInVicinity(_ numberOfMines: Int) {
         button.isHidden = true
-//        uncovered = true
         if numberOfMines != 0 {
             configureNumberOfMinesLabel(numberOfMines: numberOfMines)
         }
