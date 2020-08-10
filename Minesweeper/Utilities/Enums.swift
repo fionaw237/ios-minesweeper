@@ -24,8 +24,8 @@ enum NumberOfMines: Int {
     case Advanced = 18
 }
 
-enum GameDifficulty: Int {
-    case Beginner = 1
-    case Intermediate = 2
-    case Advanced = 3
+enum GameDifficulty: String {
+    case Beginner = "Beginner"
+    case Intermediate = "Intermediate"
+    case Advanced = "Advanced"
 }

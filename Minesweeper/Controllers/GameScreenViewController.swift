@@ -201,7 +201,7 @@ class GameScreenViewController: UIViewController {
     
     func storeHighScore(time: Int, name: String) {
         if let context = managedObjectContext {
-            let highScores = BestTimesViewController.fetchEntriesForDifficulty(gameLogic.gameDifficultyToStringEnumMapping(), context: managedObjectContext)
+            let highScores = BestTimesViewController.fetchEntriesForDifficulty(gameLogic.difficulty.rawValue, context: managedObjectContext)
             if highScores.count >= numberOfHighScoresToDisplay {
                 // Update the lowest score with the new values
                 if let lowestScore = highScores.last {
@@ -214,7 +214,7 @@ class GameScreenViewController: UIViewController {
                 let newEntry = NSManagedObject(entity: entity!, insertInto: context)
                 newEntry.setValue(name, forKey: "name")
                 newEntry.setValue(time, forKey: "time")
-                newEntry.setValue(gameLogic.gameDifficultyToStringEnumMapping(), forKey: "difficulty")
+                newEntry.setValue(gameLogic.difficulty.rawValue, forKey: "difficulty")
             }
             
             do {
@@ -226,7 +226,7 @@ class GameScreenViewController: UIViewController {
     }
     
     func isHighScore(_ winningTime: Int) -> Bool {
-        let highScores = BestTimesViewController.fetchEntriesForDifficulty(gameLogic.gameDifficultyToStringEnumMapping(), context: managedObjectContext)
+        let highScores = BestTimesViewController.fetchEntriesForDifficulty(gameLogic.difficulty.rawValue, context: managedObjectContext)
         
         if (highScores.count < numberOfHighScoresToDisplay) {return true}
         
@@ -252,7 +252,7 @@ class GameScreenViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         if segue.identifier == Constants.Segues.newHighScore {
             let bestTimesViewController = segue.destination as! BestTimesViewController
-            bestTimesViewController.defaultDifficulty = gameLogic.gameDifficultyToStringEnumMapping()
+            bestTimesViewController.defaultDifficulty = gameLogic.difficulty.rawValue
         }
     }
 }

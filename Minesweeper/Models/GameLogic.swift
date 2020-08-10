@@ -85,17 +85,6 @@ struct GameLogic {
         }
     }
     
-    func gameDifficultyToStringEnumMapping() -> String {
-        switch difficulty {
-        case .Beginner:
-            return "Beginner"
-        case .Intermediate:
-            return "Intermediate"
-        case .Advanced:
-            return "Advanced"
-        }
-    }
-    
     func isOutOfBounds(row: Int, section: Int) -> Bool {
         return row < 0 || section < 0 || row >= numberOfItemsInSection || section >= numberOfSections
     }
