@@ -116,15 +116,23 @@ class GameScreenViewController: UIViewController {
     
     
     func showAllUnflaggedMines() {
-        for cell: GameScreenCollectionViewCell in collectionView!.visibleCells as! Array<GameScreenCollectionViewCell> {
-                        
-            if cell.hasMine && !cell.hasFlag {
-                cell.configureMineContainingCell()
-            }
-            else if !cell.hasMine && cell.hasFlag {
-                cell.configureForMisplacedFlag()
+        
+        for row in 0..<gameLogic.numberOfItemsInSection {
+            for section in 0..<gameLogic.numberOfSections {
+                let indexPath = IndexPath(row: row, section: section)
+                let gridCell = gameLogic.gridCells[indexPath.row][indexPath.section]
+                
+                let collectionViewCell: GameScreenCollectionViewCell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
+                
+                if gridCell.hasMine && !gridCell.hasFlag {
+                    collectionViewCell.configureMineContainingCell()
+                }
+                else if !gridCell.hasMine && gridCell.hasFlag {
+                    collectionViewCell.configureForMisplacedFlag()
+                }
             }
         }
+
     }
     
     func disableUserInteractionOnAllCells() {
@@ -240,38 +248,7 @@ class GameScreenViewController: UIViewController {
 //            }
 //        }
     }
-    
-    func revealSurroundingCellsWithZeroMines(_ indexPath: IndexPath) {
-        var indexPathsChecked: Set<IndexPath> = [indexPath]
-        var indexPathsWithZeroMines: Set<IndexPath> = [indexPath]
         
-        while !indexPathsWithZeroMines.isEmpty {
-            var indexPathsToCheck = Set<IndexPath>()
-            indexPathsWithZeroMines.forEach {indexPathsToCheck.insert($0)}
-            indexPathsWithZeroMines.removeAll()
-            indexPathsToCheck.forEach { pathToCheck in
-                let adjacentIndexPaths = gameLogic.getValidIndexPathsSurroundingCell(pathToCheck)
-                // loop through adjacent index paths which have not already been checked
-                adjacentIndexPaths.filter {!indexPathsChecked.contains($0)}
-                    .forEach { adjacentIndexPath in
-                        let minesInVicinity = gameLogic.numberOfMinesInVicinityOfCell(adjacentIndexPath)
-                        indexPathsChecked.insert(adjacentIndexPath)
-                        if minesInVicinity == 0 {
-                            indexPathsWithZeroMines.insert(adjacentIndexPath)
-                        }
-                        
-                        let gridCell = gameLogic.gridCells[adjacentIndexPath.row][adjacentIndexPath.section]
-                        gridCell.uncovered = true
-                        
-                        if !gridCell.hasFlag {
-                            let cell = collectionView.cellForItem(at: adjacentIndexPath) as! GameScreenCollectionViewCell
-                            cell.configureForNumberOfMinesInVicinity(minesInVicinity)
-                        }
-                }
-            }
-        }
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         if segue.identifier == Constants.Segues.newHighScore {
             let bestTimesViewController = segue.destination as! BestTimesViewController
@@ -294,7 +271,6 @@ extension GameScreenViewController: UICollectionViewDataSource {
         gridCell.hasMine = gameLogic.indexPathsOfMines.contains(indexPath)
 
         let cell: GameScreenCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! GameScreenCollectionViewCell
-        cell.hasMine = gridCell.hasMine
         cell.configureFlagImageView(gridCell.getFlagImageName())
         cell.delegate = self
         cell.indexPath = indexPath
@@ -332,7 +308,11 @@ extension GameScreenViewController: CellSelectionProtocol {
         
         let minesInVicinity = gameLogic.numberOfMinesInVicinityOfCell(indexPath)
         if minesInVicinity == 0 {
-            revealSurroundingCellsWithZeroMines(indexPath)
+            let indexPathsToRevealDict = gameLogic.findCellsToReveal(indexPath)
+            for item in indexPathsToRevealDict {
+                let cellToReveal = collectionView.cellForItem(at: item.key) as! GameScreenCollectionViewCell
+                cellToReveal.configureForNumberOfMinesInVicinity(item.value)
+            }
         }
         cell.configureForNumberOfMinesInVicinity(minesInVicinity)
         isGameWon() ? handleGameWon() : playSound(Constants.Sounds.click)

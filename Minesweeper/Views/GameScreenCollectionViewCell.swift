@@ -17,18 +17,13 @@ class GameScreenCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var mineOrFlagImageView: UIImageView!
     @IBOutlet weak var redCrossImageView: UIImageView!
     @IBOutlet weak var button: UIButton!
-    var hasMine = false
-    var hasFlag = false
-    var uncovered = false
+    
     var indexPath: IndexPath? = nil
     weak var delegate: CellSelectionProtocol?
     
     override func prepareForReuse() {
         button.isHidden = false
         redCrossImageView.isHidden = true
-        hasMine = false
-        hasFlag = false
-        uncovered = false
         numberOfMinesLabel.text = ""
         mineOrFlagImageView.image = nil
         indexPath = nil
