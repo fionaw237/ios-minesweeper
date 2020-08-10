@@ -11,7 +11,6 @@ import CoreData
 
 class BestTimesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource {
     
-    @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var bestTimesTableView: UITableView!
     @IBOutlet weak var pickerView: UIPickerView!
     
@@ -25,6 +24,11 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
         managedObjectContext = appDelegate.persistentContainer.viewContext
         bestTimes = BestTimesManager.fetchEntriesForDifficulty(defaultDifficulty, context: managedObjectContext)
         setSelectedDifficultyInPickerView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = false
     }
     
     @IBAction func menuButtonPressed(_ sender: Any) {
@@ -79,8 +83,8 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         bestTimesTableView.reloadData()
     }
-            
-    @IBAction func ResetAllBestTimesButtonPressed(_ sender: Any) {
+
+    @IBAction func ResetAllBestTimesButtonPressed(_ sender: UIBarButtonItem) {
         if let context = managedObjectContext {
             if scoresAreNotEmpty(context) {
                 let alert: UIAlertController = UIAlertController.init(title: "Are you sure you want to reset all best times?",

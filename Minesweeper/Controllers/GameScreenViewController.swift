@@ -38,6 +38,11 @@ class GameScreenViewController: UIViewController {
         gameManager.delegate = self
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = false
+    }
+    
     func playSound(_ filename: String) {
         let soundFile = Bundle.main.path(forResource: filename, ofType: nil)!
         let url = URL(fileURLWithPath: soundFile)
@@ -96,9 +101,9 @@ class GameScreenViewController: UIViewController {
             if let path = indexPath {collectionView(collectionView, longPressForCellAt: path)}
         }
     }
+        
     
-    // MARK: Return to welcome screem
-    
+    // TODO: implement this with nav bar back button
     @IBAction func homeButtonPressed(_ sender: Any) {
         gameManager.timerStarted ? presentWarningAlertForReturnToHome() : self.presentingViewController?.dismiss(animated: true, completion:nil)
     }

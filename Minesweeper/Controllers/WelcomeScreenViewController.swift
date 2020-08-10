@@ -15,6 +15,11 @@ class WelcomeScreenViewController: UIViewController {
     @IBOutlet weak var advancedButton: UIButton!
     @IBOutlet weak var bestTimesButton: UIButton!
     
+   override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = true
+    }
+    
     @IBAction func gameDifficultyChosen(_ sender: Any) {
         performSegue(withIdentifier: Constants.Segues.goToGameScreen, sender: sender)
     }
