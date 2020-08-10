@@ -37,10 +37,10 @@ struct GameManager {
         remainingFlags = numberOfMines
 
         
-        for _ in 0..<numberOfItemsInSection {
+        for row in 0..<numberOfItemsInSection {
             var newRow: [GridCell] = []
-            for _ in 0..<numberOfSections {
-                newRow.append(GridCell())
+            for section in 0..<numberOfSections {
+                newRow.append(GridCell(indexPath: IndexPath(row: row, section: section)))
             }
             gridCells.append(newRow)
         }
@@ -179,5 +179,16 @@ struct GameManager {
             }
         }
         return indexPathsToReveal
+    }
+    
+    func getUncoveredCells() -> [IndexPath] {
+        var indexPathsOfUncoveredCells = [IndexPath]()
+        for gridCell in get1DGridCellsArray() {
+            if !gridCell.uncovered {
+                gridCell.hasFlag = true
+                indexPathsOfUncoveredCells.append(gridCell.indexPath)
+            }
+        }
+        return indexPathsOfUncoveredCells
     }
 }
