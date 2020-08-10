@@ -25,7 +25,7 @@
 		BA1FF28B24E05BF9006AE7B8 /* flag.wav in Resources */ = {isa = PBXBuildFile; fileRef = BA1FF28724E05BF9006AE7B8 /* flag.wav */; };
 		BA1FF28C24E05BF9006AE7B8 /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = BA1FF28824E05BF9006AE7B8 /* click.wav */; };
 		BA1FF28F24E0606A006AE7B8 /* GridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF28E24E0606A006AE7B8 /* GridCell.swift */; };
-		BA1FF29124E0609E006AE7B8 /* GameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF29024E0609E006AE7B8 /* GameLogic.swift */; };
+		BA1FF29124E0609E006AE7B8 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF29024E0609E006AE7B8 /* GameManager.swift */; };
 		BA1FF29524E0656C006AE7B8 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF29424E0656C006AE7B8 /* Enums.swift */; };
 		BA1FF29924E08E39006AE7B8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF29824E08E39006AE7B8 /* Constants.swift */; };
 /* End PBXBuildFile section */
@@ -73,7 +73,7 @@
 		BA1FF28724E05BF9006AE7B8 /* flag.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = flag.wav; sourceTree = "<group>"; };
 		BA1FF28824E05BF9006AE7B8 /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
 		BA1FF28E24E0606A006AE7B8 /* GridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridCell.swift; sourceTree = "<group>"; };
-		BA1FF29024E0609E006AE7B8 /* GameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLogic.swift; sourceTree = "<group>"; };
+		BA1FF29024E0609E006AE7B8 /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
 		BA1FF29424E0656C006AE7B8 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		BA1FF29824E08E39006AE7B8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -181,7 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				BA1FF28E24E0606A006AE7B8 /* GridCell.swift */,
-				BA1FF29024E0609E006AE7B8 /* GameLogic.swift */,
+				BA1FF29024E0609E006AE7B8 /* GameManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -363,7 +363,7 @@
 				BA1FF28F24E0606A006AE7B8 /* GridCell.swift in Sources */,
 				2BE47CAA2223FF2A00D3952A /* GameScreenViewController.swift in Sources */,
 				2BE47CA82223FF2A00D3952A /* AppDelegate.swift in Sources */,
-				BA1FF29124E0609E006AE7B8 /* GameLogic.swift in Sources */,
+				BA1FF29124E0609E006AE7B8 /* GameManager.swift in Sources */,
 				2BE47CD9222422D300D3952A /* GameScreenHeaderView.swift in Sources */,
 				BA1FF29524E0656C006AE7B8 /* Enums.swift in Sources */,
 				BA1FF29924E08E39006AE7B8 /* Constants.swift in Sources */,

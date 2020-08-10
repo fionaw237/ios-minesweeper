@@ -11,7 +11,7 @@ protocol GameAlertDelegate {
     func presentNoFlagsWarning()
 }
 
-struct GameLogic {
+struct GameManager {
     var delegate: GameAlertDelegate?
     
     var gridCells: [[GridCell]] = []
