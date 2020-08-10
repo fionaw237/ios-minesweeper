@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="u3e-n8-ewN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="u3e-n8-ewN">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -147,7 +147,7 @@
                         <outlet property="beginnerButton" destination="3EP-2G-fIO" id="7b6-mb-SRG"/>
                         <outlet property="bestTimesButton" destination="l7k-ts-zQa" id="DzK-Cg-1Q4"/>
                         <outlet property="intermediateButton" destination="HtK-OO-ucH" id="RuB-kS-6ND"/>
-                        <segue destination="BYZ-38-t0r" kind="showDetail" identifier="mySegue" id="pmC-CK-gaq"/>
+                        <segue destination="BYZ-38-t0r" kind="showDetail" identifier="goToGameScreenSegue" id="pmC-CK-gaq"/>
                         <segue destination="H2L-aF-44V" kind="showDetail" identifier="bestTimesSegue" id="3h4-bT-W5l"/>
                     </connections>
                 </viewController>
@@ -581,6 +581,9 @@
             <point key="canvasLocation" x="-305.625" y="891.54929577464793"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="2P6-Xe-YUS"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="cellButton" width="200" height="200"/>
         <image name="close" width="512" height="512"/>
@@ -588,7 +591,4 @@
         <image name="icon-happy-48" width="48" height="48"/>
         <image name="mine-icon-black-50" width="50" height="50"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="2P6-Xe-YUS"/>
-    </inferredMetricsTieBreakers>
 </document>
