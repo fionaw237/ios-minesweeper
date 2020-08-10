@@ -29,12 +29,9 @@ class GameScreenViewController: UIViewController {
         super.viewDidLoad()
         setUpGame()
         setUpLongPressGestureRecognizer()
-        
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         managedObjectContext = appDelegate.persistentContainer.viewContext
-        
         bestTimesManager.managedObjectContext = managedObjectContext
-        
         gameManager.delegate = self
     }
     
@@ -102,7 +99,6 @@ class GameScreenViewController: UIViewController {
         }
     }
         
-    
     // TODO: implement this with nav bar back button
     @IBAction func homeButtonPressed(_ sender: Any) {
         gameManager.timerStarted ? presentWarningAlertForReturnToHome() : self.presentingViewController?.dismiss(animated: true, completion:nil)
@@ -121,45 +117,32 @@ class GameScreenViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    
     func showAllUnflaggedMines() {
-        for row in 0..<gameManager.numberOfItemsInSection {
-            for section in 0..<gameManager.numberOfSections {
-                let indexPath = IndexPath(row: row, section: section)
-                let gridCell = gameManager.gridCells[indexPath.row][indexPath.section]
-                
-                let collectionViewCell: GameScreenCollectionViewCell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
-                
-                if gridCell.hasMine && !gridCell.hasFlag {
-                    collectionViewCell.configureMineContainingCell()
-                }
-                else if !gridCell.hasMine && gridCell.hasFlag {
-                    collectionViewCell.configureForMisplacedFlag()
-                }
-            }
+        for gridCell in gameManager.getGridCellsWithUnflaggedMines() {
+            let collectionViewCell = collectionView.cellForItem(at: gridCell.indexPath) as! GameScreenCollectionViewCell
+            collectionViewCell.configureMineContainingCell()
+        }
+    }
+    
+    func showMisplacedFlags() {
+        for gridCell in gameManager.getGridCellsWithMisplacedFlags() {
+            let collectionViewCell = collectionView.cellForItem(at: gridCell.indexPath) as! GameScreenCollectionViewCell
+            collectionViewCell.configureForMisplacedFlag()
         }
     }
     
     func disableUserInteractionOnAllCells() {
-        for cell in gameManager.get1DGridCellsArray() {
-            cell.uncovered = true
-        }
+        gameManager.get1DGridCellsArray().forEach {$0.uncovered = true}
     }
     
     func gameOver(clickedCell: GameScreenCollectionViewCell) {
         playSound(Constants.Sounds.gameOver)
         showAllUnflaggedMines()
+        showMisplacedFlags()
         headerView.configureResetButtonForGameOver()
         clickedCell.configureForGameOver()
         disableUserInteractionOnAllCells()
         headerView.timer.invalidate()
-    }
-    
-    func isGameWon() -> Bool {
-        let clickedCellCount = gameManager.get1DGridCellsArray().filter {
-            $0.hasFlag || $0.uncovered
-        }.count
-        return clickedCellCount == gameManager.getTotalNumberOfCells() - gameManager.remainingFlags
     }
     
     func handleGameWon() {
@@ -168,15 +151,12 @@ class GameScreenViewController: UIViewController {
         headerView.setNumberOfFlagsLabelForGameWon()
         headerView.configureResetButtonForGameWon()
         addFlagsToUncoveredCells()
-        if let winningTime = headerView.timeLabel.text {
-            if let time = Int(winningTime) {
-                displayGameWonAlert(winningTime: time)
-            }
+        if let winningTime = headerView.timeLabel.text, let time = Int(winningTime) {
+            displayGameWonAlert(winningTime: time)
         }
     }
     
     func displayGameWonAlert(winningTime: Int) {
-
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         alert.title = bestTimesManager.isHighScore(winningTime, difficulty: gameManager.difficulty) ? "New high score!" : "You won!"
         alert.message = "Your time was \(winningTime) seconds"
@@ -213,7 +193,6 @@ class GameScreenViewController: UIViewController {
             let collectionViewCell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
             collectionViewCell.configureFlagImageView(Constants.Images.flag)
         }
-
     }
         
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
@@ -258,18 +237,17 @@ extension GameScreenViewController: CellSelectionProtocol {
             gameManager.randomlyDistributeMines(indexPathOfInitialCell: indexPath)
             collectionView.reloadItems(at: Array(gameManager.indexPathsOfMines))
             gameManager.timerStarted = true
-            if let header = headerView {
-                header.timer = Timer.scheduledTimer(timeInterval: 1, target: header, selector: #selector(headerView.updateTimer), userInfo: nil, repeats: true)
-            }
+            headerView.timer = Timer.scheduledTimer(timeInterval: 1, target: headerView!, selector: #selector(headerView.updateTimer), userInfo: nil, repeats: true)
         }
-        
-        let cell: GameScreenCollectionViewCell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
         
         let gridCell = gameManager.gridCells[indexPath.row][indexPath.section]
         if gridCell.hasFlag || gridCell.uncovered {return}
         gridCell.uncovered = true
+        
+        let collectionViewCell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
+        
         if gridCell.hasMine {
-            gameOver(clickedCell: cell)
+            gameOver(clickedCell: collectionViewCell)
             return
         }
         
@@ -281,8 +259,8 @@ extension GameScreenViewController: CellSelectionProtocol {
                 cellToReveal.configureForNumberOfMinesInVicinity(item.value)
             }
         }
-        cell.configureForNumberOfMinesInVicinity(minesInVicinity)
-        isGameWon() ? handleGameWon() : playSound(Constants.Sounds.click)
+        collectionViewCell.configureForNumberOfMinesInVicinity(minesInVicinity)
+        gameManager.isGameWon() ? handleGameWon() : playSound(Constants.Sounds.click)
     }
 }
 
@@ -296,4 +274,3 @@ extension GameScreenViewController: GameAlertDelegate {
         self.present(alert, animated: true, completion: nil)
     }
 }
-

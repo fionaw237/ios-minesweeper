@@ -28,51 +28,35 @@ struct GameManager {
     var indexPathsOfFlags = Set<IndexPath>()
     var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
     
-    init(difficulty: GameDifficulty) {
-        self.difficulty = difficulty
-        
-        numberOfSections = getNumberOfRows()
-        numberOfItemsInSection = getNumberOfColumns()
-        numberOfMines = getNumberOfMines()
-        remainingFlags = numberOfMines
-
-        
-        for row in 0..<numberOfItemsInSection {
-            var newRow: [GridCell] = []
-            for section in 0..<numberOfSections {
-                newRow.append(GridCell(indexPath: IndexPath(row: row, section: section)))
-            }
-            gridCells.append(newRow)
-        }
+    var clickedCellCount: Int {
+        return get1DGridCellsArray().filter {
+            $0.hasFlag || $0.uncovered
+        }.count
     }
     
-    init() {
-        // blank
+    func getNumberOfRows() -> Int {
+        return 8
+        //        switch gameDifficulty {
+        //        case .Beginner:
+        //            return NumberOfItemsInSection.Beginner.rawValue
+        //        case .Intermediate:
+        //            return NumberOfItemsInSection.Intermediate.rawValue
+        //        case .Advanced:
+        //            return NumberOfItemsInSection.Advanced.rawValue
+        //        }
     }
     
-        func getNumberOfRows() -> Int {
-            return 8
-    //        switch gameDifficulty {
-    //        case .Beginner:
-    //            return NumberOfItemsInSection.Beginner.rawValue
-    //        case .Intermediate:
-    //            return NumberOfItemsInSection.Intermediate.rawValue
-    //        case .Advanced:
-    //            return NumberOfItemsInSection.Advanced.rawValue
-    //        }
-        }
-        
-        func getNumberOfColumns() -> Int {
-            return 9
-    //        switch gameDifficulty {
-    //        case .Beginner:
-    //            return NumberOfSections.Beginner.rawValue
-    //        case .Intermediate:
-    //            return NumberOfSections.Intermediate.rawValue
-    //        case .Advanced:
-    //            return NumberOfSections.Advanced.rawValue
-    //        }
-        }
+    func getNumberOfColumns() -> Int {
+        return 9
+        //        switch gameDifficulty {
+        //        case .Beginner:
+        //            return NumberOfSections.Beginner.rawValue
+        //        case .Intermediate:
+        //            return NumberOfSections.Intermediate.rawValue
+        //        case .Advanced:
+        //            return NumberOfSections.Advanced.rawValue
+        //        }
+    }
     
     func getNumberOfMines() -> Int {
         switch difficulty {
@@ -190,5 +174,37 @@ struct GameManager {
             }
         }
         return indexPathsOfUncoveredCells
+    }
+    
+    func isGameWon() -> Bool {
+        return clickedCellCount == getTotalNumberOfCells() - remainingFlags
+    }
+    
+    func getGridCellsWithUnflaggedMines() -> [GridCell] {
+        return get1DGridCellsArray().filter { $0.hasMine && !$0.hasFlag }
+    }
+    
+    func getGridCellsWithMisplacedFlags() -> [GridCell] {
+        return get1DGridCellsArray().filter { !$0.hasMine && $0.hasFlag }
+    }
+}
+
+extension GameManager {
+    init(difficulty: GameDifficulty) {
+        self.difficulty = difficulty
+        
+        numberOfSections = getNumberOfRows()
+        numberOfItemsInSection = getNumberOfColumns()
+        numberOfMines = getNumberOfMines()
+        remainingFlags = numberOfMines
+
+        
+        for row in 0..<numberOfItemsInSection {
+            var newRow: [GridCell] = []
+            for section in 0..<numberOfSections {
+                newRow.append(GridCell(indexPath: IndexPath(row: row, section: section)))
+            }
+            gridCells.append(newRow)
+        }
     }
 }

@@ -21,6 +21,7 @@
 		2BE47CD9222422D300D3952A /* GameScreenHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE47CD8222422D300D3952A /* GameScreenHeaderView.swift */; };
 		2BE47CDB222425A400D3952A /* GameScreenCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE47CDA222425A400D3952A /* GameScreenCollectionViewCell.swift */; };
 		BA06178324E1647E00DDF22C /* BestTimesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA06178224E1647E00DDF22C /* BestTimesManager.swift */; };
+		BA06178524E1AE1F00DDF22C /* UIAlertController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA06178424E1AE1F00DDF22C /* UIAlertController+Extensions.swift */; };
 		BA1FF28924E05BF9006AE7B8 /* game_over.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BA1FF28524E05BF9006AE7B8 /* game_over.mp3 */; };
 		BA1FF28A24E05BF9006AE7B8 /* game_won.wav in Resources */ = {isa = PBXBuildFile; fileRef = BA1FF28624E05BF9006AE7B8 /* game_won.wav */; };
 		BA1FF28B24E05BF9006AE7B8 /* flag.wav in Resources */ = {isa = PBXBuildFile; fileRef = BA1FF28724E05BF9006AE7B8 /* flag.wav */; };
@@ -70,6 +71,7 @@
 		2BE47CD8222422D300D3952A /* GameScreenHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScreenHeaderView.swift; sourceTree = "<group>"; };
 		2BE47CDA222425A400D3952A /* GameScreenCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScreenCollectionViewCell.swift; sourceTree = "<group>"; };
 		BA06178224E1647E00DDF22C /* BestTimesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestTimesManager.swift; sourceTree = "<group>"; };
+		BA06178424E1AE1F00DDF22C /* UIAlertController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extensions.swift"; sourceTree = "<group>"; };
 		BA1FF28524E05BF9006AE7B8 /* game_over.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = game_over.mp3; sourceTree = "<group>"; };
 		BA1FF28624E05BF9006AE7B8 /* game_won.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = game_won.wav; sourceTree = "<group>"; };
 		BA1FF28724E05BF9006AE7B8 /* flag.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = flag.wav; sourceTree = "<group>"; };
@@ -194,6 +196,7 @@
 			children = (
 				BA1FF29824E08E39006AE7B8 /* Constants.swift */,
 				BA1FF29424E0656C006AE7B8 /* Enums.swift */,
+				BA06178424E1AE1F00DDF22C /* UIAlertController+Extensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 				2BD85B47230C08520077776F /* BestTimesViewController.swift in Sources */,
 				2BD85B49230C1D5C0077776F /* BestTimesTableViewCell.swift in Sources */,
 				2BE47CDB222425A400D3952A /* GameScreenCollectionViewCell.swift in Sources */,
+				BA06178524E1AE1F00DDF22C /* UIAlertController+Extensions.swift in Sources */,
 				2BE47CB02223FF2A00D3952A /* Minesweeper.xcdatamodeld in Sources */,
 				BA1FF28F24E0606A006AE7B8 /* GridCell.swift in Sources */,
 				2BE47CAA2223FF2A00D3952A /* GameScreenViewController.swift in Sources */,
