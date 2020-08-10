@@ -17,18 +17,13 @@ class GameScreenCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var mineOrFlagImageView: UIImageView!
     @IBOutlet weak var redCrossImageView: UIImageView!
     @IBOutlet weak var button: UIButton!
-    var hasMine = false
-    var hasFlag = false
-    var uncovered = false
+    
     var indexPath: IndexPath? = nil
     weak var delegate: CellSelectionProtocol?
     
     override func prepareForReuse() {
         button.isHidden = false
         redCrossImageView.isHidden = true
-        hasMine = false
-        hasFlag = false
-        uncovered = false
         numberOfMinesLabel.text = ""
         mineOrFlagImageView.image = nil
         indexPath = nil
@@ -43,12 +38,16 @@ class GameScreenCollectionViewCell: UICollectionViewCell {
     }
     
     func configureMineContainingCell() {
-        mineOrFlagImageView.image = UIImage(named: "mine-icon-black-50")
+        mineOrFlagImageView.image = UIImage(named: Constants.Images.mine)
         button.isHidden = true
     }
     
-    func configureFlagImageView() {
-        mineOrFlagImageView.image = hasFlag ? UIImage(named: "icon-flag-48") : nil
+    func configureFlagImageView(_ imageName: String?) {
+        if let name = imageName {
+            mineOrFlagImageView.image = UIImage(named: name)
+        } else {
+            mineOrFlagImageView.image = nil
+        }
     }
     
     func configureForGameOver() {
@@ -57,7 +56,6 @@ class GameScreenCollectionViewCell: UICollectionViewCell {
     
     func configureForNumberOfMinesInVicinity(_ numberOfMines: Int) {
         button.isHidden = true
-        uncovered = true
         if numberOfMines != 0 {
             configureNumberOfMinesLabel(numberOfMines: numberOfMines)
         }
