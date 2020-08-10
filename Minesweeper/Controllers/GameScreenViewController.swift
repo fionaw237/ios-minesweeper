@@ -17,9 +17,9 @@ class GameScreenViewController: UIViewController {
     
     var gameDifficulty: GameDifficulty?
     var managedObjectContext: NSManagedObjectContext?
-    let numberOfHighScoresToDisplay = 10
     var audioPlayer: AVAudioPlayer?
-    var gameLogic = GameLogic()
+    var gameManager = GameManager()
+    var bestTimesManager = BestTimesManager()
     
     @IBAction func resetButtonPressed(_ sender: Any) {
         resetGame()
@@ -33,7 +33,9 @@ class GameScreenViewController: UIViewController {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         managedObjectContext = appDelegate.persistentContainer.viewContext
         
-        gameLogic.delegate = self
+        bestTimesManager.managedObjectContext = managedObjectContext
+        
+        gameManager.delegate = self
     }
     
     func playSound(_ filename: String) {
@@ -50,8 +52,8 @@ class GameScreenViewController: UIViewController {
     
     func setUpGame() {
         if let gameDifficulty = gameDifficulty {
-            gameLogic = GameLogic(difficulty: gameDifficulty)
-            headerView.updateFlagsLabel(gameLogic.remainingFlags)
+            gameManager = GameManager(difficulty: gameDifficulty)
+            headerView.updateFlagsLabel(gameManager.remainingFlags)
             headerView.configureResetButtonForNewGame()
         }
     }
@@ -66,7 +68,7 @@ class GameScreenViewController: UIViewController {
     func configureTimerForReset() {
         headerView.timer.invalidate()
         headerView.resetTimer()
-        gameLogic.timerStarted = false
+        gameManager.timerStarted = false
     }
          
     // MARK: Long press methods
@@ -78,12 +80,12 @@ class GameScreenViewController: UIViewController {
     }
     
     func collectionView(_ collectionView: UICollectionView, longPressForCellAt indexPath: IndexPath) {
-        let gridCell = gameLogic.gridCells[indexPath.row][indexPath.section]
+        let gridCell = gameManager.gridCells[indexPath.row][indexPath.section]
         if gridCell.uncovered {return}
-        gameLogic.setCellPropertiesAfterLongPress(for: indexPath)
+        gameManager.setCellPropertiesAfterLongPress(for: indexPath)
         let cell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
         cell.configureFlagImageView(gridCell.getFlagImageName())
-        headerView.updateFlagsLabel(gameLogic.remainingFlags)
+        headerView.updateFlagsLabel(gameManager.remainingFlags)
         playSound(Constants.Sounds.flag)
     }
     
@@ -98,7 +100,7 @@ class GameScreenViewController: UIViewController {
     // MARK: Return to welcome screem
     
     @IBAction func homeButtonPressed(_ sender: Any) {
-        gameLogic.timerStarted ? presentWarningAlertForReturnToHome() : self.presentingViewController?.dismiss(animated: true, completion:nil)
+        gameManager.timerStarted ? presentWarningAlertForReturnToHome() : self.presentingViewController?.dismiss(animated: true, completion:nil)
     }
     
     func presentWarningAlertForReturnToHome() {
@@ -117,10 +119,10 @@ class GameScreenViewController: UIViewController {
     
     func showAllUnflaggedMines() {
         
-        for row in 0..<gameLogic.numberOfItemsInSection {
-            for section in 0..<gameLogic.numberOfSections {
+        for row in 0..<gameManager.numberOfItemsInSection {
+            for section in 0..<gameManager.numberOfSections {
                 let indexPath = IndexPath(row: row, section: section)
-                let gridCell = gameLogic.gridCells[indexPath.row][indexPath.section]
+                let gridCell = gameManager.gridCells[indexPath.row][indexPath.section]
                 
                 let collectionViewCell: GameScreenCollectionViewCell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
                 
@@ -136,7 +138,7 @@ class GameScreenViewController: UIViewController {
     }
     
     func disableUserInteractionOnAllCells() {
-        for cell in gameLogic.get1DGridCellsArray() {
+        for cell in gameManager.get1DGridCellsArray() {
             cell.uncovered = true
         }
     }
@@ -151,10 +153,10 @@ class GameScreenViewController: UIViewController {
     }
     
     func isGameWon() -> Bool {
-        let clickedCellCount = gameLogic.get1DGridCellsArray().filter {
+        let clickedCellCount = gameManager.get1DGridCellsArray().filter {
             $0.hasFlag || $0.uncovered
         }.count
-        return clickedCellCount == gameLogic.getTotalNumberOfCells() - gameLogic.remainingFlags
+        return clickedCellCount == gameManager.getTotalNumberOfCells() - gameManager.remainingFlags
     }
     
     func handleGameWon() {
@@ -173,10 +175,10 @@ class GameScreenViewController: UIViewController {
     func displayGameWonAlert(winningTime: Int) {
 
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = isHighScore(winningTime) ? "New high score!" : "You won!"
+        alert.title = bestTimesManager.isHighScore(winningTime, difficulty: gameManager.difficulty) ? "New high score!" : "You won!"
         alert.message = "Your time was \(winningTime) seconds"
         
-        if (isHighScore(winningTime)) {
+        if (bestTimesManager.isHighScore(winningTime, difficulty: gameManager.difficulty)) {
             
             alert.addTextField { (textField) in
                 textField.placeholder = "Enter your name"
@@ -187,7 +189,7 @@ class GameScreenViewController: UIViewController {
                     if let enteredText = textfields[0].text {
                         let name = (enteredText == "") ? "Anonymous" : enteredText
 //                        self.removeLastHighScoreEntry()
-                        self.storeHighScore(time: winningTime, name: name)
+                        self.bestTimesManager.storeHighScore(time: winningTime, name: name, difficulty: self.gameManager.difficulty)
                         self.performSegue(withIdentifier: Constants.Segues.newHighScore, sender: nil)
                     }
                 }
@@ -197,43 +199,6 @@ class GameScreenViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
         }
         present(alert, animated: true)
-    }
-    
-    func storeHighScore(time: Int, name: String) {
-        if let context = managedObjectContext {
-            let highScores = BestTimesViewController.fetchEntriesForDifficulty(gameLogic.gameDifficultyToStringEnumMapping(), context: managedObjectContext)
-            if highScores.count >= numberOfHighScoresToDisplay {
-                // Update the lowest score with the new values
-                if let lowestScore = highScores.last {
-                    lowestScore.name = name
-                    lowestScore.time = Int32(time)
-                }
-            } else {
-                // No low score exists - create new entry
-                let entity = NSEntityDescription.entity(forEntityName: "BestTimeEntry", in: context)
-                let newEntry = NSManagedObject(entity: entity!, insertInto: context)
-                newEntry.setValue(name, forKey: "name")
-                newEntry.setValue(time, forKey: "time")
-                newEntry.setValue(gameLogic.gameDifficultyToStringEnumMapping(), forKey: "difficulty")
-            }
-            
-            do {
-                try context.save()
-            } catch {
-                print("Failed saving")
-            }
-        }
-    }
-    
-    func isHighScore(_ winningTime: Int) -> Bool {
-        let highScores = BestTimesViewController.fetchEntriesForDifficulty(gameLogic.gameDifficultyToStringEnumMapping(), context: managedObjectContext)
-        
-        if (highScores.count < numberOfHighScoresToDisplay) {return true}
-        
-        if let lowestStoredEntry = highScores.last {
-            return winningTime < lowestStoredEntry.time
-        }
-        return false
     }
     
     func newGameHandler(alert: UIAlertAction!) {
@@ -252,23 +217,23 @@ class GameScreenViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         if segue.identifier == Constants.Segues.newHighScore {
             let bestTimesViewController = segue.destination as! BestTimesViewController
-            bestTimesViewController.defaultDifficulty = gameLogic.gameDifficultyToStringEnumMapping()
+            bestTimesViewController.defaultDifficulty = gameManager.difficulty.rawValue
         }
     }
 }
 
 extension GameScreenViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return gameLogic.numberOfSections
+        return gameManager.numberOfSections
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return gameLogic.numberOfItemsInSection
+        return gameManager.numberOfItemsInSection
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let gridCell = gameLogic.gridCells[indexPath.row][indexPath.section]
-        gridCell.hasMine = gameLogic.indexPathsOfMines.contains(indexPath)
+        let gridCell = gameManager.gridCells[indexPath.row][indexPath.section]
+        gridCell.hasMine = gameManager.indexPathsOfMines.contains(indexPath)
 
         let cell: GameScreenCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! GameScreenCollectionViewCell
         cell.configureFlagImageView(gridCell.getFlagImageName())
@@ -280,17 +245,17 @@ extension GameScreenViewController: UICollectionViewDataSource {
 
 extension GameScreenViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = (collectionView.frame.width / CGFloat(gameLogic.numberOfItemsInSection)) - 2
+        let cellWidth = (collectionView.frame.width / CGFloat(gameManager.numberOfItemsInSection)) - 2
         return CGSize(width: cellWidth, height: cellWidth)
     }
 }
 
 extension GameScreenViewController: CellSelectionProtocol {
     func cellButtonPressed(_ indexPath: IndexPath) {
-        if (!gameLogic.timerStarted) {
-            gameLogic.randomlyDistributeMines(indexPathOfInitialCell: indexPath)
-            collectionView.reloadItems(at: Array(gameLogic.indexPathsOfMines))
-            gameLogic.timerStarted = true
+        if (!gameManager.timerStarted) {
+            gameManager.randomlyDistributeMines(indexPathOfInitialCell: indexPath)
+            collectionView.reloadItems(at: Array(gameManager.indexPathsOfMines))
+            gameManager.timerStarted = true
             if let header = headerView {
                 header.timer = Timer.scheduledTimer(timeInterval: 1, target: header, selector: #selector(headerView.updateTimer), userInfo: nil, repeats: true)
             }
@@ -298,7 +263,7 @@ extension GameScreenViewController: CellSelectionProtocol {
         
         let cell: GameScreenCollectionViewCell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
         
-        let gridCell = gameLogic.gridCells[indexPath.row][indexPath.section]
+        let gridCell = gameManager.gridCells[indexPath.row][indexPath.section]
         if gridCell.hasFlag || gridCell.uncovered {return}
         gridCell.uncovered = true
         if gridCell.hasMine {
@@ -306,9 +271,9 @@ extension GameScreenViewController: CellSelectionProtocol {
             return
         }
         
-        let minesInVicinity = gameLogic.numberOfMinesInVicinityOfCell(indexPath)
+        let minesInVicinity = gameManager.numberOfMinesInVicinityOfCell(indexPath)
         if minesInVicinity == 0 {
-            let indexPathsToRevealDict = gameLogic.findCellsToReveal(indexPath)
+            let indexPathsToRevealDict = gameManager.findCellsToReveal(indexPath)
             for item in indexPathsToRevealDict {
                 let cellToReveal = collectionView.cellForItem(at: item.key) as! GameScreenCollectionViewCell
                 cellToReveal.configureForNumberOfMinesInVicinity(item.value)

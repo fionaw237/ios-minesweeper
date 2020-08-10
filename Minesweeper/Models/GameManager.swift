@@ -11,7 +11,7 @@ protocol GameAlertDelegate {
     func presentNoFlagsWarning()
 }
 
-struct GameLogic {
+struct GameManager {
     var delegate: GameAlertDelegate?
     
     var gridCells: [[GridCell]] = []
@@ -82,17 +82,6 @@ struct GameLogic {
             return NumberOfMines.Intermediate.rawValue
         case .Advanced:
             return NumberOfMines.Advanced.rawValue
-        }
-    }
-    
-    func gameDifficultyToStringEnumMapping() -> String {
-        switch difficulty {
-        case .Beginner:
-            return "Beginner"
-        case .Intermediate:
-            return "Intermediate"
-        case .Advanced:
-            return "Advanced"
         }
     }
     

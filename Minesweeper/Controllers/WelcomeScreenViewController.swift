@@ -26,7 +26,8 @@ class WelcomeScreenViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         if segue.identifier == Constants.Segues.goToGameScreen {
             let button = sender as! UIButton
-            let chosenDifficulty = GameDifficulty(rawValue: button.tag)
+            guard let buttonTitle = button.titleLabel?.text else {return}
+            let chosenDifficulty = GameDifficulty(rawValue: buttonTitle)
             let gameViewController = segue.destination as! GameScreenViewController
             gameViewController.gameDifficulty = chosenDifficulty
         }

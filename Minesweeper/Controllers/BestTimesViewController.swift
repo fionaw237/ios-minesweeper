@@ -23,7 +23,7 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         managedObjectContext = appDelegate.persistentContainer.viewContext
-        bestTimes = BestTimesViewController.fetchEntriesForDifficulty(defaultDifficulty, context: managedObjectContext)
+        bestTimes = BestTimesManager.fetchEntriesForDifficulty(defaultDifficulty, context: managedObjectContext)
         setSelectedDifficultyInPickerView()
     }
     
@@ -66,39 +66,20 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch row {
         case 0:
-            bestTimes = BestTimesViewController.fetchEntriesForDifficulty("Beginner", context: managedObjectContext)
+            bestTimes = BestTimesManager.fetchEntriesForDifficulty("Beginner", context: managedObjectContext)
             break
         case 1:
-            bestTimes = BestTimesViewController.fetchEntriesForDifficulty("Intermediate", context: managedObjectContext)
+            bestTimes = BestTimesManager.fetchEntriesForDifficulty("Intermediate", context: managedObjectContext)
             break
         case 2:
-            bestTimes = BestTimesViewController.fetchEntriesForDifficulty("Advanced", context: managedObjectContext)
+            bestTimes = BestTimesManager.fetchEntriesForDifficulty("Advanced", context: managedObjectContext)
             break
         default:
             break
         }
         bestTimesTableView.reloadData()
     }
-    
-    // MARK: core data fetch
-    
-    static func fetchEntriesForDifficulty(_ difficulty: String, context: NSManagedObjectContext?) -> [BestTimeEntry] {
-        if let ctx = context {
-            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "BestTimeEntry")
-            request.predicate = NSPredicate(format: "difficulty == %@", difficulty)
-            request.returnsObjectsAsFaults = false
-            do {
-                let results = try ctx.fetch(request) as! [BestTimeEntry]
-                return results.sorted(by: {$0.time < $1.time})
-            } catch {
-               print("fetch failed for high scores")
-            }
-        }
-        return []
-    }
-    
-    // MARK: Core data delete all
-    
+            
     @IBAction func ResetAllBestTimesButtonPressed(_ sender: Any) {
         if let context = managedObjectContext {
             if scoresAreNotEmpty(context) {
@@ -107,7 +88,9 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
                                                                       preferredStyle: .alert)
                 let dismissAction = UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil)
                 let continueAction = UIAlertAction.init(title: "Reset All", style: .default) { (action) in
-                    self.resetAllBestTimes(context)
+                    BestTimesManager.resetAllBestTimes(context)
+                    self.bestTimes = BestTimesManager.fetchEntriesForDifficulty(self.defaultDifficulty, context: self.managedObjectContext)
+                    self.bestTimesTableView.reloadData()
                 }
                 alert.addAction(dismissAction)
                 alert.addAction(continueAction)
@@ -116,25 +99,9 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
-    private func resetAllBestTimes(_ context: NSManagedObjectContext) {
-        let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "BestTimeEntry")
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
-        do
-        {
-            try context.execute(deleteRequest)
-            try context.save()
-        }
-        catch
-        {
-            print ("There was an error deleting best times")
-        }
-        bestTimes = BestTimesViewController.fetchEntriesForDifficulty(defaultDifficulty, context: managedObjectContext)
-        bestTimesTableView.reloadData()
-    }
-    
     private func scoresAreNotEmpty(_ context: NSManagedObjectContext) -> Bool {
         for difficulty in pickerData {
-            if !BestTimesViewController.fetchEntriesForDifficulty(difficulty, context: context).isEmpty {
+            if !BestTimesManager.fetchEntriesForDifficulty(difficulty, context: context).isEmpty {
                 return true
             }
         }
