@@ -175,10 +175,10 @@ class GameScreenViewController: UIViewController {
     func displayGameWonAlert(winningTime: Int) {
 
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = bestTimesManager.isHighScore(winningTime) ? "New high score!" : "You won!"
+        alert.title = bestTimesManager.isHighScore(winningTime, difficulty: gameManager.difficulty) ? "New high score!" : "You won!"
         alert.message = "Your time was \(winningTime) seconds"
         
-        if (bestTimesManager.isHighScore(winningTime)) {
+        if (bestTimesManager.isHighScore(winningTime, difficulty: gameManager.difficulty)) {
             
             alert.addTextField { (textField) in
                 textField.placeholder = "Enter your name"
