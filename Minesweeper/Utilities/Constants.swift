@@ -28,6 +28,6 @@ struct Constants {
     struct Segues {
         static let newHighScore = "newHighScoreSegue"
         static let viewHighScores = "bestTimesSegue"
-        static let goToGameScreen = "mySegue"
+        static let goToGameScreen = "goToGameScreenSegue"
     }
 }
