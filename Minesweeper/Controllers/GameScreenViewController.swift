@@ -17,9 +17,9 @@ class GameScreenViewController: UIViewController {
     
     var gameDifficulty: GameDifficulty?
     var managedObjectContext: NSManagedObjectContext?
-    let numberOfHighScoresToDisplay = 10
     var audioPlayer: AVAudioPlayer?
     var gameManager = GameManager()
+    var bestTimesManager = BestTimesManager()
     
     @IBAction func resetButtonPressed(_ sender: Any) {
         resetGame()
@@ -32,6 +32,8 @@ class GameScreenViewController: UIViewController {
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         managedObjectContext = appDelegate.persistentContainer.viewContext
+        
+        bestTimesManager.managedObjectContext = managedObjectContext
         
         gameManager.delegate = self
     }
@@ -173,10 +175,10 @@ class GameScreenViewController: UIViewController {
     func displayGameWonAlert(winningTime: Int) {
 
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = isHighScore(winningTime) ? "New high score!" : "You won!"
+        alert.title = bestTimesManager.isHighScore(winningTime) ? "New high score!" : "You won!"
         alert.message = "Your time was \(winningTime) seconds"
         
-        if (isHighScore(winningTime)) {
+        if (bestTimesManager.isHighScore(winningTime)) {
             
             alert.addTextField { (textField) in
                 textField.placeholder = "Enter your name"
@@ -187,7 +189,7 @@ class GameScreenViewController: UIViewController {
                     if let enteredText = textfields[0].text {
                         let name = (enteredText == "") ? "Anonymous" : enteredText
 //                        self.removeLastHighScoreEntry()
-                        self.storeHighScore(time: winningTime, name: name)
+                        self.bestTimesManager.storeHighScore(time: winningTime, name: name, difficulty: self.gameManager.difficulty)
                         self.performSegue(withIdentifier: Constants.Segues.newHighScore, sender: nil)
                     }
                 }
@@ -197,43 +199,6 @@ class GameScreenViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
         }
         present(alert, animated: true)
-    }
-    
-    func storeHighScore(time: Int, name: String) {
-        if let context = managedObjectContext {
-            let highScores = BestTimesViewController.fetchEntriesForDifficulty(gameManager.difficulty.rawValue, context: managedObjectContext)
-            if highScores.count >= numberOfHighScoresToDisplay {
-                // Update the lowest score with the new values
-                if let lowestScore = highScores.last {
-                    lowestScore.name = name
-                    lowestScore.time = Int32(time)
-                }
-            } else {
-                // No low score exists - create new entry
-                let entity = NSEntityDescription.entity(forEntityName: "BestTimeEntry", in: context)
-                let newEntry = NSManagedObject(entity: entity!, insertInto: context)
-                newEntry.setValue(name, forKey: "name")
-                newEntry.setValue(time, forKey: "time")
-                newEntry.setValue(gameManager.difficulty.rawValue, forKey: "difficulty")
-            }
-            
-            do {
-                try context.save()
-            } catch {
-                print("Failed saving")
-            }
-        }
-    }
-    
-    func isHighScore(_ winningTime: Int) -> Bool {
-        let highScores = BestTimesViewController.fetchEntriesForDifficulty(gameManager.difficulty.rawValue, context: managedObjectContext)
-        
-        if (highScores.count < numberOfHighScoresToDisplay) {return true}
-        
-        if let lowestStoredEntry = highScores.last {
-            return winningTime < lowestStoredEntry.time
-        }
-        return false
     }
     
     func newGameHandler(alert: UIAlertAction!) {
