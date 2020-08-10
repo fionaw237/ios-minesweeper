@@ -123,7 +123,6 @@ class GameScreenViewController: UIViewController {
     
     
     func showAllUnflaggedMines() {
-        
         for row in 0..<gameManager.numberOfItemsInSection {
             for section in 0..<gameManager.numberOfSections {
                 let indexPath = IndexPath(row: row, section: section)
@@ -139,7 +138,6 @@ class GameScreenViewController: UIViewController {
                 }
             }
         }
-
     }
     
     func disableUserInteractionOnAllCells() {
@@ -211,12 +209,11 @@ class GameScreenViewController: UIViewController {
     }
     
     func addFlagsToUncoveredCells() {
-//        for cell: GameScreenCollectionViewCell in (collectionView!.visibleCells as! Array<GameScreenCollectionViewCell>) {
-//            if !cell.uncovered {
-//                cell.hasFlag = true
-//                cell.configureFlagImageView()
-//            }
-//        }
+        for indexPath in gameManager.getUncoveredCells() {
+            let collectionViewCell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
+            collectionViewCell.configureFlagImageView(Constants.Images.flag)
+        }
+
     }
         
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {

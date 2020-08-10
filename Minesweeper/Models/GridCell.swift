@@ -12,6 +12,11 @@ class GridCell {
     var hasMine = false
     var hasFlag = false
     var uncovered = false
+    var indexPath = IndexPath()
+    
+    init(indexPath: IndexPath) {
+        self.indexPath = indexPath
+    }
     
     func getFlagImageName() -> String? {
         return hasFlag ? Constants.Images.flag : nil
