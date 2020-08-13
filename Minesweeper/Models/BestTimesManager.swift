@@ -28,7 +28,7 @@ struct BestTimesManager {
         }
     }
     
-    static func fetchEntriesForDifficulty(_ difficulty: String, context: NSManagedObjectContext?) -> [BestTimeEntry] {
+    func fetchEntriesForDifficulty(_ difficulty: String) -> [BestTimeEntry] {
         if let ctx = context {
             let request: NSFetchRequest<BestTimeEntry> = BestTimeEntry.fetchRequest()
             request.predicate = NSPredicate(format: "difficulty == %@", difficulty)
@@ -44,7 +44,7 @@ struct BestTimesManager {
     }
     
     func isHighScore(_ winningTime: Int, difficulty: GameDifficulty) -> Bool {
-        let highScores = BestTimesManager.fetchEntriesForDifficulty(difficulty.rawValue, context: context)
+        let highScores = fetchEntriesForDifficulty(difficulty.rawValue)
 
         if (highScores.count < numberOfHighScoresToDisplay) {return true}
 
@@ -56,7 +56,7 @@ struct BestTimesManager {
     
     func storeHighScore(time: Int, name: String, difficulty: GameDifficulty) {
         if let context = context {
-            let highScores = BestTimesManager.fetchEntriesForDifficulty(difficulty.rawValue, context: context)
+            let highScores = fetchEntriesForDifficulty(difficulty.rawValue)
             if highScores.count >= numberOfHighScoresToDisplay {
                 // Update the lowest score with the new values
                 if let lowestScore = highScores.last {

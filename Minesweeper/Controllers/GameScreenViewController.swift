@@ -19,7 +19,9 @@ class GameScreenViewController: UIViewController {
     var managedObjectContext: NSManagedObjectContext?
     var audioPlayer: AVAudioPlayer?
     var gameManager = GameManager()
-    var bestTimesManager = BestTimesManager()
+    var bestTimesManager = BestTimesManager(
+        context: (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    )
     
     @IBAction func resetButtonPressed(_ sender: Any) {
         resetGame()
@@ -29,9 +31,6 @@ class GameScreenViewController: UIViewController {
         super.viewDidLoad()
         setUpGame()
         setUpLongPressGestureRecognizer()
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        managedObjectContext = appDelegate.persistentContainer.viewContext
-        bestTimesManager.context = managedObjectContext
         gameManager.delegate = self
     }
     
@@ -199,6 +198,7 @@ class GameScreenViewController: UIViewController {
         if segue.identifier == Constants.Segues.newHighScore {
             let bestTimesViewController = segue.destination as! BestTimesViewController
             bestTimesViewController.defaultDifficulty = gameManager.difficulty.rawValue
+            bestTimesViewController.bestTimesManager = bestTimesManager
         }
     }
 }
