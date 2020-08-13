@@ -31,7 +31,7 @@ class GameScreenViewController: UIViewController {
         setUpLongPressGestureRecognizer()
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         managedObjectContext = appDelegate.persistentContainer.viewContext
-        bestTimesManager.managedObjectContext = managedObjectContext
+        bestTimesManager.context = managedObjectContext
         gameManager.delegate = self
     }
     
