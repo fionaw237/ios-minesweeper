@@ -101,7 +101,7 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
                                                                       preferredStyle: .alert)
                 let dismissAction = UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil)
                 let continueAction = UIAlertAction.init(title: "Reset All", style: .default) { (action) in
-                    BestTimesManager.resetAllBestTimes(context)
+                    self.bestTimesManager!.resetAllBestTimes()
                     self.bestTimes = self.bestTimesManager!.fetchEntriesForDifficulty(self.defaultDifficulty)
                     self.bestTimesTableView.reloadData()
                 }

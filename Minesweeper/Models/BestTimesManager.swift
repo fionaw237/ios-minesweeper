@@ -14,17 +14,19 @@ struct BestTimesManager {
     var context: NSManagedObjectContext? = nil
     let numberOfHighScoresToDisplay = 10
     
-    static func resetAllBestTimes(_ context: NSManagedObjectContext) {
+    func resetAllBestTimes() {
         let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "BestTimeEntry")
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
-        do
-        {
-            try context.execute(deleteRequest)
-            try context.save()
-        }
-        catch
-        {
-            print ("Error deleting best times: \(error)")
+        if let ctx = context {
+            do
+            {
+                try ctx.execute(deleteRequest)
+                try ctx.save()
+            }
+            catch
+            {
+                print ("Error deleting best times: \(error)")
+            }
         }
     }
     
