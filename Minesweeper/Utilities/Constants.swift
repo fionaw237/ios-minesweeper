@@ -6,8 +6,6 @@
 //  Copyright © 2020 Fiona Wilson. All rights reserved.
 //
 
-import Foundation
-
 struct Constants {
     
     struct Images {

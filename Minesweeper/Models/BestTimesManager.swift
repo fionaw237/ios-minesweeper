@@ -6,7 +6,6 @@
 //  Copyright © 2020 Fiona Wilson. All rights reserved.
 //
 
-import Foundation
 import CoreData
 
 struct BestTimesManager {
