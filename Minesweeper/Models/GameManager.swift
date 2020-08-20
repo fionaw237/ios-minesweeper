@@ -15,7 +15,7 @@ struct GameManager {
     var delegate: GameAlertDelegate?
     
     var gridCells: [[GridCell]] = []
-    var difficulty: GameDifficulty = .Beginner
+    var difficulty = GameDifficulty.Beginner
     
     var numberOfSections = 0
     var numberOfItemsInSection = 0
@@ -25,40 +25,26 @@ struct GameManager {
     var timerStarted = false
     
     var indexPathsOfMines = Set<IndexPath>()
-    var indexPathsOfFlags = Set<IndexPath>()
-    var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
+    private var indexPathsOfFlags = Set<IndexPath>()
+    private var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
     
-    var clickedCellCount: Int {
+    private var clickedCellCount: Int {
         return get1DGridCellsArray().filter {
             $0.hasFlag || $0.uncovered
         }.count
     }
     
-    func getNumberOfRows() -> Int {
+    //MARK:- Methods for initialising number of rows, columns and mines
+    
+    private func getNumberOfRows() -> Int {
         return 8
-        //        switch gameDifficulty {
-        //        case .Beginner:
-        //            return NumberOfItemsInSection.Beginner.rawValue
-        //        case .Intermediate:
-        //            return NumberOfItemsInSection.Intermediate.rawValue
-        //        case .Advanced:
-        //            return NumberOfItemsInSection.Advanced.rawValue
-        //        }
     }
     
-    func getNumberOfColumns() -> Int {
+    private func getNumberOfColumns() -> Int {
         return 9
-        //        switch gameDifficulty {
-        //        case .Beginner:
-        //            return NumberOfSections.Beginner.rawValue
-        //        case .Intermediate:
-        //            return NumberOfSections.Intermediate.rawValue
-        //        case .Advanced:
-        //            return NumberOfSections.Advanced.rawValue
-        //        }
     }
     
-    func getNumberOfMines() -> Int {
+    private func getNumberOfMines() -> Int {
         switch difficulty {
         case .Beginner:
             return NumberOfMines.Beginner.rawValue
@@ -69,15 +55,15 @@ struct GameManager {
         }
     }
     
-    func isOutOfBounds(row: Int, section: Int) -> Bool {
-        return row < 0 || section < 0 || row >= numberOfItemsInSection || section >= numberOfSections
+    private func isOutOfBounds(row: Int, section: Int) -> Bool {
+        return !(0..<numberOfItemsInSection).contains(row) || !(0..<numberOfSections).contains(section)
     }
     
-    func isAtSelectedIndexPath(indexPath: IndexPath, row: Int, section: Int) -> Bool {
-        return (row == indexPath.row && section == indexPath.section)
+    private func isAtSelectedIndexPath(indexPath: IndexPath, row: Int, section: Int) -> Bool {
+        return (row == indexPath.row) && (section == indexPath.section)
     }
     
-    func getValidIndexPathsSurroundingCell(_ indexPath: IndexPath) -> Array<IndexPath> {
+    private func getValidIndexPathsSurroundingCell(_ indexPath: IndexPath) -> Array<IndexPath> {
         var validIndexPaths = Array<IndexPath>()
         for i in (indexPath.row - 1)...(indexPath.row + 1) {
             for j in (indexPath.section - 1)...(indexPath.section + 1) {
@@ -100,6 +86,8 @@ struct GameManager {
             }
         }
         indexPathsOfMines = mineIndexPaths
+        
+        //TODO: set hasMine property on relevant cells, rather than doing this in view controller
     }
     
     mutating func setCellPropertiesAfterLongPress(for indexPath: IndexPath) {
@@ -118,7 +106,7 @@ struct GameManager {
         }
     }
     
-    func getTotalNumberOfCells() -> Int {
+    private func getTotalNumberOfCells() -> Int {
         return gridCells.flatMap{$0}.count
     }
     
@@ -189,13 +177,17 @@ struct GameManager {
     }
 }
 
+
 extension GameManager {
+    
+    // Additional initialiser to default one that comes with structs
     init(difficulty: GameDifficulty) {
         self.difficulty = difficulty
         
         numberOfSections = getNumberOfRows()
         numberOfItemsInSection = getNumberOfColumns()
         numberOfMines = getNumberOfMines()
+        
         remainingFlags = numberOfMines
 
         

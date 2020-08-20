@@ -16,10 +16,9 @@ class GameScreenViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     var gameDifficulty: GameDifficulty?
-    var managedObjectContext: NSManagedObjectContext?
-    var audioPlayer: AVAudioPlayer?
-    var gameManager = GameManager()
-    var bestTimesManager = BestTimesManager(
+    private var audioPlayer: AVAudioPlayer?
+    private var gameManager = GameManager()
+    private var bestTimesManager = BestTimesManager(
         context: (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     )
     
@@ -46,7 +45,7 @@ class GameScreenViewController: UIViewController {
         gameManager.timerStarted ? presentWarningAlertForReturnToHome() : self.presentingViewController?.dismiss(animated: true, completion:nil)
     }
     
-    func presentWarningAlertForReturnToHome() {
+    private func presentWarningAlertForReturnToHome() {
         let alert: UIAlertController = UIAlertController.init(title: "Warning!",
                                                               message: "This will quit the game and return to the home screen",
                                                               preferredStyle: .alert)
@@ -72,7 +71,7 @@ class GameScreenViewController: UIViewController {
         resetGame()
     }
     
-    func setUpGame() {
+    private func setUpGame() {
         if let gameDifficulty = gameDifficulty {
             gameManager = GameManager(difficulty: gameDifficulty)
             headerView.updateFlagsLabel(gameManager.remainingFlags)
@@ -80,14 +79,14 @@ class GameScreenViewController: UIViewController {
         }
     }
     
-    func resetGame() {
+    private func resetGame() {
         playSound(Constants.Sounds.click)
         configureTimerForReset()
         setUpGame()
         collectionView.reloadData()
     }
     
-    func configureTimerForReset() {
+    private func configureTimerForReset() {
         headerView.timer.invalidate()
         headerView.resetTimer()
         gameManager.timerStarted = false
@@ -96,7 +95,7 @@ class GameScreenViewController: UIViewController {
     
     //MARK:- Sounds
     
-    func playSound(_ filename: String) {
+    private func playSound(_ filename: String) {
         let soundFile = Bundle.main.path(forResource: filename, ofType: nil)!
         let url = URL(fileURLWithPath: soundFile)
         do {
@@ -111,13 +110,13 @@ class GameScreenViewController: UIViewController {
          
     //MARK:- Long press methods
     
-    func setUpLongPressGestureRecognizer() {
+    private func setUpLongPressGestureRecognizer() {
         let longPressGestureRecogniser = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gesture:)))
         longPressGestureRecogniser.minimumPressDuration = 0.25
         collectionView.addGestureRecognizer(longPressGestureRecogniser)
     }
     
-    func collectionView(_ collectionView: UICollectionView, longPressForCellAt indexPath: IndexPath) {
+    private func collectionView(_ collectionView: UICollectionView, longPressForCellAt indexPath: IndexPath) {
         let gridCell = gameManager.gridCells[indexPath.row][indexPath.section]
         if gridCell.uncovered {return}
         gameManager.setCellPropertiesAfterLongPress(for: indexPath)
@@ -138,35 +137,35 @@ class GameScreenViewController: UIViewController {
     
     //MARK:- Methods handling cell display
     
-    func showAllUnflaggedMines() {
+    private func showAllUnflaggedMines() {
         for gridCell in gameManager.getGridCellsWithUnflaggedMines() {
             let collectionViewCell = collectionView.cellForItem(at: gridCell.indexPath) as! GameScreenCollectionViewCell
             collectionViewCell.configureMineContainingCell()
         }
     }
     
-    func showMisplacedFlags() {
+    private func showMisplacedFlags() {
         for gridCell in gameManager.getGridCellsWithMisplacedFlags() {
             let collectionViewCell = collectionView.cellForItem(at: gridCell.indexPath) as! GameScreenCollectionViewCell
             collectionViewCell.configureForMisplacedFlag()
         }
     }
     
-    func addFlagsToUncoveredCells() {
+    private func addFlagsToUncoveredCells() {
         for indexPath in gameManager.getUncoveredCells() {
             let collectionViewCell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
             collectionViewCell.configureFlagImageView(Constants.Images.flag)
         }
     }
     
-    func disableUserInteractionOnAllCells() {
+    private func disableUserInteractionOnAllCells() {
         gameManager.get1DGridCellsArray().forEach {$0.uncovered = true}
     }
     
     
     //MARK:- Methods handling game over/game won
     
-    func gameOver(clickedCell: GameScreenCollectionViewCell) {
+    private func gameOver(clickedCell: GameScreenCollectionViewCell) {
         playSound(Constants.Sounds.gameOver)
         showAllUnflaggedMines()
         showMisplacedFlags()
@@ -176,7 +175,7 @@ class GameScreenViewController: UIViewController {
         headerView.timer.invalidate()
     }
     
-    func handleGameWon() {
+    private func handleGameWon() {
         playSound(Constants.Sounds.gameWon)
         headerView.timer.invalidate()
         headerView.setNumberOfFlagsLabelForGameWon()
@@ -187,7 +186,7 @@ class GameScreenViewController: UIViewController {
         }
     }
     
-    func displayGameWonAlert(winningTime: Int) {
+    private func displayGameWonAlert(winningTime: Int) {
         
         let newHighScore = bestTimesManager.isHighScore(winningTime, difficulty: gameManager.difficulty)
         
@@ -215,7 +214,7 @@ class GameScreenViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    func newGameHandler(alert: UIAlertAction!) {
+    private func newGameHandler(alert: UIAlertAction!) {
         resetGame()
     }
     
