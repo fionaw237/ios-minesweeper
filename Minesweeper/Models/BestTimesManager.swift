@@ -40,7 +40,6 @@ struct BestTimesManager {
         
         let request: NSFetchRequest<BestTimeEntry> = BestTimeEntry.fetchRequest()
         request.predicate = NSPredicate(format: "difficulty == %@", difficulty)
-        request.returnsObjectsAsFaults = false
         
         do {
             let results = try context.fetch(request)
