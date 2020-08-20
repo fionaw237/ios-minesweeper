@@ -198,7 +198,6 @@ class GameScreenViewController: UIViewController {
         if segue.identifier == Constants.Segues.newHighScore {
             let bestTimesViewController = segue.destination as! BestTimesViewController
             bestTimesViewController.defaultDifficulty = gameManager.difficulty.rawValue
-            bestTimesViewController.bestTimesManager = bestTimesManager
         }
     }
 }
