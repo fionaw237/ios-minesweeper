@@ -72,11 +72,12 @@ class GameScreenViewController: UIViewController {
     }
     
     private func setUpGame() {
-        if let gameDifficulty = gameDifficulty {
-            gameManager = GameManager(difficulty: gameDifficulty)
-            headerView.updateFlagsLabel(gameManager.remainingFlags)
-            headerView.configureResetButtonForNewGame()
+        guard let difficulty = gameDifficulty else {
+            fatalError("Game difficulty is nil")
         }
+        gameManager = GameManager(difficulty: difficulty)
+        headerView.updateFlagsLabel(gameManager.remainingFlags)
+        headerView.configureResetButtonForNewGame()
     }
     
     private func resetGame() {
@@ -130,7 +131,9 @@ class GameScreenViewController: UIViewController {
         if gesture.state == .began {
             let locationOfGesture = gesture.location(in: collectionView)
             let indexPath = collectionView.indexPathForItem(at: locationOfGesture)
-            if let path = indexPath {collectionView(collectionView, longPressForCellAt: path)}
+            if let path = indexPath {
+                collectionView(collectionView, longPressForCellAt: path)
+            }
         }
     }
     
@@ -237,7 +240,7 @@ extension GameScreenViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let gridCell = gameManager.gridCells[indexPath.row][indexPath.section]
-        gridCell.hasMine = gameManager.indexPathsOfMines.contains(indexPath)
+//        gridCell.hasMine = gameManager.indexPathsOfMines.contains(indexPath)
 
         let cell: GameScreenCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! GameScreenCollectionViewCell
         cell.configureFlagImageView(gridCell.getFlagImageName())

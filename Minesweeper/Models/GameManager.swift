@@ -87,7 +87,9 @@ struct GameManager {
         }
         indexPathsOfMines = mineIndexPaths
         
-        //TODO: set hasMine property on relevant cells, rather than doing this in view controller
+        for cell in get1DGridCellsArray() {
+            cell.hasMine = indexPathsOfMines.contains(cell.indexPath) 
+        }
     }
     
     mutating func setCellPropertiesAfterLongPress(for indexPath: IndexPath) {
@@ -175,6 +177,8 @@ struct GameManager {
     func getGridCellsWithMisplacedFlags() -> [GridCell] {
         return get1DGridCellsArray().filter { !$0.hasMine && $0.hasFlag }
     }
+    
+    
 }
 
 
