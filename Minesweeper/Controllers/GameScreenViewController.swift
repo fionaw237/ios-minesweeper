@@ -23,8 +23,12 @@ class GameScreenViewController: UIViewController {
         context: (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     )
     
-    @IBAction func resetButtonPressed(_ sender: Any) {
-        resetGame()
+    
+    //MARK:- Lifecycle methods
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = false
     }
     
     override func viewDidLoad() {
@@ -34,21 +38,38 @@ class GameScreenViewController: UIViewController {
         gameManager.delegate = self
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.isNavigationBarHidden = false
+    
+    //MARK:- Navigation
+        
+    // TODO: implement this with nav bar back button
+    @IBAction func homeButtonPressed(_ sender: Any) {
+        gameManager.timerStarted ? presentWarningAlertForReturnToHome() : self.presentingViewController?.dismiss(animated: true, completion:nil)
     }
     
-    func playSound(_ filename: String) {
-        let soundFile = Bundle.main.path(forResource: filename, ofType: nil)!
-        let url = URL(fileURLWithPath: soundFile)
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.play()
+    func presentWarningAlertForReturnToHome() {
+        let alert: UIAlertController = UIAlertController.init(title: "Warning!",
+                                                              message: "This will quit the game and return to the home screen",
+                                                              preferredStyle: .alert)
+        let dismissAction = UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil)
+        let continueAction = UIAlertAction.init(title: "Quit Game", style: .default) { (action) in
+            self.presentingViewController?.dismiss(animated: true, completion:nil)
         }
-        catch {
-            print("Sound file \(filename) not found")
+        alert.addAction(dismissAction)
+        alert.addAction(continueAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
+        if segue.identifier == Constants.Segues.newHighScore {
+            let bestTimesViewController = segue.destination as! BestTimesViewController
+            bestTimesViewController.defaultDifficulty = gameManager.difficulty.rawValue
         }
+    }
+    
+    //MARK:- Methods handling game reset/setup
+    
+    @IBAction func resetButtonPressed(_ sender: Any) {
+        resetGame()
     }
     
     func setUpGame() {
@@ -71,8 +92,24 @@ class GameScreenViewController: UIViewController {
         headerView.resetTimer()
         gameManager.timerStarted = false
     }
+    
+    
+    //MARK:- Sounds
+    
+    func playSound(_ filename: String) {
+        let soundFile = Bundle.main.path(forResource: filename, ofType: nil)!
+        let url = URL(fileURLWithPath: soundFile)
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer?.play()
+        }
+        catch {
+            print("Sound file \(filename) not found")
+        }
+    }
+    
          
-    // MARK: Long press methods
+    //MARK:- Long press methods
     
     func setUpLongPressGestureRecognizer() {
         let longPressGestureRecogniser = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gesture:)))
@@ -97,24 +134,9 @@ class GameScreenViewController: UIViewController {
             if let path = indexPath {collectionView(collectionView, longPressForCellAt: path)}
         }
     }
-        
-    // TODO: implement this with nav bar back button
-    @IBAction func homeButtonPressed(_ sender: Any) {
-        gameManager.timerStarted ? presentWarningAlertForReturnToHome() : self.presentingViewController?.dismiss(animated: true, completion:nil)
-    }
     
-    func presentWarningAlertForReturnToHome() {
-        let alert: UIAlertController = UIAlertController.init(title: "Warning!",
-                                                              message: "This will quit the game and return to the home screen",
-                                                              preferredStyle: .alert)
-        let dismissAction = UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil)
-        let continueAction = UIAlertAction.init(title: "Quit Game", style: .default) { (action) in
-            self.presentingViewController?.dismiss(animated: true, completion:nil)
-        }
-        alert.addAction(dismissAction)
-        alert.addAction(continueAction)
-        self.present(alert, animated: true, completion: nil)
-    }
+    
+    //MARK:- Methods handling cell display
     
     func showAllUnflaggedMines() {
         for gridCell in gameManager.getGridCellsWithUnflaggedMines() {
@@ -130,9 +152,19 @@ class GameScreenViewController: UIViewController {
         }
     }
     
+    func addFlagsToUncoveredCells() {
+        for indexPath in gameManager.getUncoveredCells() {
+            let collectionViewCell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
+            collectionViewCell.configureFlagImageView(Constants.Images.flag)
+        }
+    }
+    
     func disableUserInteractionOnAllCells() {
         gameManager.get1DGridCellsArray().forEach {$0.uncovered = true}
     }
+    
+    
+    //MARK:- Methods handling game over/game won
     
     func gameOver(clickedCell: GameScreenCollectionViewCell) {
         playSound(Constants.Sounds.gameOver)
@@ -187,22 +219,15 @@ class GameScreenViewController: UIViewController {
         resetGame()
     }
     
-    func addFlagsToUncoveredCells() {
-        for indexPath in gameManager.getUncoveredCells() {
-            let collectionViewCell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
-            collectionViewCell.configureFlagImageView(Constants.Images.flag)
-        }
-    }
-        
-    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
-        if segue.identifier == Constants.Segues.newHighScore {
-            let bestTimesViewController = segue.destination as! BestTimesViewController
-            bestTimesViewController.defaultDifficulty = gameManager.difficulty.rawValue
-        }
-    }
 }
 
-extension GameScreenViewController: UICollectionViewDataSource {
+
+//MARK:- Collection view delegate methods
+
+extension GameScreenViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    // UICollectionViewDataSource
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return gameManager.numberOfSections
     }
@@ -221,16 +246,19 @@ extension GameScreenViewController: UICollectionViewDataSource {
         cell.indexPath = indexPath
         return cell
     }
-}
-
-extension GameScreenViewController: UICollectionViewDelegateFlowLayout {
+    
+    // UICollectionViewDelegateFlowLayout
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = (collectionView.frame.width / CGFloat(gameManager.numberOfItemsInSection)) - 2
         return CGSize(width: cellWidth, height: cellWidth)
     }
 }
 
-extension GameScreenViewController: CellSelectionProtocol {
+
+//MARK:- CellSelectionDelegate methods
+
+extension GameScreenViewController: CellSelectionDelegate {
     func cellButtonPressed(_ indexPath: IndexPath) {
         if (!gameManager.timerStarted) {
             gameManager.randomlyDistributeMines(indexPathOfInitialCell: indexPath)
@@ -262,6 +290,9 @@ extension GameScreenViewController: CellSelectionProtocol {
         gameManager.isGameWon() ? handleGameWon() : playSound(Constants.Sounds.click)
     }
 }
+
+
+//MARK:- GameAlertDelegate methods
 
 extension GameScreenViewController: GameAlertDelegate {
     func presentNoFlagsWarning() {

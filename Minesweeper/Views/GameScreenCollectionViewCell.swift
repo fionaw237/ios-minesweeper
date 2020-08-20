@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CellSelectionProtocol: class {
+protocol CellSelectionDelegate: class {
     func cellButtonPressed(_ indexPath: IndexPath)
 }
 
@@ -19,7 +19,7 @@ class GameScreenCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var button: UIButton!
     
     var indexPath: IndexPath? = nil
-    weak var delegate: CellSelectionProtocol?
+    weak var delegate: CellSelectionDelegate?
     
     override func prepareForReuse() {
         button.isHidden = false
