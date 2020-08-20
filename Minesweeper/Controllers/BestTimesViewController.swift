@@ -14,7 +14,9 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var bestTimesTableView: UITableView!
     @IBOutlet weak var pickerView: UIPickerView!
     
-    var bestTimesManager: BestTimesManager? = nil
+    var bestTimesManager = BestTimesManager(
+        context: (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    )
     
     var pickerData = ["Beginner", "Intermediate", "Advanced"]
     var bestTimes: [BestTimeEntry] = []
@@ -23,15 +25,7 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     var defaultDifficulty = "Beginner"
     
     override func viewDidLoad() {
-        managedObjectContext = appDelegate.persistentContainer.viewContext
-        
-        if bestTimesManager == nil {
-            bestTimesManager = BestTimesManager(
-                context: (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-            )
-        }
-        
-        bestTimes = bestTimesManager!.fetchEntriesForDifficulty(defaultDifficulty)
+        bestTimes = bestTimesManager.fetchEntriesForDifficulty(defaultDifficulty)
         setSelectedDifficultyInPickerView()
     }
     
@@ -79,13 +73,13 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch row {
         case 0:
-            bestTimes = bestTimesManager!.fetchEntriesForDifficulty("Beginner")
+            bestTimes = bestTimesManager.fetchEntriesForDifficulty("Beginner")
             break
         case 1:
-            bestTimes = bestTimesManager!.fetchEntriesForDifficulty("Intermediate")
+            bestTimes = bestTimesManager.fetchEntriesForDifficulty("Intermediate")
             break
         case 2:
-            bestTimes = bestTimesManager!.fetchEntriesForDifficulty("Advanced")
+            bestTimes = bestTimesManager.fetchEntriesForDifficulty("Advanced")
             break
         default:
             break
@@ -101,8 +95,8 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
                                                                       preferredStyle: .alert)
                 let dismissAction = UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil)
                 let continueAction = UIAlertAction.init(title: "Reset All", style: .default) { (action) in
-                    self.bestTimesManager!.resetAllBestTimes()
-                    self.bestTimes = self.bestTimesManager!.fetchEntriesForDifficulty(self.defaultDifficulty)
+                    self.bestTimesManager.resetAllBestTimes()
+                    self.bestTimes = self.bestTimesManager.fetchEntriesForDifficulty(self.defaultDifficulty)
                     self.bestTimesTableView.reloadData()
                 }
                 alert.addAction(dismissAction)
@@ -114,7 +108,7 @@ class BestTimesViewController: UIViewController, UITableViewDelegate, UITableVie
     
     private func scoresAreNotEmpty(_ context: NSManagedObjectContext) -> Bool {
         for difficulty in pickerData {
-            if !bestTimesManager!.fetchEntriesForDifficulty(difficulty).isEmpty {
+            if !bestTimesManager.fetchEntriesForDifficulty(difficulty).isEmpty {
                 return true
             }
         }

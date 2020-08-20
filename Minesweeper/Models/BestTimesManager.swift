@@ -12,7 +12,7 @@ import CoreData
 struct BestTimesManager {
     
     var context: NSManagedObjectContext? = nil
-    let numberOfHighScoresToDisplay = 10
+    let numberOfHighScoresToDisplay = Constants.HighScores.numberOfHighScoresToDisplay
     
     func resetAllBestTimes() {
         let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "BestTimeEntry")
