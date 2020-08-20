@@ -11,72 +11,85 @@ import CoreData
 
 struct BestTimesManager {
     
-    var managedObjectContext: NSManagedObjectContext? = nil
-    let numberOfHighScoresToDisplay = 10
+    var context: NSManagedObjectContext? = nil
+    let numberOfHighScoresToDisplay = Constants.HighScores.numberOfHighScoresToDisplay
     
-    static func resetAllBestTimes(_ context: NSManagedObjectContext) {
+    func resetAllBestTimes() {
+        
         let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "BestTimeEntry")
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
-        do
-        {
+        
+        guard let context = context else {
+            fatalError("The managed object context is nil")
+        }
+        
+        do {
             try context.execute(deleteRequest)
             try context.save()
         }
-        catch
-        {
-            print ("There was an error deleting best times")
+        catch {
+            print ("Error deleting best times: \(error)")
         }
     }
     
-    static func fetchEntriesForDifficulty(_ difficulty: String, context: NSManagedObjectContext?) -> [BestTimeEntry] {
-        if let ctx = context {
-            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "BestTimeEntry")
-            request.predicate = NSPredicate(format: "difficulty == %@", difficulty)
-            request.returnsObjectsAsFaults = false
-            do {
-                let results = try ctx.fetch(request) as! [BestTimeEntry]
-                return results.sorted(by: {$0.time < $1.time})
-            } catch {
-               print("fetch failed for high scores")
-            }
+    func fetchEntriesForDifficulty(_ difficulty: String) -> [BestTimeEntry] {
+        
+        guard let context = context else {
+            fatalError("The managed object context is nil")
         }
+        
+        let request: NSFetchRequest<BestTimeEntry> = BestTimeEntry.fetchRequest()
+        request.predicate = NSPredicate(format: "difficulty == %@", difficulty)
+        
+        do {
+            let results = try context.fetch(request)
+            return results.sorted(by: {$0.time < $1.time})
+        } catch {
+            print("Error fetching high scores: \(error)")
+        }
+        
         return []
     }
     
     func isHighScore(_ winningTime: Int, difficulty: GameDifficulty) -> Bool {
-        let highScores = BestTimesManager.fetchEntriesForDifficulty(difficulty.rawValue, context: managedObjectContext)
+        
+        let highScores = fetchEntriesForDifficulty(difficulty.rawValue)
 
         if (highScores.count < numberOfHighScoresToDisplay) {return true}
 
         if let lowestStoredEntry = highScores.last {
             return winningTime < lowestStoredEntry.time
         }
+        
         return false
     }
     
     func storeHighScore(time: Int, name: String, difficulty: GameDifficulty) {
-        if let context = managedObjectContext {
-            let highScores = BestTimesManager.fetchEntriesForDifficulty(difficulty.rawValue, context: managedObjectContext)
-            if highScores.count >= numberOfHighScoresToDisplay {
-                // Update the lowest score with the new values
-                if let lowestScore = highScores.last {
-                    lowestScore.name = name
-                    lowestScore.time = Int32(time)
-                }
-            } else {
-                // No low score exists - create new entry
-                let entity = NSEntityDescription.entity(forEntityName: "BestTimeEntry", in: context)
-                let newEntry = NSManagedObject(entity: entity!, insertInto: context)
-                newEntry.setValue(name, forKey: "name")
-                newEntry.setValue(time, forKey: "time")
-                newEntry.setValue(difficulty.rawValue, forKey: "difficulty")
+        
+        guard let context = context else {
+            fatalError("The managed object context is nil")
+        }
+        
+        let highScores = fetchEntriesForDifficulty(difficulty.rawValue)
+        
+        if highScores.count >= numberOfHighScoresToDisplay {
+            // Update the lowest score with the new values
+            if let lowestScore = highScores.last {
+                lowestScore.name = name
+                lowestScore.time = Int32(time)
             }
-            
-            do {
-                try context.save()
-            } catch {
-                print("Failed saving")
-            }
+        } else {
+            // No low score exists - create new entry
+            let newEntry = BestTimeEntry(context: context)
+            newEntry.name = name
+            newEntry.time = Int32(time)
+            newEntry.difficulty = difficulty.rawValue
+        }
+        
+        do {
+            try context.save()
+        } catch {
+            print("Error saving to context: \(error)")
         }
     }
     

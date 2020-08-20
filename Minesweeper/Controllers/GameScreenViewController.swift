@@ -19,7 +19,9 @@ class GameScreenViewController: UIViewController {
     var managedObjectContext: NSManagedObjectContext?
     var audioPlayer: AVAudioPlayer?
     var gameManager = GameManager()
-    var bestTimesManager = BestTimesManager()
+    var bestTimesManager = BestTimesManager(
+        context: (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    )
     
     @IBAction func resetButtonPressed(_ sender: Any) {
         resetGame()
@@ -29,9 +31,6 @@ class GameScreenViewController: UIViewController {
         super.viewDidLoad()
         setUpGame()
         setUpLongPressGestureRecognizer()
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        managedObjectContext = appDelegate.persistentContainer.viewContext
-        bestTimesManager.managedObjectContext = managedObjectContext
         gameManager.delegate = self
     }
     
@@ -157,30 +156,30 @@ class GameScreenViewController: UIViewController {
     }
     
     func displayGameWonAlert(winningTime: Int) {
+        
+        let newHighScore = bestTimesManager.isHighScore(winningTime, difficulty: gameManager.difficulty)
+        
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = bestTimesManager.isHighScore(winningTime, difficulty: gameManager.difficulty) ? "New high score!" : "You won!"
+        alert.title = newHighScore ? "New high score!" : "You won!"
         alert.message = "Your time was \(winningTime) seconds"
         
-        if (bestTimesManager.isHighScore(winningTime, difficulty: gameManager.difficulty)) {
-            
-            alert.addTextField { (textField) in
+        if newHighScore {
+            alert.addTextField { textField in
                 textField.placeholder = "Enter your name"
             }
             
-            alert.addAction(UIAlertAction(title: "Submit", style: .default, handler: { (action) in
-                if let textfields = alert.textFields {
-                    if let enteredText = textfields[0].text {
-                        let name = (enteredText == "") ? "Anonymous" : enteredText
-//                        self.removeLastHighScoreEntry()
-                        self.bestTimesManager.storeHighScore(time: winningTime, name: name, difficulty: self.gameManager.difficulty)
-                        self.performSegue(withIdentifier: Constants.Segues.newHighScore, sender: nil)
-                    }
+            alert.addAction(UIAlertAction(title: "Submit", style: .default, handler: { action in
+                if let enteredText = alert.textFields?[0].text {
+                    let name = (enteredText == "") ? "Anonymous" : enteredText
+                    self.bestTimesManager.storeHighScore(time: winningTime, name: name, difficulty: self.gameManager.difficulty)
+                    self.performSegue(withIdentifier: Constants.Segues.newHighScore, sender: nil)
                 }
             }))
         } else {
             alert.addAction(UIAlertAction(title: "New Game", style: .default, handler: newGameHandler))
             alert.addAction(UIAlertAction(title: "Okay", style: .cancel, handler: nil))
         }
+        
         present(alert, animated: true)
     }
     

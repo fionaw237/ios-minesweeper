@@ -30,4 +30,8 @@ struct Constants {
         static let viewHighScores = "bestTimesSegue"
         static let goToGameScreen = "goToGameScreenSegue"
     }
+    
+    struct HighScores {
+        static let numberOfHighScoresToDisplay = 10
+    }
 }
