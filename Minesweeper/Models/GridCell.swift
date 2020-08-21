@@ -22,12 +22,12 @@ class GridCell {
         return !hasMine && hasFlag
     }
     
-    init(indexPath: IndexPath) {
-        self.indexPath = indexPath
+    var flagImageName: String? {
+        return hasFlag ? Constants.Images.flag : nil
     }
     
-    func getFlagImageName() -> String? {
-        return hasFlag ? Constants.Images.flag : nil
+    init(indexPath: IndexPath) {
+        self.indexPath = indexPath
     }
 }
 

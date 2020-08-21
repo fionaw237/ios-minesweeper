@@ -125,7 +125,7 @@ class GameScreenViewController: UIViewController {
         gameManager.setCellPropertiesAfterLongPress(for: indexPath)
         
         let cell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
-        cell.configureFlagImageView(gridCell.getFlagImageName())
+        cell.configureFlagImageView(gridCell.flagImageName)
         
         headerView.updateFlagsLabel(gameManager.remainingFlags)
         playSound(Constants.Sounds.flag)
@@ -243,7 +243,7 @@ extension GameScreenViewController: UICollectionViewDataSource, UICollectionView
         let gridCell = gameManager.gridCellForIndexPath(indexPath)
         
         let cell: GameScreenCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! GameScreenCollectionViewCell
-        cell.configureFlagImageView(gridCell.getFlagImageName())
+        cell.configureFlagImageView(gridCell.flagImageName)
         cell.delegate = self
         cell.indexPath = indexPath
         return cell
