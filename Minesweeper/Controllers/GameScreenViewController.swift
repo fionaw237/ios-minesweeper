@@ -118,7 +118,7 @@ class GameScreenViewController: UIViewController {
     }
     
     private func collectionView(_ collectionView: UICollectionView, longPressForCellAt indexPath: IndexPath) {
-        let gridCell = gameManager.gridCells[indexPath.row][indexPath.section]
+        let gridCell = gameManager.gridCellForIndexPath(indexPath)
         if gridCell.uncovered {
             return
         }
@@ -166,7 +166,7 @@ class GameScreenViewController: UIViewController {
     }
     
     private func disableUserInteractionOnAllCells() {
-        gameManager.get1DGridCellsArray().forEach {$0.uncovered = true}
+        gameManager.gridCells.forEach {$0.uncovered = true}
     }
     
     
@@ -243,10 +243,8 @@ extension GameScreenViewController: UICollectionViewDataSource, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let gridCell = gameManager.gridCells[indexPath.row][indexPath.section]
+        let gridCell = gameManager.gridCellForIndexPath(indexPath)
         
-        let newCell = gameManager.newCells[gameManager.arrayPositonFromIndexPath(indexPath)]
-
         let cell: GameScreenCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! GameScreenCollectionViewCell
         cell.configureFlagImageView(gridCell.getFlagImageName())
         cell.delegate = self
@@ -274,7 +272,7 @@ extension GameScreenViewController: CellSelectionDelegate {
             headerView.timer = Timer.scheduledTimer(timeInterval: 1, target: headerView!, selector: #selector(headerView.updateTimer), userInfo: nil, repeats: true)
         }
         
-        let gridCell = gameManager.gridCells[indexPath.row][indexPath.section]
+        let gridCell = gameManager.gridCellForIndexPath(indexPath)
         if gridCell.hasFlag || gridCell.uncovered {return}
         gridCell.uncovered = true
         

@@ -14,8 +14,7 @@ protocol GameAlertDelegate {
 struct GameManager {
     var delegate: GameAlertDelegate?
     
-    var gridCells: [[GridCell]] = []
-    var newCells: [GridCell] = []
+    var gridCells: [GridCell] = []
     var difficulty = GameDifficulty.Beginner
     
     var numberOfSections = 0
@@ -30,7 +29,7 @@ struct GameManager {
     private var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
     
     private var clickedCellCount: Int {
-        return get1DGridCellsArray().filter {
+        return gridCells.filter {
             $0.hasFlag || $0.uncovered
         }.count
     }
@@ -88,13 +87,14 @@ struct GameManager {
         }
         indexPathsOfMines = mineIndexPaths
         
-        for cell in get1DGridCellsArray() {
-            cell.hasMine = indexPathsOfMines.contains(cell.indexPath) 
+        for cell in gridCells {
+            cell.hasMine = indexPathsOfMines.contains(cell.indexPath)
         }
+        
     }
     
     mutating func setCellPropertiesAfterLongPress(for indexPath: IndexPath) {
-        let gridCell = gridCells[indexPath.row][indexPath.section]
+        let gridCell = gridCellForIndexPath(indexPath)
         if (remainingFlags == 0 && !gridCell.hasFlag) {
             delegate?.presentNoFlagsWarning()
         } else if (remainingFlags > 0 && !gridCell.hasFlag) {
@@ -109,18 +109,10 @@ struct GameManager {
         }
     }
     
-    private func getTotalNumberOfCells() -> Int {
-        return gridCells.flatMap{$0}.count
-    }
-    
     func numberOfMinesInVicinityOfCell(_ indexPath: IndexPath) -> Int {
         return getValidIndexPathsSurroundingCell(indexPath).filter {
-            gridCells[$0.row][$0.section].hasMine
+            gridCellForIndexPath($0).hasMine
         }.count
-    }
-    
-    func get1DGridCellsArray() -> [GridCell] {
-        return gridCells.flatMap({$0})
     }
     
     func findCellsToReveal(_ indexPath: IndexPath) -> [IndexPath: Int] {
@@ -143,8 +135,7 @@ struct GameManager {
                         if minesInVicinity == 0 {
                             indexPathsWithZeroMines.insert(adjacentIndexPath)
                         }
-                        
-                        let gridCell = gridCells[adjacentIndexPath.row][adjacentIndexPath.section]
+                        let gridCell = gridCellForIndexPath(adjacentIndexPath)
                         gridCell.uncovered = true
                         
                         if !gridCell.hasFlag {
@@ -158,7 +149,7 @@ struct GameManager {
     
     func getUncoveredCells() -> [IndexPath] {
         var indexPathsOfUncoveredCells = [IndexPath]()
-        for gridCell in get1DGridCellsArray() {
+        for gridCell in gridCells {
             if !gridCell.uncovered {
                 gridCell.hasFlag = true
                 indexPathsOfUncoveredCells.append(gridCell.indexPath)
@@ -168,28 +159,28 @@ struct GameManager {
     }
     
     func isGameWon() -> Bool {
-        return clickedCellCount == getTotalNumberOfCells() - remainingFlags
+        return clickedCellCount == gridCells.count - remainingFlags
     }
     
     func getGridCellsWithUnflaggedMines() -> [GridCell] {
-        return get1DGridCellsArray().filter { $0.hasMine && !$0.hasFlag }
+        return gridCells.filter { $0.hasMine && !$0.hasFlag }
     }
     
     func getGridCellsWithMisplacedFlags() -> [GridCell] {
-        return get1DGridCellsArray().filter { !$0.hasMine && $0.hasFlag }
+        return gridCells.filter { !$0.hasMine && $0.hasFlag }
     }
     
-    func arrayPositonFromIndexPath(_ indexpath: IndexPath) -> Int {
+    func arrayPositionForIndexPath(_ indexpath: IndexPath) -> Int {
         return (indexpath.section * numberOfItemsInSection) + indexpath.row
+    }
+    
+    func gridCellForIndexPath(_ indexPath: IndexPath) -> GridCell {
+        return gridCells[arrayPositionForIndexPath(indexPath)]
     }
     
 }
 
-
-
-
 extension GameManager {
-    
     // Additional initialiser to default one that comes with structs
     init(difficulty: GameDifficulty) {
         self.difficulty = difficulty
@@ -199,21 +190,11 @@ extension GameManager {
         numberOfMines = getNumberOfMines()
         
         remainingFlags = numberOfMines
-
-        
-        for row in 0..<numberOfItemsInSection {
-            var newRow: [GridCell] = []
-            for section in 0..<numberOfSections {
-                newRow.append(GridCell(indexPath: IndexPath(row: row, section: section)))
-            }
-            gridCells.append(newRow)
-        }
         
         for section in 0..<numberOfSections {
             for item in 0..<numberOfItemsInSection {
-                newCells.append(GridCell(indexPath: IndexPath(row: item, section: section)))
+                gridCells.append(GridCell(indexPath: IndexPath(row: item, section: section)))
             }
-        }      
-        
+        }
     }
 }
