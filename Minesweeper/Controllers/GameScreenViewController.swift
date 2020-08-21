@@ -119,10 +119,14 @@ class GameScreenViewController: UIViewController {
     
     private func collectionView(_ collectionView: UICollectionView, longPressForCellAt indexPath: IndexPath) {
         let gridCell = gameManager.gridCells[indexPath.row][indexPath.section]
-        if gridCell.uncovered {return}
+        if gridCell.uncovered {
+            return
+        }
         gameManager.setCellPropertiesAfterLongPress(for: indexPath)
+        
         let cell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
         cell.configureFlagImageView(gridCell.getFlagImageName())
+        
         headerView.updateFlagsLabel(gameManager.remainingFlags)
         playSound(Constants.Sounds.flag)
     }
@@ -240,7 +244,6 @@ extension GameScreenViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let gridCell = gameManager.gridCells[indexPath.row][indexPath.section]
-//        gridCell.hasMine = gameManager.indexPathsOfMines.contains(indexPath)
 
         let cell: GameScreenCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! GameScreenCollectionViewCell
         cell.configureFlagImageView(gridCell.getFlagImageName())
