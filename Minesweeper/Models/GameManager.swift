@@ -150,31 +150,30 @@ struct GameManager {
     }
     
     func findCellsToReveal(_ indexPath: IndexPath) -> [IndexPath: Int] {
+        
         var indexPathsChecked: Set<IndexPath> = [indexPath]
         var indexPathsWithZeroMines: Set<IndexPath> = [indexPath]
-        
         var indexPathsToReveal = [IndexPath: Int]()
         
         while !indexPathsWithZeroMines.isEmpty {
-            var indexPathsToCheck = Set<IndexPath>()
-            indexPathsWithZeroMines.forEach {indexPathsToCheck.insert($0)}
+            let indexPathsToCheck = indexPathsWithZeroMines.map { $0 }
             indexPathsWithZeroMines.removeAll()
-            indexPathsToCheck.forEach { pathToCheck in
-                let adjacentIndexPaths = validIndexPathsSurroundingCell(pathToCheck)
+            
+            for pathToCheck in indexPathsToCheck {
                 // loop through adjacent index paths which have not already been checked
-                adjacentIndexPaths.filter {!indexPathsChecked.contains($0)}
-                    .forEach { adjacentIndexPath in
-                        let minesInVicinity = numberOfMinesInVicinityOfCell(adjacentIndexPath)
-                        indexPathsChecked.insert(adjacentIndexPath)
-                        if minesInVicinity == 0 {
-                            indexPathsWithZeroMines.insert(adjacentIndexPath)
-                        }
-                        let gridCell = gridCellForIndexPath(adjacentIndexPath)
-                        gridCell.uncovered = true
-                        
-                        if !gridCell.hasFlag {
-                            indexPathsToReveal[adjacentIndexPath] = minesInVicinity
-                        }
+                for path in validIndexPathsSurroundingCell(pathToCheck) where !indexPathsChecked.contains(path) {
+                    indexPathsChecked.insert(path)
+
+                    let minesInVicinity = numberOfMinesInVicinityOfCell(path)
+                    if minesInVicinity == 0 {
+                        indexPathsWithZeroMines.insert(path)
+                    }
+                    let gridCell = gridCellForIndexPath(path)
+                    gridCell.uncovered = true
+                    
+                    if !gridCell.hasFlag {
+                        indexPathsToReveal[path] = minesInVicinity
+                    }
                 }
             }
         }

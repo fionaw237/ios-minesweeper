@@ -258,23 +258,19 @@ extension GameScreenViewController: UICollectionViewDataSource, UICollectionView
 }
 
 
-//MARK:- CellSelectionDelegate methods
+//MARK:- CellSelectionDelegate and related helper methods
 
 extension GameScreenViewController: CellSelectionDelegate {
     
     func cellButtonPressed(_ indexPath: IndexPath) {
         if (!gameManager.timerStarted) {
-            gameManager.randomlyDistributeMines(indexPathOfInitialCell: indexPath)
-            gameManager.timerStarted = true
-            headerView.timer = Timer.scheduledTimer(timeInterval: 1, target: headerView!, selector: #selector(headerView.updateTimer), userInfo: nil, repeats: true)
+            handleFirstCellPressed(indexPath)
         }
         
         let gridCell = gameManager.gridCellForIndexPath(indexPath)
-        
         if gridCell.hasFlag || gridCell.uncovered {
             return
         }
-        
         gridCell.uncovered = true
         
         let collectionViewCell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
@@ -286,15 +282,29 @@ extension GameScreenViewController: CellSelectionDelegate {
         
         let minesInVicinity = gameManager.numberOfMinesInVicinityOfCell(indexPath)
         if minesInVicinity == 0 {
-            let indexPathsToRevealDict = gameManager.findCellsToReveal(indexPath)
-            for item in indexPathsToRevealDict {
-                let cellToReveal = collectionView.cellForItem(at: item.key) as! GameScreenCollectionViewCell
-                cellToReveal.configureForNumberOfMinesInVicinity(item.value)
-            }
+            handleZeroMinesInVicinityOfCell(at: indexPath)
         }
+        
         collectionViewCell.configureForNumberOfMinesInVicinity(minesInVicinity)
         gameManager.isGameWon() ? handleGameWon() : playSound(Constants.Sounds.click)
     }
+    
+    private func handleFirstCellPressed(_ indexPath: IndexPath) {
+        gameManager.randomlyDistributeMines(indexPathOfInitialCell: indexPath)
+        gameManager.timerStarted = true
+        headerView.timer = Timer.scheduledTimer(timeInterval: 1, target: headerView!, selector: #selector(headerView.updateTimer), userInfo: nil, repeats: true)
+    }
+    
+    private func handleZeroMinesInVicinityOfCell(at indexPath: IndexPath) {
+        // Create a dictionary with key = indexPath, value = number of mines in vicinity of that indexPath
+        let indexPathsToRevealDict = gameManager.findCellsToReveal(indexPath)
+        
+        indexPathsToRevealDict.forEach { (indexPath, numberOfMines) in
+            let cellToReveal = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
+            cellToReveal.configureForNumberOfMinesInVicinity(numberOfMines)
+        }
+    }
+    
 }
 
 
