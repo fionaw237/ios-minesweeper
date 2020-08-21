@@ -61,6 +61,18 @@ struct GameManager {
         }
     }
     
+    mutating func addFlag(to gridCell: GridCell) {
+        gridCell.hasFlag = true
+        indexPathsOfFlags.insert(gridCell.indexPath)
+        remainingFlags -= 1
+    }
+    
+    mutating func removeFlag(from gridCell: GridCell) {
+        gridCell.hasFlag = false
+        indexPathsOfFlags.remove(gridCell.indexPath)
+        remainingFlags += 1
+    }
+    
     private func isOutOfBounds(row: Int, section: Int) -> Bool {
         return !(0..<numberOfItemsInSection).contains(row) || !(0..<numberOfSections).contains(section)
     }
@@ -69,49 +81,61 @@ struct GameManager {
         return (row == indexPath.row) && (section == indexPath.section)
     }
     
-    private func getValidIndexPathsSurroundingCell(_ indexPath: IndexPath) -> Array<IndexPath> {
+    private func isValidIndexPath(_ indexPath: IndexPath, row: Int, section: Int) -> Bool {
+        return !isOutOfBounds(row: row, section: section) &&
+            !isAtSelectedIndexPath(indexPath: indexPath, row: row, section: section)
+    }
+    
+    private func surroundingRows(for indexPath: IndexPath) -> ClosedRange<Int> {
+        return (indexPath.row - 1)...(indexPath.row + 1)
+    }
+    
+    private func surroundingSections(for indexPath: IndexPath) -> ClosedRange<Int> {
+        return (indexPath.section - 1)...(indexPath.section + 1)
+    }
+    
+    private func validIndexPathsSurroundingCell(_ indexPath: IndexPath) -> Array<IndexPath> {
+        
         var validIndexPaths = Array<IndexPath>()
-        for i in (indexPath.row - 1)...(indexPath.row + 1) {
-            for j in (indexPath.section - 1)...(indexPath.section + 1) {
-                if !isOutOfBounds(row: i, section: j) && !isAtSelectedIndexPath(indexPath: indexPath, row: i, section: j) {
-                    validIndexPaths.append(IndexPath.init(row: i, section: j))
-                }
+        
+        for row in surroundingRows(for: indexPath) {
+            for section in surroundingSections(for: indexPath)
+                where isValidIndexPath(indexPath, row: row, section: section) {
+                validIndexPaths.append(IndexPath.init(row: row, section: section))
             }
         }
+        
         return validIndexPaths
     }
     
     mutating func randomlyDistributeMines(indexPathOfInitialCell: IndexPath) {
-        var mineIndexPaths = Set<IndexPath>()
-        while mineIndexPaths.count < numberOfMines {
+        
+        while indexPathsOfMines.count < numberOfMines {
             let randomRow = Int.random(in: 0...(numberOfItemsInSection - 1))
             let randomSection = Int.random(in: 0...(numberOfSections - 1))
             let randomIndexPath = IndexPath.init(row: randomRow, section: randomSection)
+            
             if randomIndexPath != indexPathOfInitialCell {
-                mineIndexPaths.insert(randomIndexPath)
+                indexPathsOfMines.insert(randomIndexPath)
             }
         }
-        indexPathsOfMines = mineIndexPaths
         
         for cell in gridCells {
             cell.hasMine = indexPathsOfMines.contains(cell.indexPath)
         }
-        
     }
     
     mutating func setCellPropertiesAfterLongPress(for indexPath: IndexPath) {
+        
         let gridCell = gridCellForIndexPath(indexPath)
+        
         if (remainingFlags == 0 && !gridCell.hasFlag) {
             delegate?.presentNoFlagsWarning()
         } else if (remainingFlags > 0 && !gridCell.hasFlag) {
-            gridCell.hasFlag = true
-            indexPathsOfFlags.insert(indexPath)
-            remainingFlags -= 1
+            addFlag(to: gridCell)
         }
         else if gridCell.hasFlag {
-            gridCell.hasFlag = false
-            indexPathsOfFlags.remove(indexPath)
-            remainingFlags += 1
+            removeFlag(from: gridCell)
         }
     }
     
@@ -120,7 +144,7 @@ struct GameManager {
     }
     
     func numberOfMinesInVicinityOfCell(_ indexPath: IndexPath) -> Int {
-        return getValidIndexPathsSurroundingCell(indexPath).filter {
+        return validIndexPathsSurroundingCell(indexPath).filter {
             gridCellForIndexPath($0).hasMine
         }.count
     }
@@ -136,7 +160,7 @@ struct GameManager {
             indexPathsWithZeroMines.forEach {indexPathsToCheck.insert($0)}
             indexPathsWithZeroMines.removeAll()
             indexPathsToCheck.forEach { pathToCheck in
-                let adjacentIndexPaths = getValidIndexPathsSurroundingCell(pathToCheck)
+                let adjacentIndexPaths = validIndexPathsSurroundingCell(pathToCheck)
                 // loop through adjacent index paths which have not already been checked
                 adjacentIndexPaths.filter {!indexPathsChecked.contains($0)}
                     .forEach { adjacentIndexPath in
@@ -155,10 +179,6 @@ struct GameManager {
             }
         }
         return indexPathsToReveal
-    }
-    
-    func addFlag(to gridCell: GridCell) {
-        gridCell.hasFlag = true
     }
     
     func isGameWon() -> Bool {
