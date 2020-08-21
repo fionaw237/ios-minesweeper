@@ -244,6 +244,8 @@ extension GameScreenViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let gridCell = gameManager.gridCells[indexPath.row][indexPath.section]
+        
+        let newCell = gameManager.newCells[gameManager.arrayPositonFromIndexPath(indexPath)]
 
         let cell: GameScreenCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier:"CollectionViewCell", for: indexPath) as! GameScreenCollectionViewCell
         cell.configureFlagImageView(gridCell.getFlagImageName())

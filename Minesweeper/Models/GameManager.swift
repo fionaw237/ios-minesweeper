@@ -15,6 +15,7 @@ struct GameManager {
     var delegate: GameAlertDelegate?
     
     var gridCells: [[GridCell]] = []
+    var newCells: [GridCell] = []
     var difficulty = GameDifficulty.Beginner
     
     var numberOfSections = 0
@@ -178,8 +179,13 @@ struct GameManager {
         return get1DGridCellsArray().filter { !$0.hasMine && $0.hasFlag }
     }
     
+    func arrayPositonFromIndexPath(_ indexpath: IndexPath) -> Int {
+        return (indexpath.section * numberOfItemsInSection) + indexpath.row
+    }
     
 }
+
+
 
 
 extension GameManager {
@@ -202,5 +208,12 @@ extension GameManager {
             }
             gridCells.append(newRow)
         }
+        
+        for section in 0..<numberOfSections {
+            for item in 0..<numberOfItemsInSection {
+                newCells.append(GridCell(indexPath: IndexPath(row: item, section: section)))
+            }
+        }      
+        
     }
 }
