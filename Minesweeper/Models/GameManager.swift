@@ -14,51 +14,43 @@ protocol GameAlertDelegate {
 struct GameManager {
     var delegate: GameAlertDelegate?
     
-    var gridCells: [[GridCell]] = []
-    var difficulty: GameDifficulty = .Beginner
+    var gridCells: [GridCell] = []
+    var difficulty = GameDifficulty.Beginner
     
-    var numberOfSections = 0
-    var numberOfItemsInSection = 0
+    var numberOfSections = 8
+    var numberOfItemsInSection = 9
     var numberOfMines = 0
     var remainingFlags = 0
     
     var timerStarted = false
     
-    var indexPathsOfMines = Set<IndexPath>()
-    var indexPathsOfFlags = Set<IndexPath>()
-    var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
+    private var indexPathsOfMines = Set<IndexPath>()
+    private var indexPathsOfFlags = Set<IndexPath>()
+    private var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
     
-    var clickedCellCount: Int {
-        return get1DGridCellsArray().filter {
+    
+    //MARK:- Computed properties for grid cells
+        
+    var gridCellsWithUnflaggedMine: [GridCell] {
+        return gridCells.filter { $0.hasUnflaggedMine }
+    }
+    
+    var gridCellsWithMisplacedFlag: [GridCell] {
+        return gridCells.filter { $0.hasMisplacedFlag }
+    }
+    
+    var uncoveredCells: [GridCell] {
+        return gridCells.filter { !$0.uncovered }
+    }
+    
+    private var clickedCellCount: Int {
+        return gridCells.filter {
             $0.hasFlag || $0.uncovered
         }.count
     }
     
-    func getNumberOfRows() -> Int {
-        return 8
-        //        switch gameDifficulty {
-        //        case .Beginner:
-        //            return NumberOfItemsInSection.Beginner.rawValue
-        //        case .Intermediate:
-        //            return NumberOfItemsInSection.Intermediate.rawValue
-        //        case .Advanced:
-        //            return NumberOfItemsInSection.Advanced.rawValue
-        //        }
-    }
     
-    func getNumberOfColumns() -> Int {
-        return 9
-        //        switch gameDifficulty {
-        //        case .Beginner:
-        //            return NumberOfSections.Beginner.rawValue
-        //        case .Intermediate:
-        //            return NumberOfSections.Intermediate.rawValue
-        //        case .Advanced:
-        //            return NumberOfSections.Advanced.rawValue
-        //        }
-    }
-    
-    func getNumberOfMines() -> Int {
+    private func getNumberOfMines() -> Int {
         switch difficulty {
         case .Beginner:
             return NumberOfMines.Beginner.rawValue
@@ -69,142 +61,151 @@ struct GameManager {
         }
     }
     
-    func isOutOfBounds(row: Int, section: Int) -> Bool {
-        return row < 0 || section < 0 || row >= numberOfItemsInSection || section >= numberOfSections
+    mutating func addFlag(to gridCell: GridCell) {
+        gridCell.hasFlag = true
+        indexPathsOfFlags.insert(gridCell.indexPath)
+        remainingFlags -= 1
     }
     
-    func isAtSelectedIndexPath(indexPath: IndexPath, row: Int, section: Int) -> Bool {
-        return (row == indexPath.row && section == indexPath.section)
+    mutating func removeFlag(from gridCell: GridCell) {
+        gridCell.hasFlag = false
+        indexPathsOfFlags.remove(gridCell.indexPath)
+        remainingFlags += 1
     }
     
-    func getValidIndexPathsSurroundingCell(_ indexPath: IndexPath) -> Array<IndexPath> {
+    private func isOutOfBounds(row: Int, section: Int) -> Bool {
+        return !(0..<numberOfItemsInSection).contains(row) || !(0..<numberOfSections).contains(section)
+    }
+    
+    private func isAtSelectedIndexPath(indexPath: IndexPath, row: Int, section: Int) -> Bool {
+        return (row == indexPath.row) && (section == indexPath.section)
+    }
+    
+    private func isValidIndexPath(_ indexPath: IndexPath, row: Int, section: Int) -> Bool {
+        return !isOutOfBounds(row: row, section: section) &&
+            !isAtSelectedIndexPath(indexPath: indexPath, row: row, section: section)
+    }
+    
+    private func surroundingRows(for indexPath: IndexPath) -> ClosedRange<Int> {
+        return (indexPath.row - 1)...(indexPath.row + 1)
+    }
+    
+    private func surroundingSections(for indexPath: IndexPath) -> ClosedRange<Int> {
+        return (indexPath.section - 1)...(indexPath.section + 1)
+    }
+    
+    private func validIndexPathsSurroundingCell(_ indexPath: IndexPath) -> Array<IndexPath> {
+        
         var validIndexPaths = Array<IndexPath>()
-        for i in (indexPath.row - 1)...(indexPath.row + 1) {
-            for j in (indexPath.section - 1)...(indexPath.section + 1) {
-                if !isOutOfBounds(row: i, section: j) && !isAtSelectedIndexPath(indexPath: indexPath, row: i, section: j) {
-                    validIndexPaths.append(IndexPath.init(row: i, section: j))
-                }
+        
+        for row in surroundingRows(for: indexPath) {
+            for section in surroundingSections(for: indexPath)
+                where isValidIndexPath(indexPath, row: row, section: section) {
+                validIndexPaths.append(IndexPath.init(row: row, section: section))
             }
         }
+        
         return validIndexPaths
     }
     
     mutating func randomlyDistributeMines(indexPathOfInitialCell: IndexPath) {
-        var mineIndexPaths = Set<IndexPath>()
-        while mineIndexPaths.count < numberOfMines {
+        
+        while indexPathsOfMines.count < numberOfMines {
             let randomRow = Int.random(in: 0...(numberOfItemsInSection - 1))
             let randomSection = Int.random(in: 0...(numberOfSections - 1))
             let randomIndexPath = IndexPath.init(row: randomRow, section: randomSection)
+            
             if randomIndexPath != indexPathOfInitialCell {
-                mineIndexPaths.insert(randomIndexPath)
+                indexPathsOfMines.insert(randomIndexPath)
             }
         }
-        indexPathsOfMines = mineIndexPaths
+        
+        for cell in gridCells {
+            cell.hasMine = indexPathsOfMines.contains(cell.indexPath)
+        }
     }
     
     mutating func setCellPropertiesAfterLongPress(for indexPath: IndexPath) {
-        let gridCell = gridCells[indexPath.row][indexPath.section]
+        
+        let gridCell = gridCellForIndexPath(indexPath)
+        
         if (remainingFlags == 0 && !gridCell.hasFlag) {
             delegate?.presentNoFlagsWarning()
         } else if (remainingFlags > 0 && !gridCell.hasFlag) {
-            gridCell.hasFlag = true
-            indexPathsOfFlags.insert(indexPath)
-            remainingFlags -= 1
+            addFlag(to: gridCell)
         }
         else if gridCell.hasFlag {
-            gridCell.hasFlag = false
-            indexPathsOfFlags.remove(indexPath)
-            remainingFlags += 1
+            removeFlag(from: gridCell)
         }
     }
     
-    func getTotalNumberOfCells() -> Int {
-        return gridCells.flatMap{$0}.count
+    func disableUserInteractionOnAllCells() {
+        gridCells.forEach { $0.uncovered = true }
     }
     
     func numberOfMinesInVicinityOfCell(_ indexPath: IndexPath) -> Int {
-        return getValidIndexPathsSurroundingCell(indexPath).filter {
-            gridCells[$0.row][$0.section].hasMine
+        return validIndexPathsSurroundingCell(indexPath).filter {
+            gridCellForIndexPath($0).hasMine
         }.count
     }
     
-    func get1DGridCellsArray() -> [GridCell] {
-        return gridCells.flatMap({$0})
-    }
-    
     func findCellsToReveal(_ indexPath: IndexPath) -> [IndexPath: Int] {
+        
         var indexPathsChecked: Set<IndexPath> = [indexPath]
         var indexPathsWithZeroMines: Set<IndexPath> = [indexPath]
-        
         var indexPathsToReveal = [IndexPath: Int]()
         
         while !indexPathsWithZeroMines.isEmpty {
-            var indexPathsToCheck = Set<IndexPath>()
-            indexPathsWithZeroMines.forEach {indexPathsToCheck.insert($0)}
+            let indexPathsToCheck = indexPathsWithZeroMines.map { $0 }
             indexPathsWithZeroMines.removeAll()
-            indexPathsToCheck.forEach { pathToCheck in
-                let adjacentIndexPaths = getValidIndexPathsSurroundingCell(pathToCheck)
+            
+            for pathToCheck in indexPathsToCheck {
                 // loop through adjacent index paths which have not already been checked
-                adjacentIndexPaths.filter {!indexPathsChecked.contains($0)}
-                    .forEach { adjacentIndexPath in
-                        let minesInVicinity = numberOfMinesInVicinityOfCell(adjacentIndexPath)
-                        indexPathsChecked.insert(adjacentIndexPath)
-                        if minesInVicinity == 0 {
-                            indexPathsWithZeroMines.insert(adjacentIndexPath)
-                        }
-                        
-                        let gridCell = gridCells[adjacentIndexPath.row][adjacentIndexPath.section]
-                        gridCell.uncovered = true
-                        
-                        if !gridCell.hasFlag {
-                            indexPathsToReveal[adjacentIndexPath] = minesInVicinity
-                        }
+                for path in validIndexPathsSurroundingCell(pathToCheck) where !indexPathsChecked.contains(path) {
+                    indexPathsChecked.insert(path)
+
+                    let minesInVicinity = numberOfMinesInVicinityOfCell(path)
+                    if minesInVicinity == 0 {
+                        indexPathsWithZeroMines.insert(path)
+                    }
+                    let gridCell = gridCellForIndexPath(path)
+                    gridCell.uncovered = true
+                    
+                    if !gridCell.hasFlag {
+                        indexPathsToReveal[path] = minesInVicinity
+                    }
                 }
             }
         }
         return indexPathsToReveal
     }
     
-    func getUncoveredCells() -> [IndexPath] {
-        var indexPathsOfUncoveredCells = [IndexPath]()
-        for gridCell in get1DGridCellsArray() {
-            if !gridCell.uncovered {
-                gridCell.hasFlag = true
-                indexPathsOfUncoveredCells.append(gridCell.indexPath)
-            }
-        }
-        return indexPathsOfUncoveredCells
-    }
-    
     func isGameWon() -> Bool {
-        return clickedCellCount == getTotalNumberOfCells() - remainingFlags
+        return clickedCellCount == gridCells.count - remainingFlags
     }
     
-    func getGridCellsWithUnflaggedMines() -> [GridCell] {
-        return get1DGridCellsArray().filter { $0.hasMine && !$0.hasFlag }
+    func arrayPositionForIndexPath(_ indexpath: IndexPath) -> Int {
+        return (indexpath.section * numberOfItemsInSection) + indexpath.row
     }
     
-    func getGridCellsWithMisplacedFlags() -> [GridCell] {
-        return get1DGridCellsArray().filter { !$0.hasMine && $0.hasFlag }
+    func gridCellForIndexPath(_ indexPath: IndexPath) -> GridCell {
+        return gridCells[arrayPositionForIndexPath(indexPath)]
     }
+    
 }
 
 extension GameManager {
+    // Additional initialiser to default one that comes with structs
     init(difficulty: GameDifficulty) {
         self.difficulty = difficulty
-        
-        numberOfSections = getNumberOfRows()
-        numberOfItemsInSection = getNumberOfColumns()
+
         numberOfMines = getNumberOfMines()
         remainingFlags = numberOfMines
-
         
-        for row in 0..<numberOfItemsInSection {
-            var newRow: [GridCell] = []
-            for section in 0..<numberOfSections {
-                newRow.append(GridCell(indexPath: IndexPath(row: row, section: section)))
+        for section in 0..<numberOfSections {
+            for item in 0..<numberOfItemsInSection {
+                gridCells.append(GridCell(indexPath: IndexPath(row: item, section: section)))
             }
-            gridCells.append(newRow)
         }
     }
 }

@@ -6,18 +6,6 @@
 //  Copyright © 2020 Fiona Wilson. All rights reserved.
 //
 
-//enum NumberOfSections: Int {
-//    case Beginner = 8
-//    case Intermediate = 10
-//    case Advanced = 12
-//}
-//
-//enum NumberOfItemsInSection: Int {
-//    case Beginner = 8
-//    case Intermediate = 9
-//    case Advanced = 10
-//}
-
 enum NumberOfMines: Int {
     case Beginner = 10
     case Intermediate = 14

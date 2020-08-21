@@ -6,13 +6,12 @@
 //  Copyright © 2020 Fiona Wilson. All rights reserved.
 //
 
-import Foundation
 import CoreData
 
 struct BestTimesManager {
     
     var context: NSManagedObjectContext? = nil
-    let numberOfHighScoresToDisplay = Constants.HighScores.numberOfHighScoresToDisplay
+    private let numberOfHighScoresToDisplay = Constants.HighScores.numberOfHighScoresToDisplay
     
     func resetAllBestTimes() {
         
@@ -55,7 +54,9 @@ struct BestTimesManager {
         
         let highScores = fetchEntriesForDifficulty(difficulty.rawValue)
 
-        if (highScores.count < numberOfHighScoresToDisplay) {return true}
+        if (highScores.count < numberOfHighScoresToDisplay) {
+            return true
+        }
 
         if let lowestStoredEntry = highScores.last {
             return winningTime < lowestStoredEntry.time
