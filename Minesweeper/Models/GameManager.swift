@@ -17,16 +17,31 @@ struct GameManager {
     var gridCells: [GridCell] = []
     var difficulty = GameDifficulty.Beginner
     
-    var numberOfSections = 0
-    var numberOfItemsInSection = 0
+    var numberOfSections = 8
+    var numberOfItemsInSection = 9
     var numberOfMines = 0
     var remainingFlags = 0
     
     var timerStarted = false
     
-    var indexPathsOfMines = Set<IndexPath>()
+    private var indexPathsOfMines = Set<IndexPath>()
     private var indexPathsOfFlags = Set<IndexPath>()
     private var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
+    
+    
+    //MARK:- Computed properties for grid cells
+        
+    var gridCellsWithUnflaggedMine: [GridCell] {
+        return gridCells.filter { $0.hasUnflaggedMine }
+    }
+    
+    var gridCellsWithMisplacedFlag: [GridCell] {
+        return gridCells.filter { $0.hasMisplacedFlag }
+    }
+    
+    var uncoveredCells: [GridCell] {
+        return gridCells.filter { !$0.uncovered }
+    }
     
     private var clickedCellCount: Int {
         return gridCells.filter {
@@ -34,15 +49,6 @@ struct GameManager {
         }.count
     }
     
-    //MARK:- Methods for initialising number of rows, columns and mines
-    
-    private func getNumberOfRows() -> Int {
-        return 8
-    }
-    
-    private func getNumberOfColumns() -> Int {
-        return 9
-    }
     
     private func getNumberOfMines() -> Int {
         switch difficulty {
@@ -109,6 +115,10 @@ struct GameManager {
         }
     }
     
+    func disableUserInteractionOnAllCells() {
+        gridCells.forEach { $0.uncovered = true }
+    }
+    
     func numberOfMinesInVicinityOfCell(_ indexPath: IndexPath) -> Int {
         return getValidIndexPathsSurroundingCell(indexPath).filter {
             gridCellForIndexPath($0).hasMine
@@ -147,27 +157,12 @@ struct GameManager {
         return indexPathsToReveal
     }
     
-    func getUncoveredCells() -> [IndexPath] {
-        var indexPathsOfUncoveredCells = [IndexPath]()
-        for gridCell in gridCells {
-            if !gridCell.uncovered {
-                gridCell.hasFlag = true
-                indexPathsOfUncoveredCells.append(gridCell.indexPath)
-            }
-        }
-        return indexPathsOfUncoveredCells
+    func addFlag(to gridCell: GridCell) {
+        gridCell.hasFlag = true
     }
     
     func isGameWon() -> Bool {
         return clickedCellCount == gridCells.count - remainingFlags
-    }
-    
-    func getGridCellsWithUnflaggedMines() -> [GridCell] {
-        return gridCells.filter { $0.hasMine && !$0.hasFlag }
-    }
-    
-    func getGridCellsWithMisplacedFlags() -> [GridCell] {
-        return gridCells.filter { !$0.hasMine && $0.hasFlag }
     }
     
     func arrayPositionForIndexPath(_ indexpath: IndexPath) -> Int {
@@ -184,11 +179,8 @@ extension GameManager {
     // Additional initialiser to default one that comes with structs
     init(difficulty: GameDifficulty) {
         self.difficulty = difficulty
-        
-        numberOfSections = getNumberOfRows()
-        numberOfItemsInSection = getNumberOfColumns()
+
         numberOfMines = getNumberOfMines()
-        
         remainingFlags = numberOfMines
         
         for section in 0..<numberOfSections {

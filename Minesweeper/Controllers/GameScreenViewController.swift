@@ -145,30 +145,26 @@ class GameScreenViewController: UIViewController {
     //MARK:- Methods handling cell display
     
     private func showAllUnflaggedMines() {
-        for gridCell in gameManager.getGridCellsWithUnflaggedMines() {
+        for gridCell in gameManager.gridCellsWithUnflaggedMine {
             let collectionViewCell = collectionView.cellForItem(at: gridCell.indexPath) as! GameScreenCollectionViewCell
             collectionViewCell.configureMineContainingCell()
         }
     }
     
     private func showMisplacedFlags() {
-        for gridCell in gameManager.getGridCellsWithMisplacedFlags() {
+        for gridCell in gameManager.gridCellsWithMisplacedFlag {
             let collectionViewCell = collectionView.cellForItem(at: gridCell.indexPath) as! GameScreenCollectionViewCell
             collectionViewCell.configureForMisplacedFlag()
         }
     }
     
     private func addFlagsToUncoveredCells() {
-        for indexPath in gameManager.getUncoveredCells() {
-            let collectionViewCell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell
+        for gridCell in gameManager.uncoveredCells {
+            gameManager.addFlag(to: gridCell)
+            let collectionViewCell = collectionView.cellForItem(at: gridCell.indexPath) as! GameScreenCollectionViewCell
             collectionViewCell.configureFlagImageView(Constants.Images.flag)
         }
-    }
-    
-    private func disableUserInteractionOnAllCells() {
-        gameManager.gridCells.forEach {$0.uncovered = true}
-    }
-    
+    }    
     
     //MARK:- Methods handling game over/game won
     
@@ -178,7 +174,7 @@ class GameScreenViewController: UIViewController {
         showMisplacedFlags()
         headerView.configureResetButtonForGameOver()
         clickedCell.configureForGameOver()
-        disableUserInteractionOnAllCells()
+        gameManager.disableUserInteractionOnAllCells()
         headerView.timer.invalidate()
     }
     
@@ -188,6 +184,7 @@ class GameScreenViewController: UIViewController {
         headerView.setNumberOfFlagsLabelForGameWon()
         headerView.configureResetButtonForGameWon()
         addFlagsToUncoveredCells()
+        gameManager.disableUserInteractionOnAllCells()
         if let winningTime = headerView.timeLabel.text, let time = Int(winningTime) {
             displayGameWonAlert(winningTime: time)
         }
@@ -264,16 +261,20 @@ extension GameScreenViewController: UICollectionViewDataSource, UICollectionView
 //MARK:- CellSelectionDelegate methods
 
 extension GameScreenViewController: CellSelectionDelegate {
+    
     func cellButtonPressed(_ indexPath: IndexPath) {
         if (!gameManager.timerStarted) {
             gameManager.randomlyDistributeMines(indexPathOfInitialCell: indexPath)
-            collectionView.reloadItems(at: Array(gameManager.indexPathsOfMines))
             gameManager.timerStarted = true
             headerView.timer = Timer.scheduledTimer(timeInterval: 1, target: headerView!, selector: #selector(headerView.updateTimer), userInfo: nil, repeats: true)
         }
         
         let gridCell = gameManager.gridCellForIndexPath(indexPath)
-        if gridCell.hasFlag || gridCell.uncovered {return}
+        
+        if gridCell.hasFlag || gridCell.uncovered {
+            return
+        }
+        
         gridCell.uncovered = true
         
         let collectionViewCell = collectionView.cellForItem(at: indexPath) as! GameScreenCollectionViewCell

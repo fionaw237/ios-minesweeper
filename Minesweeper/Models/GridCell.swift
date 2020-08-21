@@ -14,6 +14,14 @@ class GridCell {
     var uncovered = false
     var indexPath = IndexPath()
     
+    var hasUnflaggedMine: Bool {
+        return hasMine && !hasFlag
+    }
+    
+    var hasMisplacedFlag: Bool {
+        return !hasMine && hasFlag
+    }
+    
     init(indexPath: IndexPath) {
         self.indexPath = indexPath
     }
