@@ -84,16 +84,15 @@ class GameScreenViewController: UIViewController {
     
     private func resetGame() {
         playSound(Constants.Sounds.click)
-        configureTimerForReset()
+        
+        timeManager.resetTimer() {
+            self.headerView.resetTimeLabel()
+        }
+                
         setUpGame()
         collectionView.reloadData()
     }
-    
-    private func configureTimerForReset() {
-        timeManager.timer.invalidate()
-        headerView.resetTimeLabel()
-        timeManager.timerStarted = false
-    }
+
     
     
     //MARK:- Sounds
@@ -177,12 +176,12 @@ class GameScreenViewController: UIViewController {
         headerView.configureResetButtonForGameOver()
         clickedCell.configureForGameOver()
         gameManager.disableUserInteractionOnAllCells()
-        timeManager.timer.invalidate()
+        timeManager.stopTimer()
     }
     
     private func handleGameWon() {
         playSound(Constants.Sounds.gameWon)
-        timeManager.timer.invalidate()
+        timeManager.stopTimer()
         headerView.setNumberOfFlagsLabelForGameWon()
         headerView.configureResetButtonForGameWon()
         addFlagsToUncoveredCells()
@@ -293,10 +292,8 @@ extension GameScreenViewController: CellSelectionDelegate {
     
     private func handleFirstCellPressed(_ indexPath: IndexPath) {
         gameManager.randomlyDistributeMines(indexPathOfInitialCell: indexPath)
-        
         timeManager.scheduletimer { timer in
-            self.timeManager.time += 1
-            self.headerView.timeLabel.text = "\(self.timeManager.time)"
+            self.headerView.timeLabel.text = "\(self.timeManager.getUpdatedTime())"
         }
     }
     

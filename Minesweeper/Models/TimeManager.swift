@@ -18,4 +18,19 @@ struct TimeManager {
         time = 0
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: callback)
     }
+    
+    mutating func getUpdatedTime() -> Int {
+        time += 1
+        return time
+    }
+    
+    mutating func resetTimer(_ callback: () -> Void) {
+        timer.invalidate()
+        timerStarted = false
+        callback()
+    }
+    
+    func stopTimer() {
+        timer.invalidate()
+    }
 }
