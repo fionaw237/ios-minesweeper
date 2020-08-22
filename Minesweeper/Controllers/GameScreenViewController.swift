@@ -14,9 +14,11 @@ class GameScreenViewController: UIViewController {
     
     @IBOutlet var headerView: GameScreenHeaderView!
     @IBOutlet weak var collectionView: UICollectionView!
-    
+        
     var gameDifficulty: GameDifficulty?
     private var audioPlayer: AVAudioPlayer?
+    
+    private var timeManager = TimeManager()
     private var gameManager = GameManager()
     private var bestTimesManager = BestTimesManager(
         context: (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -42,7 +44,7 @@ class GameScreenViewController: UIViewController {
         
     // TODO: implement this with nav bar back button
     @IBAction func homeButtonPressed(_ sender: Any) {
-        gameManager.timerStarted ? presentWarningAlertForReturnToHome() : self.presentingViewController?.dismiss(animated: true, completion:nil)
+        timeManager.timerStarted ? presentWarningAlertForReturnToHome() : self.presentingViewController?.dismiss(animated: true, completion:nil)
     }
     
     private func presentWarningAlertForReturnToHome() {
@@ -88,9 +90,9 @@ class GameScreenViewController: UIViewController {
     }
     
     private func configureTimerForReset() {
-        headerView.timer.invalidate()
-        headerView.resetTimer()
-        gameManager.timerStarted = false
+        timeManager.timer.invalidate()
+        headerView.resetTimeLabel()
+        timeManager.timerStarted = false
     }
     
     
@@ -175,12 +177,12 @@ class GameScreenViewController: UIViewController {
         headerView.configureResetButtonForGameOver()
         clickedCell.configureForGameOver()
         gameManager.disableUserInteractionOnAllCells()
-        headerView.timer.invalidate()
+        timeManager.timer.invalidate()
     }
     
     private func handleGameWon() {
         playSound(Constants.Sounds.gameWon)
-        headerView.timer.invalidate()
+        timeManager.timer.invalidate()
         headerView.setNumberOfFlagsLabelForGameWon()
         headerView.configureResetButtonForGameWon()
         addFlagsToUncoveredCells()
@@ -263,7 +265,7 @@ extension GameScreenViewController: UICollectionViewDataSource, UICollectionView
 extension GameScreenViewController: CellSelectionDelegate {
     
     func cellButtonPressed(_ indexPath: IndexPath) {
-        if (!gameManager.timerStarted) {
+        if (!timeManager.timerStarted) {
             handleFirstCellPressed(indexPath)
         }
         
@@ -291,8 +293,11 @@ extension GameScreenViewController: CellSelectionDelegate {
     
     private func handleFirstCellPressed(_ indexPath: IndexPath) {
         gameManager.randomlyDistributeMines(indexPathOfInitialCell: indexPath)
-        gameManager.timerStarted = true
-        headerView.timer = Timer.scheduledTimer(timeInterval: 1, target: headerView!, selector: #selector(headerView.updateTimer), userInfo: nil, repeats: true)
+        
+        timeManager.scheduletimer { timer in
+            self.timeManager.time += 1
+            self.headerView.timeLabel.text = "\(self.timeManager.time)"
+        }
     }
     
     private func handleZeroMinesInVicinityOfCell(at indexPath: IndexPath) {

@@ -13,18 +13,8 @@ class GameScreenHeaderView: UIView {
     @IBOutlet weak var numberOfFlagsLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var resetButton: UIButton!
-    var time = 0
-    var timer = Timer()
     
-    @objc func updateTimer() {
-        time += 1
-        if let label = timeLabel {
-            label.text = String(time)
-        }
-    }
-    
-    func resetTimer() {
-        time = 0
+    func resetTimeLabel() {
         timeLabel.text = "0"
     }
 

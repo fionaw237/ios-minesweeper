@@ -22,8 +22,6 @@ struct GameManager {
     var numberOfMines = 0
     var remainingFlags = 0
     
-    var timerStarted = false
-    
     private var indexPathsOfMines = Set<IndexPath>()
     private var indexPathsOfFlags = Set<IndexPath>()
     private var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
@@ -48,7 +46,6 @@ struct GameManager {
             $0.hasFlag || $0.uncovered
         }.count
     }
-    
     
     private func getNumberOfMines() -> Int {
         switch difficulty {
