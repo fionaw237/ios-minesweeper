@@ -12,8 +12,15 @@ enum NumberOfMines: Int {
     case Advanced = 18
 }
 
-enum GameDifficulty: String {
+enum GameDifficulty: String, CaseIterable {
     case Beginner = "Beginner"
     case Intermediate = "Intermediate"
     case Advanced = "Advanced"
+    
+    static func selectedIndexForDifficulty(_ difficulty: String) -> Int {
+        guard let index = allCases.map({$0.rawValue}).firstIndex(of: difficulty) else {
+            fatalError("The selected difficulty doesn't appear in GameDifficulty enum.")
+        }
+        return index
+    }
 }

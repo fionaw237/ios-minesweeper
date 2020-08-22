@@ -395,6 +395,9 @@
                                     <segment title="Intermediate"/>
                                     <segment title="Advanced"/>
                                 </segments>
+                                <connections>
+                                    <action selector="difficultySelected:" destination="H2L-aF-44V" eventType="valueChanged" id="Slw-Bx-byn"/>
+                                </connections>
                             </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" red="0.86299999999999999" green="0.86299999999999999" blue="0.86299999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
