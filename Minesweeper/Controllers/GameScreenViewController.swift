@@ -321,7 +321,7 @@ extension GameScreenViewController: GameAlertDelegate {
         UIAlertController.alert(
             title: "No flags left!",
             message: "Remove an existing flag to place it elsewhere",
-            actions: [UIAlertAction.init(title: "Dismiss", style: .cancel, handler: nil) ]
-        ) { self.present($0, animated: true, completion: nil) }
+            actions: [UIAlertAction.init(title: "Okay", style: .cancel, handler: nil) ]
+        ) { self.present($0, animated: true) }
     }
 }
