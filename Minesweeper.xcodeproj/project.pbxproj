@@ -197,6 +197,7 @@
 			children = (
 				BA1FF29824E08E39006AE7B8 /* Constants.swift */,
 				BA1FF29424E0656C006AE7B8 /* Enums.swift */,
+				BA83474424F174C40002B2A8 /* UIAlertController+Extensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -207,7 +208,6 @@
 				2BE47CA92223FF2A00D3952A /* GameScreenViewController.swift */,
 				2BD85B46230C08520077776F /* BestTimesViewController.swift */,
 				2B54565E2250056B00AB6EAE /* WelcomeScreenViewController.swift */,
-				BA83474424F174C40002B2A8 /* UIAlertController+Extensions.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
