@@ -33,10 +33,16 @@ class BestTimesViewController: UIViewController {
     override func viewDidLoad() {
         difficultySelector.selectedSegmentIndex = GameDifficulty.selectedIndexForDifficulty(defaultDifficulty)
         bestTimes = bestTimesManager.fetchEntriesForDifficulty(defaultDifficulty)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(backButtonPressed(sender:)))
     }
+    
     
     //MARK:- Navigation
     
+    @objc func backButtonPressed(sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+    }
+
     @IBAction func menuButtonPressed(_ sender: Any) {
         self.presentingViewController?.dismiss(animated: true, completion:nil)
     }
@@ -52,23 +58,18 @@ class BestTimesViewController: UIViewController {
     @IBAction func ResetAllBestTimesButtonPressed(_ sender: UIBarButtonItem) {
         
         if scoresAreNotEmpty(context) {
-            
-            let alert: UIAlertController = UIAlertController.init(title: "Are you sure you want to reset all best times?",
-                                                                  message: nil,
-                                                                  preferredStyle: .alert)
-            
-            let dismissAction = UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil)
-    
-            let continueAction = UIAlertAction.init(title: "Reset All", style: .default) { (action) in
-                self.bestTimesManager.resetAllBestTimes()
-                self.bestTimes = self.bestTimesManager.fetchEntriesForDifficulty(self.defaultDifficulty)
-                self.bestTimesTableView.reloadData()
-            }
-            
-            alert.addAction(dismissAction)
-            alert.addAction(continueAction)
-            
-            self.present(alert, animated: true, completion: nil)
+            UIAlertController.alert(
+                title: "Are you sure you want to reset all best times?",
+                message: "",
+                actions: [
+                    UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil) ,
+                    UIAlertAction.init(title: "Reset All", style: .default) { (action) in
+                        self.bestTimesManager.resetAllBestTimes()
+                        self.bestTimes = self.bestTimesManager.fetchEntriesForDifficulty(self.defaultDifficulty)
+                        self.bestTimesTableView.reloadData()
+                    }
+                ]
+            ) { self.present($0, animated: true) }
         }
     }
     

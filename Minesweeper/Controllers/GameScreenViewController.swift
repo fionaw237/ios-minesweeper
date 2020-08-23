@@ -37,27 +37,31 @@ class GameScreenViewController: UIViewController {
         setUpGame()
         setUpLongPressGestureRecognizer()
         gameManager.delegate = self
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(backButtonPressed(sender:)))
     }
     
     
     //MARK:- Navigation
-        
-    // TODO: implement this with nav bar back button
-    @IBAction func homeButtonPressed(_ sender: Any) {
-        timeManager.timerStarted ? presentWarningAlertForReturnToHome() : self.presentingViewController?.dismiss(animated: true, completion:nil)
+    
+    @objc func backButtonPressed(sender: UIBarButtonItem) {
+        if timeManager.timerStarted {
+            presentWarningAlertForReturnToHome()
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
     }
     
     private func presentWarningAlertForReturnToHome() {
-        let alert: UIAlertController = UIAlertController.init(title: "Warning!",
-                                                              message: "This will quit the game and return to the home screen",
-                                                              preferredStyle: .alert)
-        let dismissAction = UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil)
-        let continueAction = UIAlertAction.init(title: "Quit Game", style: .default) { (action) in
-            self.presentingViewController?.dismiss(animated: true, completion:nil)
-        }
-        alert.addAction(dismissAction)
-        alert.addAction(continueAction)
-        self.present(alert, animated: true, completion: nil)
+        UIAlertController.alert(
+            title: "Warning!",
+            message: "This will quit the game and return to the home screen",
+            actions: [
+                UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil),
+                UIAlertAction.init(title: "Quit Game", style: .default) { _ in
+                    self.navigationController?.popViewController(animated: true)
+                }
+            ]
+        ) { self.present($0, animated: true) }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
@@ -66,6 +70,7 @@ class GameScreenViewController: UIViewController {
             bestTimesViewController.defaultDifficulty = gameManager.difficulty.rawValue
         }
     }
+    
     
     //MARK:- Methods handling game reset/setup
     
@@ -314,11 +319,10 @@ extension GameScreenViewController: CellSelectionDelegate {
 
 extension GameScreenViewController: GameAlertDelegate {
     func presentNoFlagsWarning() {
-        let alert: UIAlertController = UIAlertController.init(title: "No flags left!",
-                                                              message: "Remove an existing flag to place it elsewhere",
-                                                              preferredStyle: .alert)
-        let dismissAction = UIAlertAction.init(title: "Dismiss", style: .cancel, handler: nil)
-        alert.addAction(dismissAction)
-        self.present(alert, animated: true, completion: nil)
+        UIAlertController.alert(
+            title: "No flags left!",
+            message: "Remove an existing flag to place it elsewhere",
+            actions: [UIAlertAction.init(title: "Okay", style: .cancel, handler: nil) ]
+        ) { self.present($0, animated: true) }
     }
 }

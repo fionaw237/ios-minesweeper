@@ -29,6 +29,7 @@
 		BA1FF29524E0656C006AE7B8 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF29424E0656C006AE7B8 /* Enums.swift */; };
 		BA1FF29924E08E39006AE7B8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF29824E08E39006AE7B8 /* Constants.swift */; };
 		BA83474124F163340002B2A8 /* TimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA83474024F163340002B2A8 /* TimeManager.swift */; };
+		BA83474524F174C40002B2A8 /* UIAlertController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA83474424F174C40002B2A8 /* UIAlertController+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		BA1FF29424E0656C006AE7B8 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		BA1FF29824E08E39006AE7B8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		BA83474024F163340002B2A8 /* TimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeManager.swift; sourceTree = "<group>"; };
+		BA83474424F174C40002B2A8 /* UIAlertController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +197,7 @@
 			children = (
 				BA1FF29824E08E39006AE7B8 /* Constants.swift */,
 				BA1FF29424E0656C006AE7B8 /* Enums.swift */,
+				BA83474424F174C40002B2A8 /* UIAlertController+Extensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 				2BE47CAA2223FF2A00D3952A /* GameScreenViewController.swift in Sources */,
 				BA06178324E1647E00DDF22C /* BestTimesManager.swift in Sources */,
 				2BE47CA82223FF2A00D3952A /* AppDelegate.swift in Sources */,
+				BA83474524F174C40002B2A8 /* UIAlertController+Extensions.swift in Sources */,
 				BA1FF29124E0609E006AE7B8 /* GameManager.swift in Sources */,
 				2BE47CD9222422D300D3952A /* GameScreenHeaderView.swift in Sources */,
 				BA1FF29524E0656C006AE7B8 /* Enums.swift in Sources */,
