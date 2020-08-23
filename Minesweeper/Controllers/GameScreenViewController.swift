@@ -37,10 +37,19 @@ class GameScreenViewController: UIViewController {
         setUpGame()
         setUpLongPressGestureRecognizer()
         gameManager.delegate = self
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(backButtonPressed(sender:)))
     }
     
     
     //MARK:- Navigation
+    
+    @objc func backButtonPressed(sender: UIBarButtonItem) {
+        if timeManager.timerStarted {
+            presentWarningAlertForReturnToHome()
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
+    }
     
     private func presentWarningAlertForReturnToHome() {
         UIAlertController.alert(
@@ -61,6 +70,7 @@ class GameScreenViewController: UIViewController {
             bestTimesViewController.defaultDifficulty = gameManager.difficulty.rawValue
         }
     }
+    
     
     //MARK:- Methods handling game reset/setup
     

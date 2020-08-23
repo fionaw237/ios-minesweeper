@@ -33,10 +33,16 @@ class BestTimesViewController: UIViewController {
     override func viewDidLoad() {
         difficultySelector.selectedSegmentIndex = GameDifficulty.selectedIndexForDifficulty(defaultDifficulty)
         bestTimes = bestTimesManager.fetchEntriesForDifficulty(defaultDifficulty)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(backButtonPressed(sender:)))
     }
+    
     
     //MARK:- Navigation
     
+    @objc func backButtonPressed(sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+    }
+
     @IBAction func menuButtonPressed(_ sender: Any) {
         self.presentingViewController?.dismiss(animated: true, completion:nil)
     }
