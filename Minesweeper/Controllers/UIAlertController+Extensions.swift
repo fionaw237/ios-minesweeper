@@ -10,11 +10,11 @@ import UIKit
 
 extension UIAlertController {
  
-    static func alert(title: String, message: String, actions: [UIAlertAction], completion: (UIAlertController) -> Void) {
+    static func alert(title: String, message: String, actions: () -> UIAlertAction..., completion: (UIAlertController) -> Void) {
         let alertController = UIAlertController(title: title,
                                                 message: message,
                                                 preferredStyle: .alert)
-        actions.forEach { alertController.addAction($0) }
+        actions.forEach { alertController.addAction($0()) }
         completion(alertController)
     }
 }

@@ -195,6 +195,10 @@ class GameScreenViewController: UIViewController {
         
         let newHighScore = bestTimesManager.isHighScore(winningTime, difficulty: gameManager.difficulty)
         
+        
+        
+        
+        
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         alert.title = newHighScore ? "New high score!" : "You won!"
         alert.message = "Your time was \(winningTime) seconds"
@@ -317,8 +321,7 @@ extension GameScreenViewController: GameAlertDelegate {
         UIAlertController.alert(
             title: "No flags left!",
             message: "Remove an existing flag to place it elsewhere",
-            actions: [UIAlertAction.init(title: "Dismiss", style: .cancel, handler: nil)],
-            completion: { self.present($0, animated: true, completion: nil) }
-        )
+            actions: { UIAlertAction.init(title: "Dismiss", style: .cancel, handler: nil) }
+        ) { self.present($0, animated: true, completion: nil) }
     }
 }
