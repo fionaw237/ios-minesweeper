@@ -55,13 +55,15 @@ class BestTimesViewController: UIViewController {
             UIAlertController.alert(
                 title: "Are you sure you want to reset all best times?",
                 message: "",
-                actions: { UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil) },
-                { UIAlertAction.init(title: "Reset All", style: .default) { (action) in
+                actions: [
+                    UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil) ,
+                    UIAlertAction.init(title: "Reset All", style: .default) { (action) in
                         self.bestTimesManager.resetAllBestTimes()
                         self.bestTimes = self.bestTimesManager.fetchEntriesForDifficulty(self.defaultDifficulty)
                         self.bestTimesTableView.reloadData()
-                    } }
-            ) {self.present($0, animated: true, completion: nil)}
+                    }
+                ]
+            ) { self.present($0, animated: true) }
         }
     }
     
