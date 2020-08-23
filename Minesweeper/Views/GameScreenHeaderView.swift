@@ -15,7 +15,7 @@ class GameScreenHeaderView: UIView {
     @IBOutlet weak var resetButton: UIButton!
     
     func resetTimeLabel() {
-        timeLabel.text = "0"
+        timeLabel.text = "00:00"
     }
 
     func updateFlagsLabel(_ numberOfFlags: Int) {
