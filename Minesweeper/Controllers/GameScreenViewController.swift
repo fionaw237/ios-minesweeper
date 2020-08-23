@@ -314,11 +314,11 @@ extension GameScreenViewController: CellSelectionDelegate {
 
 extension GameScreenViewController: GameAlertDelegate {
     func presentNoFlagsWarning() {
-        let alert: UIAlertController = UIAlertController.init(title: "No flags left!",
-                                                              message: "Remove an existing flag to place it elsewhere",
-                                                              preferredStyle: .alert)
-        let dismissAction = UIAlertAction.init(title: "Dismiss", style: .cancel, handler: nil)
-        alert.addAction(dismissAction)
-        self.present(alert, animated: true, completion: nil)
+        UIAlertController.alert(
+            title: "No flags left!",
+            message: "Remove an existing flag to place it elsewhere",
+            actions: [UIAlertAction.init(title: "Dismiss", style: .cancel, handler: nil)],
+            completion: { self.present($0, animated: true, completion: nil) }
+        )
     }
 }
