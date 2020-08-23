@@ -191,9 +191,7 @@ class GameScreenViewController: UIViewController {
         headerView.configureResetButtonForGameWon()
         addFlagsToUncoveredCells()
         gameManager.disableUserInteractionOnAllCells()
-        if let winningTime = headerView.timeLabel.text, let time = Int(winningTime) {
-            displayGameWonAlert(winningTime: time)
-        }
+        displayGameWonAlert(winningTime: timeManager.time)
     }
     
     private func displayGameWonAlert(winningTime: Int) {
@@ -202,7 +200,7 @@ class GameScreenViewController: UIViewController {
         
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         alert.title = newHighScore ? "New high score!" : "You won!"
-        alert.message = "Your time was \(winningTime) seconds"
+        alert.message = "Your time was \(TimeManager.convertSecondsToMinutesAndSeconds(winningTime))"
         
         if newHighScore {
             alert.addTextField { textField in
@@ -298,7 +296,7 @@ extension GameScreenViewController: CellSelectionDelegate {
     private func handleFirstCellPressed(_ indexPath: IndexPath) {
         gameManager.randomlyDistributeMines(indexPathOfInitialCell: indexPath)
         timeManager.scheduletimer { timer in
-            self.headerView.timeLabel.text = "\(self.timeManager.getUpdatedTime())"
+            self.headerView.timeLabel.text = self.timeManager.getUpdatedTime()
         }
     }
     

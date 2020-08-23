@@ -17,6 +17,6 @@ class BestTimesTableViewCell: UITableViewCell {
     func configure(row: Int, timeEntry: BestTimeEntry) {
         positionLabel.text = "\(row + 1)"
         nameLabel.text = timeEntry.name
-        timeLabel.text = "\(timeEntry.time)s"
+        timeLabel.text = "\(TimeManager.convertSecondsToMinutesAndSeconds(Int(timeEntry.time)))"
     }
 }

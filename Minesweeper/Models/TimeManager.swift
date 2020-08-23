@@ -13,15 +13,25 @@ struct TimeManager {
     var time = 0
     var timerStarted = false
     
+    static func convertSecondsToMinutesAndSeconds(_ seconds: Int) -> String {
+        let minutes = seconds / 60
+        let remainingSeconds = seconds % 60
+        
+        let minutesString = (minutes < 10) ? "0\(minutes)" : "\(minutes)"
+        let secondsString = (remainingSeconds < 10) ? "0\(remainingSeconds)" : "\(remainingSeconds)"
+        
+        return "\(minutesString):\(secondsString)"
+    }
+    
     mutating func scheduletimer(_ callback: @escaping (Timer) -> Void) {
         timerStarted = true
         time = 0
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: callback)
     }
     
-    mutating func getUpdatedTime() -> Int {
+    mutating func getUpdatedTime() -> String {
         time += 1
-        return time
+        return TimeManager.convertSecondsToMinutesAndSeconds(time)
     }
     
     mutating func resetTimer(_ callback: () -> Void) {
