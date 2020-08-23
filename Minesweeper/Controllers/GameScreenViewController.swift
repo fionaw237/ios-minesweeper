@@ -41,23 +41,18 @@ class GameScreenViewController: UIViewController {
     
     
     //MARK:- Navigation
-        
-    // TODO: implement this with nav bar back button
-    @IBAction func homeButtonPressed(_ sender: Any) {
-        timeManager.timerStarted ? presentWarningAlertForReturnToHome() : self.presentingViewController?.dismiss(animated: true, completion:nil)
-    }
     
     private func presentWarningAlertForReturnToHome() {
-        let alert: UIAlertController = UIAlertController.init(title: "Warning!",
-                                                              message: "This will quit the game and return to the home screen",
-                                                              preferredStyle: .alert)
-        let dismissAction = UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil)
-        let continueAction = UIAlertAction.init(title: "Quit Game", style: .default) { (action) in
-            self.presentingViewController?.dismiss(animated: true, completion:nil)
-        }
-        alert.addAction(dismissAction)
-        alert.addAction(continueAction)
-        self.present(alert, animated: true, completion: nil)
+        UIAlertController.alert(
+            title: "Warning!",
+            message: "This will quit the game and return to the home screen",
+            actions: [
+                UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil),
+                UIAlertAction.init(title: "Quit Game", style: .default) { _ in
+                    self.navigationController?.popViewController(animated: true)
+                }
+            ]
+        ) { self.present($0, animated: true) }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
@@ -194,10 +189,6 @@ class GameScreenViewController: UIViewController {
     private func displayGameWonAlert(winningTime: Int) {
         
         let newHighScore = bestTimesManager.isHighScore(winningTime, difficulty: gameManager.difficulty)
-        
-        
-        
-        
         
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         alert.title = newHighScore ? "New high score!" : "You won!"
