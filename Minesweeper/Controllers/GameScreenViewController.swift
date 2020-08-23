@@ -191,9 +191,6 @@ class GameScreenViewController: UIViewController {
         headerView.configureResetButtonForGameWon()
         addFlagsToUncoveredCells()
         gameManager.disableUserInteractionOnAllCells()
-//        if let winningTime = headerView.timeLabel.text, let time = Int(winningTime) {
-//            displayGameWonAlert(winningTime: time)
-//        }
         displayGameWonAlert(winningTime: timeManager.time)
     }
     
