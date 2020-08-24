@@ -33,7 +33,8 @@ class BestTimesViewController: UIViewController {
     override func viewDidLoad() {
         difficultySelector.selectedSegmentIndex = GameDifficulty.selectedIndexForDifficulty(defaultDifficulty)
         bestTimes = bestTimesManager.fetchEntriesForDifficulty(defaultDifficulty)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(backButtonPressed(sender:)))
+        navigationItem.configureBackButton(barButtonSystemItem: .stop, target: self, action: #selector(backButtonPressed(sender:)), colour: Colours.darkBlue)
+        navigationItem.rightBarButtonItem?.tintColor = Colours.darkBlue
     }
     
     
@@ -99,6 +100,6 @@ extension BestTimesViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70.0
+        return 80.0
     }
 }

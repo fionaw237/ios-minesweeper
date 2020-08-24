@@ -20,6 +20,18 @@ class WelcomeScreenViewController: UIViewController {
         navigationController?.isNavigationBarHidden = true
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureNavigationBarStyle()
+    }
+    
+    func configureNavigationBarStyle() {
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: Colours.darkBlue,
+            NSAttributedString.Key.font: Fonts.navBarTitle
+        ]
+    }
+    
     @IBAction func gameDifficultyChosen(_ sender: Any) {
         performSegue(withIdentifier: Constants.Segues.goToGameScreen, sender: sender)
     }
