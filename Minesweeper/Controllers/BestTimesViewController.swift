@@ -31,7 +31,7 @@ class BestTimesViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        difficultySelector.selectedSegmentIndex = GameDifficulty.selectedIndexForDifficulty(defaultDifficulty)
+        configureDifficultySelector()
         bestTimes = bestTimesManager.fetchEntriesForDifficulty(defaultDifficulty)
         navigationItem.configureBackButton(barButtonSystemItem: .stop, target: self, action: #selector(backButtonPressed(sender:)), colour: Colours.darkBlue)
         navigationItem.rightBarButtonItem?.tintColor = Colours.darkBlue
@@ -51,6 +51,20 @@ class BestTimesViewController: UIViewController {
     @IBAction func difficultySelected(_ sender: UISegmentedControl) {
         bestTimes = bestTimesManager.fetchEntriesForDifficulty(sender.titleForSegment(at: sender.selectedSegmentIndex)!)
         bestTimesTableView.reloadData()
+    }
+        
+    func configureDifficultySelector() {
+        difficultySelector.selectedSegmentIndex = GameDifficulty.selectedIndexForDifficulty(defaultDifficulty)
+        difficultySelector.backgroundColor = Colours.darkBlue
+        difficultySelector.setTitleTextAttributes([
+            NSAttributedString.Key.font : Fonts.difficultySelector,
+            NSAttributedString.Key.foregroundColor: UIColor.white
+            ], for: .normal)
+
+        difficultySelector.setTitleTextAttributes([
+            NSAttributedString.Key.font : Fonts.difficultySelector,
+            NSAttributedString.Key.foregroundColor: Colours.darkBlue
+            ], for: .selected)
     }
     
     

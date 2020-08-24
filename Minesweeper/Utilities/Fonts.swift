@@ -10,4 +10,5 @@ import UIKit
 
 struct Fonts {
     static let navBarTitle = UIFont(name: "Copperplate", size: 24.0) ?? UIColor.black
+    static let difficultySelector = UIFont(name: "Copperplate", size: 16.0) ?? UIColor.black
 }
