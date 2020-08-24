@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="TUl-gq-Ur4">
-    <device id="retina4_0" orientation="portrait" appearance="light"/>
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -13,132 +14,121 @@
             <objects>
                 <viewController id="u3e-n8-ewN" customClass="WelcomeScreenViewController" customModule="Minesweeper" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ddJ-fZ-LpM">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3EP-2G-fIO">
-                                <rect key="frame" x="45" y="277" width="230" height="58"/>
-                                <color key="backgroundColor" red="0.82033967971801758" green="0.82096666097640991" blue="0.82043677568435669" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="58" id="tr6-I7-akf"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <state key="normal" title="Beginner"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <integer key="value" value="5"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="gameDifficultyChosen:" destination="u3e-n8-ewN" eventType="touchUpInside" id="nRE-74-EUX"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HtK-OO-ucH">
-                                <rect key="frame" x="45" y="351" width="230" height="58"/>
-                                <color key="backgroundColor" red="0.82033967971801758" green="0.82096666097640991" blue="0.82043677568435669" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="58" id="MAQ-aV-fgf"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <state key="normal" title="Intermediate"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <integer key="value" value="5"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="gameDifficultyChosen:" destination="u3e-n8-ewN" eventType="touchUpInside" id="eWN-Ji-bhb"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mgT-bQ-tgo">
-                                <rect key="frame" x="45" y="425" width="230" height="58"/>
-                                <color key="backgroundColor" white="0.77814640410958902" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="58" id="Cnx-Od-LFQ"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <state key="normal" title="Advanced"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <integer key="value" value="5"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="gameDifficultyChosen:" destination="u3e-n8-ewN" eventType="touchUpInside" id="oeL-t7-8dr"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Minesweeper!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PXu-U3-u7Z">
-                                <rect key="frame" x="10" y="194" width="300" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <color key="textColor" red="0.092556603187550435" green="0.19203083039100161" blue="0.92928432679999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a difficulty:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gzg-iq-H0I">
-                                <rect key="frame" x="91.5" y="240" width="137" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.092556603190000003" green="0.19203083039999999" blue="0.92928432679999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mine-icon-black-50" translatesAutoresizingMaskIntoConstraints="NO" id="WcF-cI-cqK">
-                                <rect key="frame" x="70" y="69" width="180" height="100"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="Wq1-vo-TXn"/>
-                                    <constraint firstAttribute="width" constant="180" id="fnD-z8-M01"/>
-                                </constraints>
-                            </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mB7-wW-KE4">
-                                <rect key="frame" x="0.0" y="508" width="320" height="60"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalCentering" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ijG-45-RJ9">
+                                <rect key="frame" x="0.0" y="128" width="414" height="768"/>
                                 <subviews>
-                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l7k-ts-zQa" userLabel="Best Times Button">
-                                        <rect key="frame" x="60" y="10" width="200" height="40"/>
-                                        <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Xh3-N5-l5N" userLabel="TitleStackView">
+                                        <rect key="frame" x="69" y="0.0" width="276" height="160"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Minesweeper!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PXu-U3-u7Z">
+                                                <rect key="frame" x="0.0" y="0.0" width="276" height="77.5"/>
+                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="40"/>
+                                                <color key="textColor" red="0.092556603187550435" green="0.19203083039100161" blue="0.92928432679999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mine-icon-black-50" translatesAutoresizingMaskIntoConstraints="NO" id="WcF-cI-cqK">
+                                                <rect key="frame" x="0.0" y="82.5" width="276" height="77.5"/>
+                                            </imageView>
+                                        </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="JaQ-bK-qCO"/>
+                                            <constraint firstAttribute="height" constant="160" id="KX1-i5-sCn"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <state key="normal" title="Best Times"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <integer key="value" value="5"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="bestTimesButtonPressed:" destination="u3e-n8-ewN" eventType="touchUpInside" id="WOa-R8-dPI"/>
-                                        </connections>
-                                    </button>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="Qu6-Bo-UaI" userLabel="ButtonsStackView">
+                                        <rect key="frame" x="60" y="244" width="294" height="300"/>
+                                        <subviews>
+                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3EP-2G-fIO">
+                                                <rect key="frame" x="0.0" y="0.0" width="294" height="73.5"/>
+                                                <color key="backgroundColor" red="0.82033967971801758" green="0.82096666097640991" blue="0.82043677568435669" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="28"/>
+                                                <state key="normal" title="Beginner"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <integer key="value" value="5"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="gameDifficultyChosen:" destination="u3e-n8-ewN" eventType="touchUpInside" id="nRE-74-EUX"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HtK-OO-ucH">
+                                                <rect key="frame" x="0.0" y="113.5" width="294" height="73"/>
+                                                <color key="backgroundColor" red="0.82033967971801758" green="0.82096666097640991" blue="0.82043677568435669" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="28"/>
+                                                <state key="normal" title="Intermediate"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <integer key="value" value="5"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="gameDifficultyChosen:" destination="u3e-n8-ewN" eventType="touchUpInside" id="eWN-Ji-bhb"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mgT-bQ-tgo">
+                                                <rect key="frame" x="0.0" y="226.5" width="294" height="73.5"/>
+                                                <color key="backgroundColor" white="0.77814640410958902" alpha="1" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="28"/>
+                                                <state key="normal" title="Advanced"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <integer key="value" value="5"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="gameDifficultyChosen:" destination="u3e-n8-ewN" eventType="touchUpInside" id="oeL-t7-8dr"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="300" id="vdb-8X-k64" userLabel="height = 240"/>
+                                        </constraints>
+                                    </stackView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mB7-wW-KE4" userLabel="FooterView">
+                                        <rect key="frame" x="0.0" y="648" width="414" height="120"/>
+                                        <subviews>
+                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l7k-ts-zQa" userLabel="Best Times Button">
+                                                <rect key="frame" x="80" y="41" width="254" height="38"/>
+                                                <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
+                                                <state key="normal" title="Best Times"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <integer key="value" value="5"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="bestTimesButtonPressed:" destination="u3e-n8-ewN" eventType="touchUpInside" id="WOa-R8-dPI"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.69999999999999996" green="0.69999999999999996" blue="0.69999999999999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="l7k-ts-zQa" firstAttribute="leading" secondItem="mB7-wW-KE4" secondAttribute="leading" constant="80" id="ITI-4D-X3V"/>
+                                            <constraint firstItem="l7k-ts-zQa" firstAttribute="centerY" secondItem="mB7-wW-KE4" secondAttribute="centerY" id="Lif-3H-JTf"/>
+                                            <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="l7k-ts-zQa" secondAttribute="trailing" constant="80" id="cLR-U0-Z0p"/>
+                                            <constraint firstAttribute="height" constant="120" id="dNF-TP-Fbs"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
-                                <color key="backgroundColor" red="0.69999999999999996" green="0.69999999999999996" blue="0.69999999999999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstItem="l7k-ts-zQa" firstAttribute="leading" secondItem="mB7-wW-KE4" secondAttribute="leading" constant="60" id="Ly4-lQ-Gp2"/>
-                                    <constraint firstItem="l7k-ts-zQa" firstAttribute="centerX" secondItem="mB7-wW-KE4" secondAttribute="centerX" id="Rmi-EZ-FEG"/>
-                                    <constraint firstAttribute="height" constant="60" id="SeQ-Qv-Ofb"/>
-                                    <constraint firstItem="l7k-ts-zQa" firstAttribute="centerY" secondItem="mB7-wW-KE4" secondAttribute="centerY" id="e7h-5P-qeq"/>
-                                    <constraint firstAttribute="trailing" secondItem="l7k-ts-zQa" secondAttribute="trailing" constant="60" id="s1x-0A-Qal"/>
+                                    <constraint firstAttribute="bottom" secondItem="mB7-wW-KE4" secondAttribute="bottom" id="CLH-7X-1IG"/>
+                                    <constraint firstAttribute="trailing" secondItem="mB7-wW-KE4" secondAttribute="trailing" id="b1d-GC-7Ib"/>
+                                    <constraint firstItem="Qu6-Bo-UaI" firstAttribute="leading" secondItem="ijG-45-RJ9" secondAttribute="leading" constant="60" id="dXe-xm-cX8"/>
+                                    <constraint firstAttribute="trailing" secondItem="Qu6-Bo-UaI" secondAttribute="trailing" constant="60" id="fjh-Mw-565"/>
+                                    <constraint firstItem="mB7-wW-KE4" firstAttribute="leading" secondItem="ijG-45-RJ9" secondAttribute="leading" id="gFM-LB-Jyw"/>
                                 </constraints>
-                            </view>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" red="0.86299999999999999" green="0.86299999999999999" blue="0.86299999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Gzg-iq-H0I" firstAttribute="centerX" secondItem="5pg-dB-oM5" secondAttribute="centerX" id="1EM-3J-vnJ"/>
-                            <constraint firstItem="5pg-dB-oM5" firstAttribute="trailing" secondItem="HtK-OO-ucH" secondAttribute="trailing" constant="45" id="1nk-J0-xtc"/>
-                            <constraint firstItem="mB7-wW-KE4" firstAttribute="leading" secondItem="5pg-dB-oM5" secondAttribute="leading" id="3Al-hO-TSf"/>
-                            <constraint firstItem="HtK-OO-ucH" firstAttribute="leading" secondItem="5pg-dB-oM5" secondAttribute="leading" constant="45" id="6ox-GO-Yjv"/>
-                            <constraint firstItem="3EP-2G-fIO" firstAttribute="leading" secondItem="5pg-dB-oM5" secondAttribute="leading" constant="45" id="A8V-uk-su6"/>
-                            <constraint firstItem="3EP-2G-fIO" firstAttribute="top" secondItem="Gzg-iq-H0I" secondAttribute="bottom" constant="16" id="BNg-HG-u2U"/>
-                            <constraint firstItem="PXu-U3-u7Z" firstAttribute="top" secondItem="WcF-cI-cqK" secondAttribute="bottom" constant="25" id="Bjj-LR-bUW"/>
-                            <constraint firstItem="PXu-U3-u7Z" firstAttribute="leading" secondItem="5pg-dB-oM5" secondAttribute="leading" constant="10" id="FUB-Bf-S7r"/>
-                            <constraint firstItem="WcF-cI-cqK" firstAttribute="centerX" secondItem="5pg-dB-oM5" secondAttribute="centerX" id="Fpj-bg-ygd"/>
-                            <constraint firstItem="mgT-bQ-tgo" firstAttribute="centerX" secondItem="5pg-dB-oM5" secondAttribute="centerX" id="Hds-vQ-xUj"/>
-                            <constraint firstItem="Gzg-iq-H0I" firstAttribute="top" secondItem="PXu-U3-u7Z" secondAttribute="bottom" constant="16" id="JIT-iW-4pF"/>
-                            <constraint firstItem="5pg-dB-oM5" firstAttribute="trailing" secondItem="mgT-bQ-tgo" secondAttribute="trailing" constant="45" id="Jk0-FU-2XC"/>
-                            <constraint firstAttribute="bottom" secondItem="mB7-wW-KE4" secondAttribute="bottom" id="SPJ-1X-rvM"/>
-                            <constraint firstItem="5pg-dB-oM5" firstAttribute="trailing" secondItem="mB7-wW-KE4" secondAttribute="trailing" id="VmS-vM-xJc"/>
-                            <constraint firstItem="mgT-bQ-tgo" firstAttribute="top" secondItem="HtK-OO-ucH" secondAttribute="bottom" constant="16" id="abr-jT-3TR"/>
-                            <constraint firstItem="5pg-dB-oM5" firstAttribute="trailing" secondItem="PXu-U3-u7Z" secondAttribute="trailing" constant="10" id="c5y-rb-Rbz"/>
-                            <constraint firstItem="5pg-dB-oM5" firstAttribute="trailing" secondItem="3EP-2G-fIO" secondAttribute="trailing" constant="45" id="lBf-I4-95L"/>
-                            <constraint firstItem="WcF-cI-cqK" firstAttribute="top" secondItem="5pg-dB-oM5" secondAttribute="top" constant="25" id="maW-RW-Hcu"/>
-                            <constraint firstItem="HtK-OO-ucH" firstAttribute="top" secondItem="3EP-2G-fIO" secondAttribute="bottom" constant="16" id="q5h-ky-tiF"/>
-                            <constraint firstItem="mgT-bQ-tgo" firstAttribute="leading" secondItem="5pg-dB-oM5" secondAttribute="leading" constant="45" id="z6V-1S-mrC"/>
+                            <constraint firstAttribute="trailing" secondItem="ijG-45-RJ9" secondAttribute="trailing" id="7oy-Jf-Mk4"/>
+                            <constraint firstItem="ijG-45-RJ9" firstAttribute="leading" secondItem="5pg-dB-oM5" secondAttribute="leading" id="8qv-ML-U9G"/>
+                            <constraint firstItem="ijG-45-RJ9" firstAttribute="top" secondItem="5pg-dB-oM5" secondAttribute="top" constant="40" id="cFE-yk-UMA"/>
+                            <constraint firstItem="ijG-45-RJ9" firstAttribute="bottom" secondItem="ddJ-fZ-LpM" secondAttribute="bottom" id="h4y-3f-qWu"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="5pg-dB-oM5"/>
                     </view>
@@ -161,28 +151,28 @@
             <objects>
                 <viewController modalPresentationStyle="fullScreen" id="BYZ-38-t0r" customClass="GameScreenViewController" customModule="Minesweeper" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cha-Yd-rC7" userLabel="Header View" customClass="GameScreenHeaderView" customModule="Minesweeper" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="44" width="320" height="113.5"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="179"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Flags" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ttv-2p-uia" userLabel="Number of Flags Label">
-                                        <rect key="frame" x="35" y="34" width="83" height="45.5"/>
+                                        <rect key="frame" x="47.5" y="54" width="107.5" height="71.5"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
                                         <color key="textColor" red="1" green="0.19124066219999999" blue="0.2452359818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H6d-LK-ZS5" userLabel="Time Label">
-                                        <rect key="frame" x="202" y="34" width="83" height="45.5"/>
+                                        <rect key="frame" x="259" y="54" width="107.5" height="71.5"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
                                         <color key="textColor" red="1" green="0.19124066219999999" blue="0.2452359818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pVa-Rr-U7a">
-                                        <rect key="frame" x="143" y="40" width="34" height="34"/>
+                                        <rect key="frame" x="180" y="62.5" width="54" height="54"/>
                                         <color key="backgroundColor" red="0.60200536039999997" green="0.60200536039999997" blue="0.60200536039999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="pVa-Rr-U7a" secondAttribute="height" multiplier="1:1" id="yb6-Oe-JxG"/>
@@ -215,7 +205,7 @@
                                 </connections>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="XC7-qC-mJ5">
-                                <rect key="frame" x="20" y="177.5" width="280" height="370.5"/>
+                                <rect key="frame" x="20" y="287" width="374" height="555"/>
                                 <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="PIX-TV-kb9">
                                     <size key="itemSize" width="50" height="50"/>
@@ -316,36 +306,36 @@
             <objects>
                 <viewController modalPresentationStyle="fullScreen" id="H2L-aF-44V" userLabel="Best Times View Controller" customClass="BestTimesViewController" customModule="Minesweeper" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="BrY-Mv-jOm">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nBh-3s-7mR">
-                                <rect key="frame" x="0.0" y="116" width="320" height="452"/>
+                                <rect key="frame" x="0.0" y="160" width="414" height="702"/>
                                 <color key="backgroundColor" red="0.86299999999999999" green="0.86299999999999999" blue="0.86299999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BestTimesTableViewCell" rowHeight="30" id="xe3-zC-oTM" customClass="BestTimesTableViewCell" customModule="Minesweeper" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="320" height="30"/>
+                                        <rect key="frame" x="0.0" y="28" width="414" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xe3-zC-oTM" id="CSy-nb-5Hi">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="30"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sz6-we-u2w" userLabel="positionLabel">
-                                                    <rect key="frame" x="0.0" y="0.0" width="106.5" height="30"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="138" height="30"/>
                                                     <color key="backgroundColor" red="0.86299999999999999" green="0.86299999999999999" blue="0.86299999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" red="0.092556603190000003" green="0.19203083039999999" blue="0.92928432679999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fiona" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5t7-HO-ZAf" userLabel="nameLabel">
-                                                    <rect key="frame" x="106.5" y="0.0" width="106.5" height="30"/>
+                                                    <rect key="frame" x="138" y="0.0" width="137.5" height="30"/>
                                                     <color key="backgroundColor" red="0.86299999999999999" green="0.86299999999999999" blue="0.86299999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" red="0.092556603190000003" green="0.19203083039999999" blue="0.92928432679999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="37s" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PLN-nb-1W5" userLabel="timeLabel">
-                                                    <rect key="frame" x="213" y="0.0" width="106.5" height="30"/>
+                                                    <rect key="frame" x="275.5" y="0.0" width="138" height="30"/>
                                                     <color key="backgroundColor" red="0.86299999999999999" green="0.86299999999999999" blue="0.86299999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" red="0.092556603190000003" green="0.19203083039999999" blue="0.92928432679999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -385,7 +375,7 @@
                                 </connections>
                             </tableView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="V0N-mb-mx3" userLabel="Difficulty Selector">
-                                <rect key="frame" x="0.0" y="44" width="320" height="71"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="71"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="Cgn-K1-j5t"/>
@@ -434,7 +424,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="TUl-gq-Ur4" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="8Dr-D5-8KY">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.86265975240000003" green="0.86280494929999996" blue="0.86264061930000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
@@ -449,7 +439,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="2P6-Xe-YUS"/>
+        <segue reference="3h4-bT-W5l"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="cellButton" width="200" height="200"/>
