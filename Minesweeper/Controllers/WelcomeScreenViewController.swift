@@ -29,7 +29,7 @@ class WelcomeScreenViewController: UIViewController {
     
     private func configureNavigationBarStyle() {
         navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: Colours.darkBlue,
+            NSAttributedString.Key.foregroundColor: Colours.navBarTitle,
             NSAttributedString.Key.font: Fonts.navBarTitle
         ]
     }

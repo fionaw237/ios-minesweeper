@@ -10,4 +10,5 @@ import UIKit
 
 struct Colours {
     static let darkBlue = UIColor(red: 24.0 / 255.0, green: 49.0 / 255.0, blue: 237.0 / 255.0, alpha: 1.0)
+    static let navBarTitle = UIColor.darkGray
 }

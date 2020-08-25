@@ -37,7 +37,7 @@ class GameScreenViewController: UIViewController {
         setUpGame()
         setUpLongPressGestureRecognizer()
         gameManager.delegate = self
-        navigationItem.configureBackButton(barButtonSystemItem: .stop, target: self, action: #selector(backButtonPressed(sender:)), colour: Colours.darkBlue)
+        navigationItem.configureBackButton(barButtonSystemItem: .stop, target: self, action: #selector(backButtonPressed(sender:)), colour: Colours.navBarTitle)
     }
     
     
