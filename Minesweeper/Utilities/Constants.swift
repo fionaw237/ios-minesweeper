@@ -22,6 +22,7 @@ struct Constants {
     
     struct BestTimes {
         static let numberOfBestTimesToDisplay = 10
+        static let tableViewRowHeight: CGFloat = 80.0
     }
     
     struct Images {

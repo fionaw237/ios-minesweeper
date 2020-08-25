@@ -23,7 +23,6 @@ class GameScreenViewController: UIViewController {
         context: (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     )
     
-    
     //MARK:- Lifecycle methods
     
     override func viewWillAppear(_ animated: Bool) {
@@ -39,7 +38,6 @@ class GameScreenViewController: UIViewController {
         gameManager.delegate = self
         navigationItem.configureBackButton(barButtonSystemItem: .stop, target: self, action: #selector(backButtonPressed(sender:)), colour: Constants.Colours.navBarTitle)
     }
-    
     
     //MARK:- Navigation
     
@@ -71,7 +69,6 @@ class GameScreenViewController: UIViewController {
         }
     }
     
-    
     //MARK:- Methods handling game reset/setup
     
     @IBAction func resetButtonPressed(_ sender: Any) {
@@ -89,16 +86,11 @@ class GameScreenViewController: UIViewController {
     
     private func resetGame() {
         soundsManager.playSound(Constants.Sounds.click)
-        
-        timeManager.resetTimer() {
-            self.headerView.resetTimeLabel()
-        }
-                
+        timeManager.resetTimer() { self.headerView.resetTimeLabel() }
         setUpGame()
         collectionView.reloadData()
     }
 
-    
     //MARK:- Toggle sounds
     
     @IBAction func soundsTogglePressed(_ sender: UIButton) {
@@ -110,7 +102,6 @@ class GameScreenViewController: UIViewController {
         soundsToggle.setImage(UIImage(systemName: soundsManager.soundToggleImageName), for: .normal)
     }
     
-         
     //MARK:- Long press methods
     
     private func setUpLongPressGestureRecognizer() {
@@ -142,7 +133,6 @@ class GameScreenViewController: UIViewController {
             }
         }
     }
-    
     
     //MARK:- Methods handling cell display
     
@@ -221,9 +211,7 @@ class GameScreenViewController: UIViewController {
     private func newGameHandler(alert: UIAlertAction!) {
         resetGame()
     }
-    
 }
-
 
 //MARK:- Collection view delegate methods
 
@@ -256,7 +244,6 @@ extension GameScreenViewController: UICollectionViewDataSource, UICollectionView
         return CGSize(width: cellWidth, height: cellWidth)
     }
 }
-
 
 //MARK:- CellSelectionDelegate and related helper methods
 
@@ -307,7 +294,6 @@ extension GameScreenViewController: CellSelectionDelegate {
     }
     
 }
-
 
 //MARK:- GameAlertDelegate methods
 

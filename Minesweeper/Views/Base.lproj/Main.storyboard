@@ -421,7 +421,7 @@
                     <navigationItem key="navigationItem" title="Best Times" id="bjc-NI-os1">
                         <barButtonItem key="rightBarButtonItem" systemItem="trash" id="Kw7-YQ-od6">
                             <connections>
-                                <action selector="ResetAllBestTimesButtonPressed:" destination="H2L-aF-44V" id="Xrn-22-69f"/>
+                                <action selector="resetAllBestTimesButtonPressed:" destination="H2L-aF-44V" id="Xrn-22-69f"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

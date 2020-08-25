@@ -36,7 +36,6 @@ class BestTimesViewController: UIViewController {
         navigationItem.rightBarButtonItem?.tintColor = Constants.Colours.navBarTitle
     }
     
-    
     //MARK:- Navigation
     
     @objc func backButtonPressed(sender: UIBarButtonItem) {
@@ -66,11 +65,9 @@ class BestTimesViewController: UIViewController {
             ], for: .selected)
     }
     
-    
     //MARK:- Methods handling the resetting of best times
 
-    @IBAction func ResetAllBestTimesButtonPressed(_ sender: UIBarButtonItem) {
-        
+    @IBAction func resetAllBestTimesButtonPressed(_ sender: UIBarButtonItem) {
         if scoresAreNotEmpty() {
             UIAlertController.alert(
                 title: "Are you sure you want to reset all best times?",
@@ -95,7 +92,6 @@ class BestTimesViewController: UIViewController {
         }
         return false
     }
-    
 }
 
 // MARK:- Table view delegate methods
@@ -113,6 +109,6 @@ extension BestTimesViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80.0
+        return Constants.BestTimes.tableViewRowHeight
     }
 }

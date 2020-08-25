@@ -26,9 +26,6 @@ struct GameManager {
     private var indexPathsOfFlags = Set<IndexPath>()
     private var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
     
-    
-    //MARK:- Computed properties for grid cells
-        
     var gridCellsWithUnflaggedMine: [GridCell] {
         return gridCells.filter { $0.hasUnflaggedMine }
     }
