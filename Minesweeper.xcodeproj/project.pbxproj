@@ -31,6 +31,7 @@
 		BA1FF29924E08E39006AE7B8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF29824E08E39006AE7B8 /* Constants.swift */; };
 		BA83474124F163340002B2A8 /* TimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA83474024F163340002B2A8 /* TimeManager.swift */; };
 		BA83474524F174C40002B2A8 /* UIAlertController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA83474424F174C40002B2A8 /* UIAlertController+Extensions.swift */; };
+		BA980F1B24F5664A00135A9F /* SoundsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA980F1A24F5664A00135A9F /* SoundsManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +83,7 @@
 		BA1FF29824E08E39006AE7B8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		BA83474024F163340002B2A8 /* TimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeManager.swift; sourceTree = "<group>"; };
 		BA83474424F174C40002B2A8 /* UIAlertController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extensions.swift"; sourceTree = "<group>"; };
+		BA980F1A24F5664A00135A9F /* SoundsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundsManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +192,7 @@
 				BA1FF29024E0609E006AE7B8 /* GameManager.swift */,
 				BA06178224E1647E00DDF22C /* BestTimesManager.swift */,
 				BA83474024F163340002B2A8 /* TimeManager.swift */,
+				BA980F1A24F5664A00135A9F /* SoundsManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -372,6 +375,7 @@
 				2BE47CB02223FF2A00D3952A /* Minesweeper.xcdatamodeld in Sources */,
 				BA1FF28F24E0606A006AE7B8 /* GridCell.swift in Sources */,
 				2BE47CAA2223FF2A00D3952A /* GameScreenViewController.swift in Sources */,
+				BA980F1B24F5664A00135A9F /* SoundsManager.swift in Sources */,
 				BA06178324E1647E00DDF22C /* BestTimesManager.swift in Sources */,
 				2BE47CA82223FF2A00D3952A /* AppDelegate.swift in Sources */,
 				BA83474524F174C40002B2A8 /* UIAlertController+Extensions.swift in Sources */,

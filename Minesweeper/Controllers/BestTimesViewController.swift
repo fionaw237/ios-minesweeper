@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 
 class BestTimesViewController: UIViewController {
     
@@ -72,7 +71,7 @@ class BestTimesViewController: UIViewController {
 
     @IBAction func ResetAllBestTimesButtonPressed(_ sender: UIBarButtonItem) {
         
-        if scoresAreNotEmpty(context) {
+        if scoresAreNotEmpty() {
             UIAlertController.alert(
                 title: "Are you sure you want to reset all best times?",
                 message: "",
@@ -88,7 +87,7 @@ class BestTimesViewController: UIViewController {
         }
     }
     
-    private func scoresAreNotEmpty(_ context: NSManagedObjectContext) -> Bool {
+    private func scoresAreNotEmpty() -> Bool {
         for difficulty in GameDifficulty.allCases {
             if !bestTimesManager.fetchEntriesForDifficulty(difficulty.rawValue).isEmpty {
                 return true

@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import CoreData
-import AVFoundation
 
 class GameScreenViewController: UIViewController {
     
@@ -17,10 +15,10 @@ class GameScreenViewController: UIViewController {
     @IBOutlet weak var soundsToggle: UIButton!
     
     var gameDifficulty: GameDifficulty?
-    private var audioPlayer: AVAudioPlayer?
     
     private var timeManager = TimeManager()
     private var gameManager = GameManager()
+    private var soundsManager = SoundsManager()
     private var bestTimesManager = BestTimesManager(
         context: (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     )
@@ -90,7 +88,7 @@ class GameScreenViewController: UIViewController {
     }
     
     private func resetGame() {
-        playSound(Constants.Sounds.click)
+        soundsManager.playSound(Constants.Sounds.click)
         
         timeManager.resetTimer() {
             self.headerView.resetTimeLabel()
@@ -101,41 +99,15 @@ class GameScreenViewController: UIViewController {
     }
 
     
-    
-    //MARK:- Sounds
-    
-    private func playSound(_ filename: String) {
-        if UserDefaults.standard.bool(forKey: Constants.UserDefaults.soundsOn) {
-            let soundFile = Bundle.main.path(forResource: filename, ofType: nil)!
-            let url = URL(fileURLWithPath: soundFile)
-            do {
-                audioPlayer = try AVAudioPlayer(contentsOf: url)
-                // This line will prevent music from another app stopping
-                try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.ambient)
-                audioPlayer?.play()
-            }
-            catch {
-                print("Error with sounds: \(error)")
-            }
-        }
-    }
+    //MARK:- Toggle sounds
     
     @IBAction func soundsTogglePressed(_ sender: UIButton) {
-        let soundsOn = !UserDefaults.standard.bool(forKey: Constants.UserDefaults.soundsOn)
-        UserDefaults.standard.set(soundsOn, forKey: Constants.UserDefaults.soundsOn)
+        soundsManager.toggleSounds()
         setSoundsToggleImage()
     }
     
     private func setSoundsToggleImage() {
-        if UserDefaults.standard.object(forKey: Constants.UserDefaults.soundsOn) == nil {
-            // Used when app is first installed to set the appropriate key for sounds
-            UserDefaults.standard.set(true, forKey: Constants.UserDefaults.soundsOn)
-        }
-        if UserDefaults.standard.bool(forKey: Constants.UserDefaults.soundsOn) {
-            soundsToggle.setImage(UIImage(systemName: Constants.Images.soundsOn), for: .normal)
-        } else {
-            soundsToggle.setImage(UIImage(systemName: Constants.Images.soundsOff), for: .normal)
-        }
+        soundsToggle.setImage(UIImage(systemName: soundsManager.soundToggleImageName), for: .normal)
     }
     
          
@@ -158,7 +130,7 @@ class GameScreenViewController: UIViewController {
         cell.configureFlagImageView(gridCell.flagImageName)
         
         headerView.updateFlagsLabel(gameManager.remainingFlags)
-        playSound(Constants.Sounds.flag)
+        soundsManager.playSound(Constants.Sounds.flag)
     }
     
     @objc func handleLongPress(gesture: UILongPressGestureRecognizer) {
@@ -199,7 +171,7 @@ class GameScreenViewController: UIViewController {
     //MARK:- Methods handling game over/game won
     
     private func gameOver(clickedCell: GameScreenCollectionViewCell) {
-        playSound(Constants.Sounds.gameOver)
+        soundsManager.playSound(Constants.Sounds.gameOver)
         showAllUnflaggedMines()
         showMisplacedFlags()
         headerView.configureResetButtonForGameOver()
@@ -209,7 +181,7 @@ class GameScreenViewController: UIViewController {
     }
     
     private func handleGameWon() {
-        playSound(Constants.Sounds.gameWon)
+        soundsManager.playSound(Constants.Sounds.gameWon)
         timeManager.stopTimer()
         headerView.setNumberOfFlagsLabelForGameWon()
         headerView.configureResetButtonForGameWon()
@@ -314,7 +286,7 @@ extension GameScreenViewController: CellSelectionDelegate {
         }
         
         collectionViewCell.configureForNumberOfMinesInVicinity(minesInVicinity)
-        gameManager.isGameWon() ? handleGameWon() : playSound(Constants.Sounds.click)
+        gameManager.isGameWon() ? handleGameWon() : soundsManager.playSound(Constants.Sounds.click)
     }
     
     private func handleFirstCellPressed(_ indexPath: IndexPath) {
