@@ -134,6 +134,7 @@
                         <outlet property="beginnerButton" destination="3EP-2G-fIO" id="7b6-mb-SRG"/>
                         <outlet property="bestTimesButton" destination="l7k-ts-zQa" id="DzK-Cg-1Q4"/>
                         <outlet property="intermediateButton" destination="HtK-OO-ucH" id="RuB-kS-6ND"/>
+                        <outlet property="titleLabel" destination="PXu-U3-u7Z" id="PSQ-ma-Gqc"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="goToGameScreenSegue" id="pmC-CK-gaq"/>
                         <segue destination="H2L-aF-44V" kind="show" identifier="bestTimesSegue" id="3h4-bT-W5l"/>
                     </connections>
@@ -217,7 +218,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GXg-KX-lmK" userLabel="Number Of Mines Label">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GXg-KX-lmK" userLabel="Number Of Mines Label">
                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
