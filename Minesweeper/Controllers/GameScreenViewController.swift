@@ -35,11 +35,11 @@ class GameScreenViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setSoundsToggleImage()
         setUpGame()
         setUpLongPressGestureRecognizer()
         gameManager.delegate = self
         navigationItem.configureBackButton(barButtonSystemItem: .stop, target: self, action: #selector(backButtonPressed(sender:)), colour: Colours.navBarTitle)
-        setSoundsToggleImage()
     }
     
     
@@ -127,7 +127,11 @@ class GameScreenViewController: UIViewController {
     }
     
     private func setSoundsToggleImage() {
-        if  UserDefaults.standard.bool(forKey: "soundsOn") {
+        if UserDefaults.standard.object(forKey: "soundsOn") == nil {
+            // Used when app is first installed to set the appropriate key for sounds
+            UserDefaults.standard.set(true, forKey: "soundsOn")
+        }
+        if UserDefaults.standard.bool(forKey: "soundsOn") {
             soundsToggle.setImage(UIImage(systemName: "speaker.fill"), for: .normal)
         } else {
             soundsToggle.setImage(UIImage(systemName: "speaker.slash.fill"), for: .normal)
