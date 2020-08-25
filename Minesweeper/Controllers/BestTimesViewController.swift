@@ -33,8 +33,8 @@ class BestTimesViewController: UIViewController {
     override func viewDidLoad() {
         configureDifficultySelector()
         bestTimes = bestTimesManager.fetchEntriesForDifficulty(defaultDifficulty)
-        navigationItem.configureBackButton(barButtonSystemItem: .stop, target: self, action: #selector(backButtonPressed(sender:)), colour: Colours.darkBlue)
-        navigationItem.rightBarButtonItem?.tintColor = Colours.darkBlue
+        navigationItem.configureBackButton(barButtonSystemItem: .stop, target: self, action: #selector(backButtonPressed(sender:)), colour: Colours.navBarTitle)
+        navigationItem.rightBarButtonItem?.tintColor = Colours.navBarTitle
     }
     
     
