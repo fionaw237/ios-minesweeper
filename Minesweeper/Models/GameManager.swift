@@ -17,11 +17,11 @@ struct GameManager {
     var gridCells: [GridCell] = []
     var difficulty = GameDifficulty.Beginner
     
-    var numberOfSections = 8
+    var numberOfSections = 10
     var numberOfItemsInSection = 9
     var numberOfMines = 0
     var remainingFlags = 0
-    
+        
     private var indexPathsOfMines = Set<IndexPath>()
     private var indexPathsOfFlags = Set<IndexPath>()
     private var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
@@ -45,17 +45,6 @@ struct GameManager {
         return gridCells.filter {
             $0.hasFlag || $0.uncovered
         }.count
-    }
-    
-    private func getNumberOfMines() -> Int {
-        switch difficulty {
-        case .Beginner:
-            return NumberOfMines.Beginner.rawValue
-        case .Intermediate:
-            return NumberOfMines.Intermediate.rawValue
-        case .Advanced:
-            return NumberOfMines.Advanced.rawValue
-        }
     }
     
     mutating func addFlag(to gridCell: GridCell) {
@@ -196,7 +185,7 @@ extension GameManager {
     init(difficulty: GameDifficulty) {
         self.difficulty = difficulty
 
-        numberOfMines = getNumberOfMines()
+        numberOfMines = NumberOfMines.numberOfMinesForDifficulty(difficulty: difficulty)
         remainingFlags = numberOfMines
         
         for section in 0..<numberOfSections {

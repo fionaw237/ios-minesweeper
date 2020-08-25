@@ -7,9 +7,20 @@
 //
 
 enum NumberOfMines: Int {
-    case Beginner = 10
+    case Beginner = 11
     case Intermediate = 14
     case Advanced = 18
+    
+    static func numberOfMinesForDifficulty(difficulty: GameDifficulty) -> Int {
+        switch difficulty {
+        case .Beginner:
+            return NumberOfMines.Beginner.rawValue
+        case .Intermediate:
+            return NumberOfMines.Intermediate.rawValue
+        case .Advanced:
+            return NumberOfMines.Advanced.rawValue
+        }
+    }
 }
 
 enum GameDifficulty: String, CaseIterable {
