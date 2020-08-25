@@ -67,7 +67,7 @@ class BestTimesViewController: UIViewController {
     }
     
     
-    //MARK:- Methods handling the resetting of high scores
+    //MARK:- Methods handling the resetting of best times
 
     @IBAction func ResetAllBestTimesButtonPressed(_ sender: UIBarButtonItem) {
         

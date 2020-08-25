@@ -20,8 +20,8 @@ struct Constants {
         static let difficultySelector = UIFont(name: "Copperplate", size: 16.0) ?? UIColor.black
     }
     
-    struct HighScores {
-        static let numberOfHighScoresToDisplay = 10
+    struct BestTimes {
+        static let numberOfBestTimesToDisplay = 10
     }
     
     struct Images {
@@ -35,8 +35,8 @@ struct Constants {
     }
    
     struct Segues {
-        static let newHighScore = "newHighScoreSegue"
-        static let viewHighScores = "bestTimesSegue"
+        static let newBestTime = "newBestTimeSegue"
+        static let viewBestTimes = "bestTimesSegue"
         static let goToGameScreen = "goToGameScreenSegue"
     }
 

@@ -65,7 +65,7 @@ class GameScreenViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
-        if segue.identifier == Constants.Segues.newHighScore {
+        if segue.identifier == Constants.Segues.newBestTime {
             let bestTimesViewController = segue.destination as! BestTimesViewController
             bestTimesViewController.defaultDifficulty = gameManager.difficulty.rawValue
         }
@@ -192,13 +192,13 @@ class GameScreenViewController: UIViewController {
     
     private func displayGameWonAlert(winningTime: Int) {
         
-        let newHighScore = bestTimesManager.isHighScore(winningTime, difficulty: gameManager.difficulty)
+        let newBestTime = bestTimesManager.isBestTime(winningTime, difficulty: gameManager.difficulty)
         
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = newHighScore ? "New high score!" : "You won!"
+        alert.title = newBestTime ? "New best time!" : "You won!"
         alert.message = "Your time was \(TimeManager.convertSecondsToMinutesAndSeconds(winningTime))"
         
-        if newHighScore {
+        if newBestTime {
             alert.addTextField { textField in
                 textField.placeholder = "Enter your name"
             }
@@ -206,8 +206,8 @@ class GameScreenViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "Submit", style: .default, handler: { action in
                 if let enteredText = alert.textFields?[0].text {
                     let name = (enteredText == "") ? "Anonymous" : enteredText
-                    self.bestTimesManager.storeHighScore(time: winningTime, name: name, difficulty: self.gameManager.difficulty)
-                    self.performSegue(withIdentifier: Constants.Segues.newHighScore, sender: nil)
+                    self.bestTimesManager.storeBestTime(time: winningTime, name: name, difficulty: self.gameManager.difficulty)
+                    self.performSegue(withIdentifier: Constants.Segues.newBestTime, sender: nil)
                 }
             }))
         } else {
