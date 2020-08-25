@@ -11,7 +11,6 @@ import CoreData
 struct BestTimesManager {
     
     var context: NSManagedObjectContext? = nil
-    private let numberOfHighScoresToDisplay = Constants.HighScores.numberOfHighScoresToDisplay
     
     func resetAllBestTimes() {
         
@@ -44,38 +43,38 @@ struct BestTimesManager {
             let results = try context.fetch(request)
             return results.sorted(by: {$0.time < $1.time})
         } catch {
-            print("Error fetching high scores: \(error)")
+            print("Error fetching best times: \(error)")
         }
         
         return []
     }
     
-    func isHighScore(_ winningTime: Int, difficulty: GameDifficulty) -> Bool {
+    func isBestTime(_ winningTime: Int, difficulty: GameDifficulty) -> Bool {
         
-        let highScores = fetchEntriesForDifficulty(difficulty.rawValue)
+        let bestTimes = fetchEntriesForDifficulty(difficulty.rawValue)
 
-        if (highScores.count < numberOfHighScoresToDisplay) {
+        if (bestTimes.count < Constants.BestTimes.numberOfBestTimesToDisplay) {
             return true
         }
 
-        if let lowestStoredEntry = highScores.last {
+        if let lowestStoredEntry = bestTimes.last {
             return winningTime < lowestStoredEntry.time
         }
         
         return false
     }
     
-    func storeHighScore(time: Int, name: String, difficulty: GameDifficulty) {
+    func storeBestTime(time: Int, name: String, difficulty: GameDifficulty) {
         
         guard let context = context else {
             fatalError("The managed object context is nil")
         }
         
-        let highScores = fetchEntriesForDifficulty(difficulty.rawValue)
+        let bestTimes = fetchEntriesForDifficulty(difficulty.rawValue)
         
-        if highScores.count >= numberOfHighScoresToDisplay {
+        if bestTimes.count >= Constants.BestTimes.numberOfBestTimesToDisplay {
             // Update the lowest score with the new values
-            if let lowestScore = highScores.last {
+            if let lowestScore = bestTimes.last {
                 lowestScore.name = name
                 lowestScore.time = Int32(time)
             }

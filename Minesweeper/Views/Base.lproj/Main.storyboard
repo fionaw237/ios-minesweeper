@@ -310,7 +310,7 @@
                         <outlet property="collectionView" destination="XC7-qC-mJ5" id="hw2-Bd-wev"/>
                         <outlet property="headerView" destination="Cha-Yd-rC7" id="ofs-Ze-Tcc"/>
                         <outlet property="soundsToggle" destination="LYL-dm-qSZ" id="VBs-3x-mDn"/>
-                        <segue destination="H2L-aF-44V" kind="show" identifier="newHighScoreSegue" id="2P6-Xe-YUS"/>
+                        <segue destination="H2L-aF-44V" kind="show" identifier="newBestTimeSegue" id="2P6-Xe-YUS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

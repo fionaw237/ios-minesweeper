@@ -50,7 +50,7 @@ class WelcomeScreenViewController: UIViewController {
     }
     
     @IBAction func bestTimesButtonPressed(_ sender: Any) {
-        performSegue(withIdentifier: Constants.Segues.viewHighScores, sender: sender)
+        performSegue(withIdentifier: Constants.Segues.viewBestTimes, sender: sender)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
