@@ -17,11 +17,11 @@ struct GameManager {
     var gridCells: [GridCell] = []
     var difficulty = GameDifficulty.Beginner
     
-    var numberOfSections = 9
+    var numberOfSections = 10
     var numberOfItemsInSection = 9
     var numberOfMines = 0
     var remainingFlags = 0
-    
+        
     private var indexPathsOfMines = Set<IndexPath>()
     private var indexPathsOfFlags = Set<IndexPath>()
     private var adjacentIndexPathsWithZeroMinesInVicinity = Set<IndexPath>()
@@ -185,7 +185,6 @@ extension GameManager {
     init(difficulty: GameDifficulty) {
         self.difficulty = difficulty
 
-        numberOfSections = NumberOfSections.numberOfSectionsForDifficulty(difficulty: difficulty)
         numberOfMines = NumberOfMines.numberOfMinesForDifficulty(difficulty: difficulty)
         remainingFlags = numberOfMines
         

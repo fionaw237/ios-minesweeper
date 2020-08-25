@@ -6,27 +6,10 @@
 //  Copyright © 2020 Fiona Wilson. All rights reserved.
 //
 
-enum NumberOfSections: Int {
-    case Beginner = 9
-    case Intermediate = 10
-    case Advanced = 11
-    
-    static func numberOfSectionsForDifficulty(difficulty: GameDifficulty) -> Int {
-        switch difficulty {
-        case .Beginner:
-            return NumberOfSections.Beginner.rawValue
-        case .Intermediate:
-            return NumberOfSections.Intermediate.rawValue
-        case .Advanced:
-            return NumberOfSections.Advanced.rawValue
-        }
-    }
-}
-
 enum NumberOfMines: Int {
-    case Beginner = 10
+    case Beginner = 11
     case Intermediate = 14
-    case Advanced = 20
+    case Advanced = 18
     
     static func numberOfMinesForDifficulty(difficulty: GameDifficulty) -> Int {
         switch difficulty {
