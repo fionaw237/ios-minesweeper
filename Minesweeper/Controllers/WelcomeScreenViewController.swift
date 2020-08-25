@@ -14,10 +14,35 @@ class WelcomeScreenViewController: UIViewController {
     @IBOutlet weak var intermediateButton: UIButton!
     @IBOutlet weak var advancedButton: UIButton!
     @IBOutlet weak var bestTimesButton: UIButton!
+    @IBOutlet weak var titleLabel: UILabel!
     
    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = true
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureNavigationBarStyle()
+        animateTitleLabel()
+    }
+    
+    private func configureNavigationBarStyle() {
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: Colours.darkBlue,
+            NSAttributedString.Key.font: Fonts.navBarTitle
+        ]
+    }
+    
+    private func animateTitleLabel() {
+        var charIndex = 0.0
+        titleLabel.text = ""
+        for letter in Constants.WelcomeScreen.titleLabelText {
+            Timer.scheduledTimer(withTimeInterval: 0.15 * charIndex, repeats: false) { (timer) in
+                self.titleLabel.text?.append(letter)
+            }
+            charIndex += 1
+        }
     }
     
     @IBAction func gameDifficultyChosen(_ sender: Any) {

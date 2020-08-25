@@ -20,6 +20,9 @@
 		2BE47CD9222422D300D3952A /* GameScreenHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE47CD8222422D300D3952A /* GameScreenHeaderView.swift */; };
 		2BE47CDB222425A400D3952A /* GameScreenCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE47CDA222425A400D3952A /* GameScreenCollectionViewCell.swift */; };
 		BA06178324E1647E00DDF22C /* BestTimesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA06178224E1647E00DDF22C /* BestTimesManager.swift */; };
+		BA1FA06624F40E8A001E7A2A /* Colours.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FA06524F40E8A001E7A2A /* Colours.swift */; };
+		BA1FA06824F41017001E7A2A /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FA06724F41017001E7A2A /* Fonts.swift */; };
+		BA1FA06A24F4126E001E7A2A /* UINavigationItem+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FA06924F4126E001E7A2A /* UINavigationItem+Extensions.swift */; };
 		BA1FF28924E05BF9006AE7B8 /* game_over.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BA1FF28524E05BF9006AE7B8 /* game_over.mp3 */; };
 		BA1FF28A24E05BF9006AE7B8 /* game_won.wav in Resources */ = {isa = PBXBuildFile; fileRef = BA1FF28624E05BF9006AE7B8 /* game_won.wav */; };
 		BA1FF28B24E05BF9006AE7B8 /* flag.wav in Resources */ = {isa = PBXBuildFile; fileRef = BA1FF28724E05BF9006AE7B8 /* flag.wav */; };
@@ -70,6 +73,9 @@
 		2BE47CD8222422D300D3952A /* GameScreenHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScreenHeaderView.swift; sourceTree = "<group>"; };
 		2BE47CDA222425A400D3952A /* GameScreenCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScreenCollectionViewCell.swift; sourceTree = "<group>"; };
 		BA06178224E1647E00DDF22C /* BestTimesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestTimesManager.swift; sourceTree = "<group>"; };
+		BA1FA06524F40E8A001E7A2A /* Colours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colours.swift; sourceTree = "<group>"; };
+		BA1FA06724F41017001E7A2A /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		BA1FA06924F4126E001E7A2A /* UINavigationItem+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationItem+Extensions.swift"; sourceTree = "<group>"; };
 		BA1FF28524E05BF9006AE7B8 /* game_over.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = game_over.mp3; sourceTree = "<group>"; };
 		BA1FF28624E05BF9006AE7B8 /* game_won.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = game_won.wav; sourceTree = "<group>"; };
 		BA1FF28724E05BF9006AE7B8 /* flag.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = flag.wav; sourceTree = "<group>"; };
@@ -198,6 +204,9 @@
 				BA1FF29824E08E39006AE7B8 /* Constants.swift */,
 				BA1FF29424E0656C006AE7B8 /* Enums.swift */,
 				BA83474424F174C40002B2A8 /* UIAlertController+Extensions.swift */,
+				BA1FA06524F40E8A001E7A2A /* Colours.swift */,
+				BA1FA06724F41017001E7A2A /* Fonts.swift */,
+				BA1FA06924F4126E001E7A2A /* UINavigationItem+Extensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -360,6 +369,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA1FA06A24F4126E001E7A2A /* UINavigationItem+Extensions.swift in Sources */,
 				2B54565F2250056B00AB6EAE /* WelcomeScreenViewController.swift in Sources */,
 				2BD85B47230C08520077776F /* BestTimesViewController.swift in Sources */,
 				BA83474124F163340002B2A8 /* TimeManager.swift in Sources */,
@@ -367,6 +377,7 @@
 				2BE47CDB222425A400D3952A /* GameScreenCollectionViewCell.swift in Sources */,
 				2BE47CB02223FF2A00D3952A /* Minesweeper.xcdatamodeld in Sources */,
 				BA1FF28F24E0606A006AE7B8 /* GridCell.swift in Sources */,
+				BA1FA06824F41017001E7A2A /* Fonts.swift in Sources */,
 				2BE47CAA2223FF2A00D3952A /* GameScreenViewController.swift in Sources */,
 				BA06178324E1647E00DDF22C /* BestTimesManager.swift in Sources */,
 				2BE47CA82223FF2A00D3952A /* AppDelegate.swift in Sources */,
@@ -375,6 +386,7 @@
 				2BE47CD9222422D300D3952A /* GameScreenHeaderView.swift in Sources */,
 				BA1FF29524E0656C006AE7B8 /* Enums.swift in Sources */,
 				BA1FF29924E08E39006AE7B8 /* Constants.swift in Sources */,
+				BA1FA06624F40E8A001E7A2A /* Colours.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

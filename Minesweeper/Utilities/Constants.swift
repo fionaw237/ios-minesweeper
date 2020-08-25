@@ -8,6 +8,10 @@
 
 struct Constants {
     
+    struct WelcomeScreen {
+        static let titleLabelText = "Minesweeper!"
+    }
+   
     struct Images {
         static let mine = "mine-icon-black-50"
         static let flag = "icon-flag-48"
