@@ -107,10 +107,12 @@ class GameScreenViewController: UIViewController {
         let url = URL(fileURLWithPath: soundFile)
         do {
             audioPlayer = try AVAudioPlayer(contentsOf: url)
+            // This line will prevent music from another app stopping
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.ambient)
             audioPlayer?.play()
         }
         catch {
-            print("Sound file \(filename) not found")
+            print("Error with sounds: \(error)")
         }
     }
     
