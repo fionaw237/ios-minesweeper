@@ -14,7 +14,8 @@ class GameScreenViewController: UIViewController {
     
     @IBOutlet var headerView: GameScreenHeaderView!
     @IBOutlet weak var collectionView: UICollectionView!
-        
+    @IBOutlet weak var soundsToggle: UIButton!
+    
     var gameDifficulty: GameDifficulty?
     private var audioPlayer: AVAudioPlayer?
     
@@ -38,6 +39,7 @@ class GameScreenViewController: UIViewController {
         setUpLongPressGestureRecognizer()
         gameManager.delegate = self
         navigationItem.configureBackButton(barButtonSystemItem: .stop, target: self, action: #selector(backButtonPressed(sender:)), colour: Colours.navBarTitle)
+        setSoundsToggleImage()
     }
     
     
@@ -103,18 +105,35 @@ class GameScreenViewController: UIViewController {
     //MARK:- Sounds
     
     private func playSound(_ filename: String) {
-        let soundFile = Bundle.main.path(forResource: filename, ofType: nil)!
-        let url = URL(fileURLWithPath: soundFile)
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            // This line will prevent music from another app stopping
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.ambient)
-            audioPlayer?.play()
-        }
-        catch {
-            print("Error with sounds: \(error)")
+        if UserDefaults.standard.bool(forKey: "soundsOn") {
+            let soundFile = Bundle.main.path(forResource: filename, ofType: nil)!
+            let url = URL(fileURLWithPath: soundFile)
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                // This line will prevent music from another app stopping
+                try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.ambient)
+                audioPlayer?.play()
+            }
+            catch {
+                print("Error with sounds: \(error)")
+            }
         }
     }
+    
+    @IBAction func soundsTogglePressed(_ sender: UIButton) {
+        let soundsOn = !UserDefaults.standard.bool(forKey: "soundsOn")
+        UserDefaults.standard.set(soundsOn, forKey: "soundsOn")
+        setSoundsToggleImage()
+    }
+    
+    private func setSoundsToggleImage() {
+        if  UserDefaults.standard.bool(forKey: "soundsOn") {
+            soundsToggle.setImage(UIImage(systemName: "speaker.fill"), for: .normal)
+        } else {
+            soundsToggle.setImage(UIImage(systemName: "speaker.slash.fill"), for: .normal)
+        }
+    }
+    
     
          
     //MARK:- Long press methods
