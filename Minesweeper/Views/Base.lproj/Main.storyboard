@@ -206,7 +206,7 @@
                                 </connections>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="XC7-qC-mJ5">
-                                <rect key="frame" x="20" y="287" width="374" height="555"/>
+                                <rect key="frame" x="20" y="287" width="374" height="515"/>
                                 <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="PIX-TV-kb9">
                                     <size key="itemSize" width="50" height="50"/>
@@ -277,16 +277,31 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="ySF-2R-Zby"/>
                                 </connections>
                             </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LYL-dm-qSZ" userLabel="SoundsToggle">
+                                <rect key="frame" x="354" y="822" width="40" height="40"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="P7V-da-9Y6"/>
+                                    <constraint firstAttribute="width" constant="40" id="V0U-AK-sgv"/>
+                                </constraints>
+                                <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" image="speaker.fill" catalog="system"/>
+                                <connections>
+                                    <action selector="soundsTogglePressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gTw-yW-sA7"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="XC7-qC-mJ5" secondAttribute="bottom" constant="20" id="80t-pg-vIY"/>
+                            <constraint firstItem="LYL-dm-qSZ" firstAttribute="top" secondItem="XC7-qC-mJ5" secondAttribute="bottom" constant="20" id="80t-pg-vIY"/>
                             <constraint firstItem="XC7-qC-mJ5" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" constant="-20" id="IHm-Fj-5Vv"/>
                             <constraint firstItem="Cha-Yd-rC7" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="IcW-K8-vJI"/>
                             <constraint firstItem="XC7-qC-mJ5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="MCp-eS-RkM"/>
                             <constraint firstItem="XC7-qC-mJ5" firstAttribute="top" secondItem="Cha-Yd-rC7" secondAttribute="bottom" constant="20" id="VKB-g6-kMu"/>
                             <constraint firstItem="Cha-Yd-rC7" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.2" id="WCb-N5-tfT"/>
+                            <constraint firstItem="LYL-dm-qSZ" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="kUq-Lg-4e5"/>
                             <constraint firstItem="Cha-Yd-rC7" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="nEE-Ap-3ld"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="LYL-dm-qSZ" secondAttribute="trailing" constant="20" id="pZT-YW-DMB"/>
                             <constraint firstItem="Cha-Yd-rC7" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="pea-WS-hHW"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -295,6 +310,7 @@
                     <connections>
                         <outlet property="collectionView" destination="XC7-qC-mJ5" id="hw2-Bd-wev"/>
                         <outlet property="headerView" destination="Cha-Yd-rC7" id="ofs-Ze-Tcc"/>
+                        <outlet property="soundsToggle" destination="LYL-dm-qSZ" id="VBs-3x-mDn"/>
                         <segue destination="H2L-aF-44V" kind="show" identifier="newHighScoreSegue" id="2P6-Xe-YUS"/>
                     </connections>
                 </viewController>
@@ -443,12 +459,13 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="3h4-bT-W5l"/>
+        <segue reference="2P6-Xe-YUS"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="cellButton" width="200" height="200"/>
         <image name="icon-game-over" width="48" height="48"/>
         <image name="icon-happy-48" width="48" height="48"/>
         <image name="mine-icon-black-50" width="50" height="50"/>
+        <image name="speaker.fill" catalog="system" width="128" height="121"/>
     </resources>
 </document>

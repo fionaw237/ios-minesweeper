@@ -14,7 +14,8 @@ class GameScreenViewController: UIViewController {
     
     @IBOutlet var headerView: GameScreenHeaderView!
     @IBOutlet weak var collectionView: UICollectionView!
-        
+    @IBOutlet weak var soundsToggle: UIButton!
+    
     var gameDifficulty: GameDifficulty?
     private var audioPlayer: AVAudioPlayer?
     
@@ -34,10 +35,11 @@ class GameScreenViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setSoundsToggleImage()
         setUpGame()
         setUpLongPressGestureRecognizer()
         gameManager.delegate = self
-        navigationItem.configureBackButton(barButtonSystemItem: .stop, target: self, action: #selector(backButtonPressed(sender:)), colour: Colours.navBarTitle)
+        navigationItem.configureBackButton(barButtonSystemItem: .stop, target: self, action: #selector(backButtonPressed(sender:)), colour: Constants.Colours.navBarTitle)
     }
     
     
@@ -103,14 +105,36 @@ class GameScreenViewController: UIViewController {
     //MARK:- Sounds
     
     private func playSound(_ filename: String) {
-        let soundFile = Bundle.main.path(forResource: filename, ofType: nil)!
-        let url = URL(fileURLWithPath: soundFile)
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.play()
+        if UserDefaults.standard.bool(forKey: Constants.UserDefaults.soundsOn) {
+            let soundFile = Bundle.main.path(forResource: filename, ofType: nil)!
+            let url = URL(fileURLWithPath: soundFile)
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                // This line will prevent music from another app stopping
+                try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.ambient)
+                audioPlayer?.play()
+            }
+            catch {
+                print("Error with sounds: \(error)")
+            }
         }
-        catch {
-            print("Sound file \(filename) not found")
+    }
+    
+    @IBAction func soundsTogglePressed(_ sender: UIButton) {
+        let soundsOn = !UserDefaults.standard.bool(forKey: Constants.UserDefaults.soundsOn)
+        UserDefaults.standard.set(soundsOn, forKey: Constants.UserDefaults.soundsOn)
+        setSoundsToggleImage()
+    }
+    
+    private func setSoundsToggleImage() {
+        if UserDefaults.standard.object(forKey: Constants.UserDefaults.soundsOn) == nil {
+            // Used when app is first installed to set the appropriate key for sounds
+            UserDefaults.standard.set(true, forKey: Constants.UserDefaults.soundsOn)
+        }
+        if UserDefaults.standard.bool(forKey: Constants.UserDefaults.soundsOn) {
+            soundsToggle.setImage(UIImage(systemName: Constants.Images.soundsOn), for: .normal)
+        } else {
+            soundsToggle.setImage(UIImage(systemName: Constants.Images.soundsOff), for: .normal)
         }
     }
     
