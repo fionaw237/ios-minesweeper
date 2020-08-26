@@ -53,16 +53,16 @@ class BestTimesViewController: UIViewController {
         
     func configureDifficultySelector() {
         difficultySelector.selectedSegmentIndex = GameDifficulty.selectedIndexForDifficulty(defaultDifficulty)
-        difficultySelector.backgroundColor = Constants.Colours.darkBlue
+        difficultySelector.backgroundColor = Constants.Colours.teal
         difficultySelector.setTitleTextAttributes([
             NSAttributedString.Key.font : Constants.Fonts.difficultySelector,
-            NSAttributedString.Key.foregroundColor: UIColor.white
-            ], for: .normal)
-
+            NSAttributedString.Key.foregroundColor: Constants.Colours.background
+        ], for: .normal)
+        
         difficultySelector.setTitleTextAttributes([
             NSAttributedString.Key.font : Constants.Fonts.difficultySelector,
-            NSAttributedString.Key.foregroundColor: Constants.Colours.darkBlue
-            ], for: .selected)
+            NSAttributedString.Key.foregroundColor: Constants.Colours.teal
+        ], for: .selected)
     }
     
     //MARK:- Methods handling the resetting of best times
@@ -106,9 +106,5 @@ extension BestTimesViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: BestTimesTableViewCell.self), for: indexPath) as! BestTimesTableViewCell
         cell.configure(row:indexPath.row, timeEntry:bestTimes[indexPath.row])
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return Constants.BestTimes.tableViewRowHeight
     }
 }
