@@ -11,7 +11,7 @@ import UIKit
 struct Constants {
     
     struct Colours {
-        static let darkBlue = UIColor(red: 24.0 / 255.0, green: 49.0 / 255.0, blue: 237.0 / 255.0, alpha: 1.0)
+        static let teal = UIColor(red: 0.0 / 255.0, green: 128.0 / 255.0, blue: 128.0 / 255.0, alpha: 1.0)
         static let navBarTitle = UIColor.darkGray
     }
     
@@ -22,7 +22,6 @@ struct Constants {
     
     struct BestTimes {
         static let numberOfBestTimesToDisplay = 10
-        static let tableViewRowHeight: CGFloat = 80.0
     }
     
     struct Images {
@@ -31,7 +30,7 @@ struct Constants {
         static let happyFace = "icon-happy-48"
         static let sadFace = "icon-sad-48"
         static let coolFace = "icon-cool-48"
-        static let soundsOn = "speaker.fill"
+        static let soundsOn = "speaker.2.fill"
         static let soundsOff = "speaker.slash.fill"
     }
    
