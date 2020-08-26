@@ -56,13 +56,13 @@ class BestTimesViewController: UIViewController {
         difficultySelector.backgroundColor = Constants.Colours.teal
         difficultySelector.setTitleTextAttributes([
             NSAttributedString.Key.font : Constants.Fonts.difficultySelector,
-            NSAttributedString.Key.foregroundColor: UIColor.white
-            ], for: .normal)
-
+            NSAttributedString.Key.foregroundColor: Constants.Colours.background
+        ], for: .normal)
+        
         difficultySelector.setTitleTextAttributes([
             NSAttributedString.Key.font : Constants.Fonts.difficultySelector,
             NSAttributedString.Key.foregroundColor: Constants.Colours.teal
-            ], for: .selected)
+        ], for: .selected)
     }
     
     //MARK:- Methods handling the resetting of best times

@@ -212,7 +212,7 @@
                                     <outlet property="timeLabel" destination="H6d-LK-ZS5" id="Se3-a9-O3H"/>
                                 </connections>
                             </view>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="XC7-qC-mJ5">
+                            <collectionView clipsSubviews="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="XC7-qC-mJ5">
                                 <rect key="frame" x="20" y="241.5" width="374" height="570.5"/>
                                 <color key="backgroundColor" white="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="PIX-TV-kb9">
@@ -360,7 +360,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="37s" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PLN-nb-1W5" userLabel="timeLabel">
-                                                    <rect key="frame" x="276" y="0.0" width="138" height="70"/>
+                                                    <rect key="frame" x="275.5" y="0.0" width="138" height="70"/>
                                                     <color key="backgroundColor" white="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="25"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -372,7 +372,6 @@
                                                 <constraint firstItem="PLN-nb-1W5" firstAttribute="leading" secondItem="5t7-HO-ZAf" secondAttribute="trailing" id="80p-sH-w8Z"/>
                                                 <constraint firstItem="5t7-HO-ZAf" firstAttribute="leading" secondItem="Sz6-we-u2w" secondAttribute="trailing" id="mNd-iE-Pmb"/>
                                                 <constraint firstItem="PLN-nb-1W5" firstAttribute="width" secondItem="CSy-nb-5Hi" secondAttribute="width" multiplier="0.333" id="ocI-8E-7GF"/>
-                                                <constraint firstAttribute="trailing" secondItem="PLN-nb-1W5" secondAttribute="trailing" id="qe5-Oe-7Hf"/>
                                                 <constraint firstItem="Sz6-we-u2w" firstAttribute="leading" secondItem="CSy-nb-5Hi" secondAttribute="leading" id="zzG-eD-bsG"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -402,7 +401,7 @@
                             </tableView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="V0N-mb-mx3" userLabel="Difficulty Selector">
                                 <rect key="frame" x="0.0" y="88" width="414" height="71"/>
-                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.0" green="0.50196078430000002" blue="0.50196078430000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="Cgn-K1-j5t"/>
                                 </constraints>
@@ -411,6 +410,7 @@
                                     <segment title="Intermediate"/>
                                     <segment title="Advanced"/>
                                 </segments>
+                                <color key="selectedSegmentTintColor" white="0.84999999999999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <action selector="difficultySelected:" destination="H2L-aF-44V" eventType="valueChanged" id="Slw-Bx-byn"/>
                                 </connections>
