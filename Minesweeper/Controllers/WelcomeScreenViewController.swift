@@ -38,7 +38,7 @@ class WelcomeScreenViewController: UIViewController {
         var charIndex = 0.0
         titleLabel.text = ""
         for letter in Constants.WelcomeScreen.titleLabelText {
-            Timer.scheduledTimer(withTimeInterval: 0.15 * charIndex, repeats: false) { (timer) in
+            Timer.scheduledTimer(withTimeInterval: 0.12 * charIndex, repeats: false) { (timer) in
                 self.titleLabel.text?.append(letter)
             }
             charIndex += 1

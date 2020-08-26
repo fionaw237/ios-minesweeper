@@ -53,6 +53,6 @@ struct Constants {
     }
     
     struct WelcomeScreen {
-        static let titleLabelText = "Minesweeper!"
+        static let titleLabelText = "Minesweeper"
     }
 }
