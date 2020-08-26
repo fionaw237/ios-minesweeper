@@ -13,14 +13,8 @@ struct SoundsManager {
     
     private var audioPlayer: AVAudioPlayer?
     
-    private var soundsOn: Bool {
-        if UserDefaults.standard.object(forKey: Constants.UserDefaults.soundsOn) == nil {
-            // Used when app is first installed to set the appropriate key for sounds
-            UserDefaults.standard.set(true, forKey: Constants.UserDefaults.soundsOn)
-            return true
-        }
-        return UserDefaults.standard.bool(forKey: Constants.UserDefaults.soundsOn)
-    }
+    @DefaultSynced(key: "soundsOn", defaultValue: true)
+    private var soundsOn: Bool
     
     var soundToggleImageName: String {
         if soundsOn {
