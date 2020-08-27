@@ -10,17 +10,6 @@ import UIKit
 
 struct Constants {
     
-    struct Colours {
-        static let teal = UIColor(red: 0.0 / 255.0, green: 128.0 / 255.0, blue: 128.0 / 255.0, alpha: 1.0)
-        static let navBarTitle = UIColor.darkGray
-        static let background = UIColor(red: 204.0 / 255.0, green: 204.0 / 255.0, blue: 204.0 / 255.0, alpha: 1.0)
-    }
-    
-    struct Fonts {
-        static let navBarTitle = UIFont(name: "Copperplate", size: 24.0) ?? UIColor.black
-        static let difficultySelector = UIFont(name: "Copperplate", size: 16.0) ?? UIColor.black
-    }
-    
     struct BestTimes {
         static let numberOfBestTimesToDisplay = 10
     }

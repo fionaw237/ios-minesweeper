@@ -30,6 +30,8 @@
 		BA1FF29524E0656C006AE7B8 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF29424E0656C006AE7B8 /* Enums.swift */; };
 		BA1FF29924E08E39006AE7B8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FF29824E08E39006AE7B8 /* Constants.swift */; };
 		BA7A8F6E24F6B0500055E69F /* PropertyWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7A8F6D24F6B0500055E69F /* PropertyWrappers.swift */; };
+		BA7A8F7024F7C3660055E69F /* Colours.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7A8F6F24F7C3660055E69F /* Colours.swift */; };
+		BA7A8F7224F7C3870055E69F /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7A8F7124F7C3870055E69F /* Fonts.swift */; };
 		BA83474124F163340002B2A8 /* TimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA83474024F163340002B2A8 /* TimeManager.swift */; };
 		BA83474524F174C40002B2A8 /* UIAlertController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA83474424F174C40002B2A8 /* UIAlertController+Extensions.swift */; };
 		BA980F1B24F5664A00135A9F /* SoundsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA980F1A24F5664A00135A9F /* SoundsManager.swift */; };
@@ -83,6 +85,8 @@
 		BA1FF29424E0656C006AE7B8 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		BA1FF29824E08E39006AE7B8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		BA7A8F6D24F6B0500055E69F /* PropertyWrappers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyWrappers.swift; sourceTree = "<group>"; };
+		BA7A8F6F24F7C3660055E69F /* Colours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colours.swift; sourceTree = "<group>"; };
+		BA7A8F7124F7C3870055E69F /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		BA83474024F163340002B2A8 /* TimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeManager.swift; sourceTree = "<group>"; };
 		BA83474424F174C40002B2A8 /* UIAlertController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extensions.swift"; sourceTree = "<group>"; };
 		BA980F1A24F5664A00135A9F /* SoundsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundsManager.swift; sourceTree = "<group>"; };
@@ -207,6 +211,8 @@
 				BA83474424F174C40002B2A8 /* UIAlertController+Extensions.swift */,
 				BA1FA06924F4126E001E7A2A /* UINavigationItem+Extensions.swift */,
 				BA7A8F6D24F6B0500055E69F /* PropertyWrappers.swift */,
+				BA7A8F6F24F7C3660055E69F /* Colours.swift */,
+				BA7A8F7124F7C3870055E69F /* Fonts.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -373,6 +379,7 @@
 				2B54565F2250056B00AB6EAE /* WelcomeScreenViewController.swift in Sources */,
 				2BD85B47230C08520077776F /* BestTimesViewController.swift in Sources */,
 				BA83474124F163340002B2A8 /* TimeManager.swift in Sources */,
+				BA7A8F7024F7C3660055E69F /* Colours.swift in Sources */,
 				2BD85B49230C1D5C0077776F /* BestTimesTableViewCell.swift in Sources */,
 				2BE47CDB222425A400D3952A /* GameScreenCollectionViewCell.swift in Sources */,
 				BA7A8F6E24F6B0500055E69F /* PropertyWrappers.swift in Sources */,
@@ -384,6 +391,7 @@
 				2BE47CA82223FF2A00D3952A /* AppDelegate.swift in Sources */,
 				BA83474524F174C40002B2A8 /* UIAlertController+Extensions.swift in Sources */,
 				BA1FF29124E0609E006AE7B8 /* GameManager.swift in Sources */,
+				BA7A8F7224F7C3870055E69F /* Fonts.swift in Sources */,
 				2BE47CD9222422D300D3952A /* GameScreenHeaderView.swift in Sources */,
 				BA1FF29524E0656C006AE7B8 /* Enums.swift in Sources */,
 				BA1FF29924E08E39006AE7B8 /* Constants.swift in Sources */,
